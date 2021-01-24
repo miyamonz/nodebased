@@ -11,13 +11,14 @@ type Socket = {
 export type InputSocket = Socket & {
   type: "input";
   atom: InputAtom;
+  from: OutputSocket | null;
 };
 export type OutputSocket = Socket & {
   type: "output";
   atom: OutputAtom;
 };
 
-export type InputAtom = PrimitiveAtom<number>;
+export type InputAtom = PrimitiveAtom<number> | Atom<number>;
 export type OutputAtom = Atom<number>;
 
 export type Node = {
@@ -36,6 +37,7 @@ const createNodeAtom = ({ x = 0, y = 0 }): NodeAtom => {
       return { x: _rect.x, y: _rect.y + _rect.height / 2 };
     }),
     atom: atom(0) as InputAtom,
+    from: null,
   };
   const output: OutputSocket = {
     type: "output",
@@ -83,6 +85,7 @@ function dragNode(dragTarget: Node, { get, set, pos }: any) {
 }
 
 export const connectTargetAtom = atom<OutputSocket | null>(null);
+export const hoveredInputSocketAtom = atom<InputSocket | null>(null);
 
 type Pos = readonly [number, number];
 const dragDataAtom = atom<Pos | "end">("end");
@@ -99,6 +102,13 @@ export const dragAtom = atom(
     }
     if (connectTarget) {
       if (pos === "end") {
+        const hovered = get(hoveredInputSocketAtom);
+        if (hovered) {
+          console.log("connect");
+          const newAtom = atom((get) => get(connectTarget.atom));
+          hovered.atom = newAtom;
+          hovered.from = connectTarget;
+        }
         set(connectTargetAtom, null);
       }
     }

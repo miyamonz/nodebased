@@ -1,8 +1,9 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { dragTargetAtom, connectTargetAtom } from "./atoms";
+import { dragTargetAtom } from "./atoms";
+import { connectTargetAtom, hoveredInputSocketAtom } from "./atoms";
 import type { NodeAtom, PositionAtom } from "./atoms";
-import SliderComponent from "./SliderNode";
+import SliderNode from "./SliderNode";
 
 const IOCircle = React.memo(
   ({
@@ -31,6 +32,7 @@ const RenderNode = ({ atom }: { atom: NodeAtom }) => {
   const [rectProp] = useAtom(node.rect);
   const [target, setTarget] = useAtom(dragTargetAtom);
   const [, setConnectTarget] = useAtom(connectTargetAtom);
+  const [, setHovered] = useAtom(hoveredInputSocketAtom);
   const isTarget = atom === target;
   return (
     <>
@@ -43,8 +45,16 @@ const RenderNode = ({ atom }: { atom: NodeAtom }) => {
         }}
       />
       {isTarget && <rect {...rectProp} fill="none" stroke="red" />}
-      <SliderComponent inputAtom={node.input.atom} rectAtom={node.rect} />
-      <IOCircle positionAtom={node.input.position} />
+      <SliderNode node={node} />
+      <IOCircle
+        positionAtom={node.input.position}
+        onMouseEnter={() => {
+          setHovered(node.input);
+        }}
+        onMouseLeave={() => {
+          setHovered(null);
+        }}
+      />
       <IOCircle
         positionAtom={node.output.position}
         onMouseDown={() => {
