@@ -43,10 +43,10 @@ function SvgCanvas({ width, height }: { width: number; height: number }) {
       <text x={0} y={20}>
         nodebased
       </text>
+      <TmpConnectLine />
       {nodeAtomList.map((atom) => {
         return <RenderNode key={atom.toString()} atom={atom} />;
       })}
-      <TmpConnectLine />
     </svg>
   );
 }
