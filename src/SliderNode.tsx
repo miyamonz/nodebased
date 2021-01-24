@@ -8,12 +8,15 @@ import { isPrimitive } from "./util";
 
 const SliderComponent = ({
   inputAtom,
+  outputAtom,
   rectAtom,
 }: {
   inputAtom: PrimitiveAtom<number>;
+  outputAtom: Atom<number>;
   rectAtom: PrimitiveAtom<RectProp>;
 }) => {
-  const [num, setInput] = useAtom(inputAtom);
+  const [, setInput] = useAtom(inputAtom);
+  const [num] = useAtom(outputAtom);
   const [rect] = useAtom(rectAtom);
   return (
     <>
@@ -69,7 +72,13 @@ const SliderNode = ({ node }: { node: Node<number, number> }) => {
   const [input] = useAtom(node.input.atom);
 
   if (isPrimitive(input)) {
-    return <SliderComponent inputAtom={input} rectAtom={node.rect} />;
+    return (
+      <SliderComponent
+        inputAtom={input}
+        outputAtom={node.output.atom}
+        rectAtom={node.rect}
+      />
+    );
   } else {
     return (
       <ReactiveComponent
