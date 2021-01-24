@@ -10,7 +10,7 @@ const useKeyDown = (code: string, handler: any) => {
     (e) => {
       if (e.code === code) handler(e);
     },
-    [code]
+    [code, handler]
   );
   React.useEffect(() => {
     window.addEventListener("keydown", listener);
