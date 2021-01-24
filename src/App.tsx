@@ -1,25 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import { Provider } from "jotai";
+import "./App.css";
+import SvgCanvas from "./SvgCanvas";
 
 function App() {
+  const [size, setSize] = useState([window.innerWidth, window.innerHeight]);
+  useEffect(() => {
+    const callback = () => {
+      setSize([window.innerWidth, window.innerHeight]);
+    };
+    window.addEventListener("resize", callback);
+    return () => window.removeEventListener("resize", callback);
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider>
+      <SvgCanvas width={size[0]} height={size[1]} />
+    </Provider>
   );
 }
 
