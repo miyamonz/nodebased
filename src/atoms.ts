@@ -2,22 +2,50 @@ import { atom } from "jotai";
 import type { Atom, PrimitiveAtom } from "jotai";
 import type { RectProp } from "./types";
 
+export type Position = { x: number; y: number };
+export type PositionAtom = Atom<Position>;
+
+type Socket = {
+  position: PositionAtom;
+};
+export type InputSocket = Socket & {
+  type: "input";
+  atom: InputAtom;
+};
+export type OutputSocket = Socket & {
+  type: "output";
+  atom: OutputAtom;
+};
+
+export type InputAtom = PrimitiveAtom<number>;
+export type OutputAtom = Atom<number>;
+
 export type Node = {
-  rect: RectProp;
-  input: PrimitiveAtom<number>;
-  out: Atom<number>;
+  rect: PrimitiveAtom<RectProp>;
+  input: InputSocket;
+  output: OutputSocket;
 };
 export type NodeAtom = PrimitiveAtom<Node>;
 
 const createNodeAtom = ({ x = 0, y = 0 }): NodeAtom => {
-  const input = atom(0) as PrimitiveAtom<number>;
-  const out = atom((get) => {
-    const i = get(input);
-    return i;
-  });
-  const rect: RectProp = { x, y, width: 100, height: 50 };
-  atom({ rect, input, out });
-  return atom({ rect, input, out });
+  const rect: PrimitiveAtom<RectProp> = atom({ x, y, width: 100, height: 50 });
+  const input: InputSocket = {
+    type: "input",
+    position: atom((get) => {
+      const _rect = get(rect);
+      return { x: _rect.x, y: _rect.y + _rect.height / 2 };
+    }),
+    atom: atom(0) as InputAtom,
+  };
+  const output: OutputSocket = {
+    type: "output",
+    position: atom((get) => {
+      const _rect = get(rect);
+      return { x: _rect.x + _rect.width, y: _rect.y + _rect.height / 2 };
+    }),
+    atom: atom((get) => get(input.atom)),
+  };
+  return atom({ rect, input, output });
 };
 
 export const nodeAtomListAtom = atom<NodeAtom[]>([]);
@@ -28,37 +56,51 @@ export const addNodeAtom = atom(null, (get, set) => {
 });
 
 const dragStartAtom = atom<{ x: number; y: number } | null>(null);
+
 export const dragTargetAtom = atom<NodeAtom | null>(null);
 
-export const dragAtom = atom(
-  null,
-  (get, set, pos: readonly [number, number] | "end") => {
-    const dragTarget = get(dragTargetAtom);
-    if (!dragTarget) return; // or maybe we should warn
+function dragNode(dragTarget: Node, { get, set, pos }: any) {
+  const dragStart = get(dragStartAtom);
 
-    const dragStart = get(dragStartAtom);
-    if (pos === "end") {
-      set(dragStartAtom, null);
-      set(dragTargetAtom, null);
-    } else if (dragStart) {
-      set(dragTarget, (prev) => {
-        return {
-          ...prev,
-          rect: {
-            ...prev.rect,
-            x: pos[0] + dragStart.x,
-            y: pos[1] + dragStart.y,
-          },
-        };
-      });
-    } else {
-      const {
-        rect: { x, y },
-      } = get(dragTarget);
-      set(dragStartAtom, {
-        x: x - pos[0],
-        y: y - pos[1],
-      });
+  if (pos === "end") {
+    set(dragStartAtom, null);
+    set(dragTargetAtom, null);
+  } else if (dragStart) {
+    set(dragTarget.rect, (prev: any) => {
+      return {
+        ...prev,
+        x: pos[0] + dragStart.x,
+        y: pos[1] + dragStart.y,
+      };
+    });
+  } else {
+    const { x, y } = get(dragTarget.rect);
+    set(dragStartAtom, {
+      x: x - pos[0],
+      y: y - pos[1],
+    });
+  }
+}
+
+export const connectTargetAtom = atom<OutputSocket | null>(null);
+
+type Pos = readonly [number, number];
+const dragDataAtom = atom<Pos | "end">("end");
+
+export const dragAtom = atom(
+  (get) => get(dragDataAtom),
+  (get, set, pos: Pos | "end") => {
+    set(dragDataAtom, pos);
+    const dragTarget = get(dragTargetAtom);
+    const connectTarget = get(connectTargetAtom);
+    if (dragTarget) {
+      const node = get(dragTarget);
+      dragNode(node, { get, set, pos });
+    }
+    if (connectTarget) {
+      if (pos === "end") {
+        set(connectTargetAtom, null);
+      }
     }
   }
 );

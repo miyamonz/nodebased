@@ -1,33 +1,55 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { dragTargetAtom } from "./atoms";
-import type { NodeAtom } from "./atoms";
+import { dragTargetAtom, connectTargetAtom } from "./atoms";
+import type { NodeAtom, PositionAtom } from "./atoms";
 import SliderComponent from "./SliderNode";
 
-const IOCircle = ({ cx, cy }: { cx: number; cy: number }) => {
-  return <circle cx={cx} cy={cy} fill="white" stroke="blue" r={5} />;
-};
+const IOCircle = React.memo(
+  ({
+    positionAtom,
+    ...props
+  }: {
+    positionAtom: PositionAtom;
+    [x: string]: any;
+  }) => {
+    const [position] = useAtom(positionAtom);
+    return (
+      <circle
+        {...props}
+        cx={position.x}
+        cy={position.y}
+        fill="white"
+        stroke="blue"
+        r={7}
+      />
+    );
+  }
+);
 
 const RenderNode = ({ atom }: { atom: NodeAtom }) => {
   const [node] = useAtom(atom);
+  const [rectProp] = useAtom(node.rect);
   const [target, setTarget] = useAtom(dragTargetAtom);
+  const [, setConnectTarget] = useAtom(connectTargetAtom);
   const isTarget = atom === target;
   return (
     <>
       <rect
-        {...node.rect}
+        {...rectProp}
         fill="transparent"
         stroke="black"
         onMouseDown={() => {
           setTarget(atom);
         }}
       />
-      {isTarget && <rect {...node.rect} fill="none" stroke="red" />}
-      <SliderComponent inputAtom={node.input} rect={node.rect} />
-      <IOCircle cx={node.rect.x} cy={node.rect.y + node.rect.height / 2} />
+      {isTarget && <rect {...rectProp} fill="none" stroke="red" />}
+      <SliderComponent inputAtom={node.input.atom} rectAtom={node.rect} />
+      <IOCircle positionAtom={node.input.position} />
       <IOCircle
-        cx={node.rect.x + node.rect.width}
-        cy={node.rect.y + node.rect.height / 2}
+        positionAtom={node.output.position}
+        onMouseDown={() => {
+          setConnectTarget(node.output);
+        }}
       />
     </>
   );

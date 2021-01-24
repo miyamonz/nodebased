@@ -1,16 +1,18 @@
 import React from "react";
 import { RectProp } from "./types";
 import { useAtom } from "jotai";
-import type { PrimitiveAtom } from "jotai";
+import { PrimitiveAtom } from "jotai";
+import type { InputAtom } from "./atoms";
 
 const SliderComponent = ({
   inputAtom,
-  rect,
+  rectAtom,
 }: {
-  inputAtom: PrimitiveAtom<number>;
-  rect: RectProp;
+  inputAtom: InputAtom;
+  rectAtom: PrimitiveAtom<RectProp>;
 }) => {
   const [input, setInput] = useAtom(inputAtom);
+  const [rect] = useAtom(rectAtom);
   return (
     <>
       <text {...rect}>{input} </text>

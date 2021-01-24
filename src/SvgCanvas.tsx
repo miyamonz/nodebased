@@ -1,6 +1,7 @@
 import React from "react";
 import { useAtom } from "jotai";
 import { nodeAtomListAtom, addNodeAtom, dragAtom } from "./atoms";
+import { OutputSocket, connectTargetAtom } from "./atoms";
 import RenderNode from "./RenderNode";
 
 const useKeyDown = (code: string, handler: any) => {
@@ -17,22 +18,38 @@ const useKeyDown = (code: string, handler: any) => {
 
   return;
 };
+
+const TmpConnectLine = React.memo(({ socket }: { socket: OutputSocket }) => {
+  const [position] = useAtom(socket.position);
+  const [pos] = useAtom(dragAtom);
+  return (
+    <line
+      x1={position.x}
+      y1={position.y}
+      x2={pos[0]}
+      y2={pos[1]}
+      stroke="red"
+    />
+  );
+});
+
 function SvgCanvas({ width, height }: { width: number; height: number }) {
   const [nodeAtomList] = useAtom(nodeAtomListAtom);
   const [, addAtom] = useAtom(addNodeAtom);
-  const [, drag] = useAtom(dragAtom);
+  const [, setDrag] = useAtom(dragAtom);
+  const [connectTarget] = useAtom(connectTargetAtom);
   useKeyDown("Space", () => addAtom());
   return (
     <svg
       viewBox={`0 0 ${width} ${height}`}
       onMouseDown={(e) => {
-        drag([e.clientX, e.clientY]);
+        setDrag([e.clientX, e.clientY]);
       }}
       onMouseMove={(e) => {
-        drag([e.clientX, e.clientY]);
+        setDrag([e.clientX, e.clientY]);
       }}
       onMouseUp={() => {
-        drag("end");
+        setDrag("end");
       }}
     >
       <text x={0} y={20}>
@@ -41,6 +58,7 @@ function SvgCanvas({ width, height }: { width: number; height: number }) {
       {nodeAtomList.map((atom) => {
         return <RenderNode key={atom.toString()} atom={atom} />;
       })}
+      {connectTarget && <TmpConnectLine socket={connectTarget} />}
     </svg>
   );
 }
