@@ -1,8 +1,9 @@
 import React from "react";
 import { useAtom } from "jotai";
 import { nodeAtomListAtom, addNodeAtom, dragAtom } from "./atoms";
-import { OutputSocket, connectTargetAtom } from "./atoms";
 import RenderNode from "./RenderNode";
+
+import TmpConnectLine from "./TmpConnectLine";
 
 const useKeyDown = (code: string, handler: any) => {
   const listener = React.useCallback(
@@ -19,26 +20,13 @@ const useKeyDown = (code: string, handler: any) => {
   return;
 };
 
-const TmpConnectLine = React.memo(({ socket }: { socket: OutputSocket }) => {
-  const [position] = useAtom(socket.position);
-  const [pos] = useAtom(dragAtom);
-  return (
-    <line
-      x1={position.x}
-      y1={position.y}
-      x2={pos[0]}
-      y2={pos[1]}
-      stroke="red"
-    />
-  );
-});
-
 function SvgCanvas({ width, height }: { width: number; height: number }) {
   const [nodeAtomList] = useAtom(nodeAtomListAtom);
+
   const [, addAtom] = useAtom(addNodeAtom);
-  const [, setDrag] = useAtom(dragAtom);
-  const [connectTarget] = useAtom(connectTargetAtom);
   useKeyDown("Space", () => addAtom());
+
+  const [, setDrag] = useAtom(dragAtom);
   return (
     <svg
       viewBox={`0 0 ${width} ${height}`}
@@ -58,7 +46,7 @@ function SvgCanvas({ width, height }: { width: number; height: number }) {
       {nodeAtomList.map((atom) => {
         return <RenderNode key={atom.toString()} atom={atom} />;
       })}
-      {connectTarget && <TmpConnectLine socket={connectTarget} />}
+      <TmpConnectLine />
     </svg>
   );
 }

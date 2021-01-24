@@ -27,7 +27,7 @@ const IOCircle = React.memo(
   }
 );
 
-const RenderNode = ({ atom }: { atom: NodeAtom }) => {
+const RenderNode = ({ atom }: { atom: NodeAtom<number, number> }) => {
   const [node] = useAtom(atom);
   const [rectProp] = useAtom(node.rect);
   const [dragTarget, setDragTarget] = useAtom(dragTargetAtom);

@@ -12,7 +12,7 @@ export {
   hoveredInputSocketAtom,
 } from "./drag";
 
-export const nodeAtomListAtom = atom<NodeAtom[]>([]);
+export const nodeAtomListAtom = atom<NodeAtom<any, any>[]>([]);
 
 export const addNodeAtom = atom(null, (get, set) => {
   const nodeAtom = createNodeAtom({ x: 100, y: 20 });

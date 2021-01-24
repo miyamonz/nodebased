@@ -5,9 +5,9 @@ import type { InputSocket, OutputSocket } from "./Node";
 
 const dragStartAtom = atom<{ x: number; y: number } | null>(null);
 
-export const dragTargetAtom = atom<NodeAtom | null>(null);
+export const dragTargetAtom = atom<NodeAtom<any, any> | null>(null);
 
-function dragNode(dragTarget: Node, { get, set, pos }: any) {
+function dragNode(dragTarget: Node<any, any>, { get, set, pos }: any) {
   const dragStart = get(dragStartAtom);
 
   if (pos === "end") {
@@ -30,8 +30,8 @@ function dragNode(dragTarget: Node, { get, set, pos }: any) {
   }
 }
 
-export const connectTargetAtom = atom<OutputSocket | null>(null);
-export const hoveredInputSocketAtom = atom<InputSocket | null>(null);
+export const connectTargetAtom = atom<OutputSocket<any> | null>(null);
+export const hoveredInputSocketAtom = atom<InputSocket<any> | null>(null);
 
 type Pos = readonly [number, number];
 const dragDataAtom = atom<Pos | "end">("end");
@@ -52,8 +52,8 @@ export const dragAtom = atom(
         if (hovered) {
           console.log("connect");
           const newAtom = atom((get) => get(connectTarget.atom));
-          hovered.atom = newAtom;
           hovered.from = connectTarget;
+          set(hovered.atom, newAtom);
         }
         set(connectTargetAtom, null);
       }
