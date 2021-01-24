@@ -30,10 +30,10 @@ const IOCircle = React.memo(
 const RenderNode = ({ atom }: { atom: NodeAtom }) => {
   const [node] = useAtom(atom);
   const [rectProp] = useAtom(node.rect);
-  const [target, setTarget] = useAtom(dragTargetAtom);
+  const [dragTarget, setDragTarget] = useAtom(dragTargetAtom);
   const [, setConnectTarget] = useAtom(connectTargetAtom);
   const [, setHovered] = useAtom(hoveredInputSocketAtom);
-  const isTarget = atom === target;
+  const isTarget = atom === dragTarget;
   return (
     <>
       <rect
@@ -41,7 +41,7 @@ const RenderNode = ({ atom }: { atom: NodeAtom }) => {
         fill="transparent"
         stroke="black"
         onMouseDown={() => {
-          setTarget(atom);
+          setDragTarget(atom);
         }}
       />
       {isTarget && <rect {...rectProp} fill="none" stroke="red" />}
