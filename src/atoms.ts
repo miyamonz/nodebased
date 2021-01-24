@@ -2,19 +2,21 @@ import { atom } from "jotai";
 import type { Atom, PrimitiveAtom } from "jotai";
 import type { RectProp } from "./types";
 
-export type NodeAtom = Atom<{
+export type Node = {
   rect: RectProp;
   input: PrimitiveAtom<number>;
   out: Atom<number>;
-}>;
+};
+export type NodeAtom = PrimitiveAtom<Node>;
 
 const createNodeAtom = ({ x = 0, y = 0 }): NodeAtom => {
-  const input = atom(0);
+  const input = atom(0) as PrimitiveAtom<number>;
   const out = atom((get) => {
     const i = get(input);
     return i;
   });
-  const rect = { x, y, width: 100, height: 50 };
+  const rect: RectProp = { x, y, width: 100, height: 50 };
+  atom({ rect, input, out });
   return atom({ rect, input, out });
 };
 

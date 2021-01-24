@@ -1,33 +1,9 @@
 import React from "react";
 import { useAtom } from "jotai";
-import {
-  nodeAtomListAtom,
-  addNodeAtom,
-  dragTargetAtom,
-  dragAtom,
-} from "./atoms";
-import type { NodeAtom } from "./atoms";
+import { nodeAtomListAtom, addNodeAtom, dragAtom } from "./atoms";
+import RenderNode from "./RenderNode";
 
-const RenderNode = ({ atom }: { atom: NodeAtom }) => {
-  const [node] = useAtom(atom);
-  const [target, setTarget] = useAtom(dragTargetAtom);
-  const isTarget = atom === target;
-  return (
-    <>
-      <rect
-        {...node.rect}
-        fill="transparent"
-        stroke="black"
-        onMouseDown={() => {
-          setTarget(atom);
-        }}
-      />
-      {isTarget && <rect {...node.rect} fill="none" stroke="red" />}
-    </>
-  );
-};
-
-const useKeyDown = (code: string, handler) => {
+const useKeyDown = (code: string, handler: any) => {
   const listener = React.useCallback(
     (e) => {
       if (e.code === code) handler(e);

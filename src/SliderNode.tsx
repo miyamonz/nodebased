@@ -1,17 +1,20 @@
-import { atom, useAtom } from "jotai";
-import type { Atom, PrimitiveAtom } from "jotai";
+import React from "react";
+import { RectProp } from "./types";
+import { useAtom } from "jotai";
+import type { PrimitiveAtom } from "jotai";
 
 const SliderComponent = ({
   inputAtom,
-  ...props
+  rect,
 }: {
   inputAtom: PrimitiveAtom<number>;
+  rect: RectProp;
 }) => {
   const [input, setInput] = useAtom(inputAtom);
   return (
     <>
-      <text {...props}>{input} </text>
-      <foreignObject {...props} width={100} height={50}>
+      <text {...rect}>{input} </text>
+      <foreignObject {...rect} y={rect.y + rect.height}>
         <input
           type="range"
           min={0}
@@ -24,6 +27,4 @@ const SliderComponent = ({
   );
 };
 
-const createSliderAtom = () => {
-  return atom();
-};
+export default React.memo(SliderComponent);
