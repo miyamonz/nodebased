@@ -2,7 +2,7 @@ import { atom } from "jotai";
 
 import { createNodeAtom, NodeAtom } from "./Node";
 export type { Node, NodeAtom, PositionAtom } from "./Node";
-export type { InputSocket, OutputSocket } from "./Node";
+export type { InputSocket, OutputSocket } from "../Socket";
 export type { InputAtom, OutputAtom } from "./Node";
 
 export {

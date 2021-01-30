@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 
 import type { Node, NodeAtom } from "./Node";
-import type { InputSocket, OutputSocket } from "./Node";
+import type { InputSocket, OutputSocket } from "../Socket";
 
 const dragStartAtom = atom<{ x: number; y: number } | null>(null);
 
