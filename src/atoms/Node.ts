@@ -47,7 +47,10 @@ const createOutputSocket = <T>(
   };
 };
 
-export const createNodeAtom = ({ x = 0, y = 0 }): NodeAtom<number, number> => {
+export const createNodeAtom = ({
+  x,
+  y,
+}: Position): NodeAtom<number, number> => {
   const rect: PrimitiveAtom<RectProp> = atom({ x, y, width: 100, height: 50 });
   const input = createInputSocket(rect);
   const output = createOutputSocket(rect, input.atom);

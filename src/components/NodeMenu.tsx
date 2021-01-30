@@ -39,9 +39,10 @@ function NodeMenuList({
   onClick: () => void;
 }) {
   const [, addAtom] = useAtom(addNodeAtom);
+  const [pos] = useAtom(mousePosAtom);
   const _onClick = () => {
     onClick();
-    addAtom();
+    addAtom({ x: pos[0], y: pos[1] });
   };
 
   return (
