@@ -43,14 +43,14 @@ export type Node<I, O> = {
 export type NodeAtom<I, O> = PrimitiveAtom<Node<I, O>>;
 
 const createInputSocket = (rectAtom: RectAtom): InputSocket<number> => {
-  const zeroAtom: PrimitiveAtom<number> = atom(0);
+  const zeroAtom: Input<number> = atom(0);
   return {
     type: "input",
     position: atom((get) => {
       const rect = get(rectAtom);
       return { x: rect.x, y: rect.y + rect.height / 2 };
     }),
-    atom: atom(zeroAtom) as any,
+    atom: atom(zeroAtom),
     from: null,
   };
 };
