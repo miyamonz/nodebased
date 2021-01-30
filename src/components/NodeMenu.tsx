@@ -1,6 +1,7 @@
 import React from "react";
 import { useAtom } from "jotai";
 import { addNodeAtom, mousePosAtom } from "../atoms";
+import { createOperator } from "../Operator";
 
 const useKeyDown = (code: string, handler: any) => {
   const listener = React.useCallback(
@@ -19,13 +20,12 @@ const useKeyDown = (code: string, handler: any) => {
 
 type Option = {
   name: string;
+  fn?: (...args: any[]) => any;
 };
 const nodeOptions: Option[] = [
   { name: "slider" },
-  { name: "null" },
-  { name: "add" },
-  { name: "sub" },
-  { name: "mul" },
+  { name: "minus", fn: (a) => -a },
+  { name: "double", fn: (a) => a * 2 },
 ];
 
 const size = { width: 200, height: 300 };
@@ -42,7 +42,9 @@ function NodeMenuList({
   const [pos] = useAtom(mousePosAtom);
   const _onClick = () => {
     onClick();
-    addAtom({ x: pos[0], y: pos[1] });
+    const position = { x: pos[0], y: pos[1] };
+    const op = createOperator(option.name, option?.fn ?? ((a) => a));
+    addAtom({ position, op });
   };
 
   return (

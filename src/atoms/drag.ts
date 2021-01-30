@@ -30,8 +30,8 @@ function dragNode(dragTarget: Node<any, any>, { get, set, pos }: any) {
   }
 }
 
-export const connectTargetAtom = atom<OutputSocket<number> | null>(null);
-export const hoveredInputSocketAtom = atom<InputSocket<number> | null>(null);
+export const connectTargetAtom = atom<OutputSocket<unknown> | null>(null);
+export const hoveredInputSocketAtom = atom<InputSocket<unknown> | null>(null);
 
 type Pos = readonly [number, number];
 const dragDataAtom = atom<Pos | "end">("end");
