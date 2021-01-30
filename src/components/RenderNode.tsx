@@ -1,38 +1,14 @@
 import React from "react";
 import { useAtom } from "jotai";
 import { dragTargetAtom } from "../atoms";
-import { connectTargetAtom, hoveredInputSocketAtom } from "../atoms";
-import type { NodeAtom, PositionAtom } from "../atoms";
+import type { NodeAtom } from "../atoms";
 import SliderNode from "./SliderNode";
-
-const IOCircle = React.memo(
-  ({
-    positionAtom,
-    ...props
-  }: {
-    positionAtom: PositionAtom;
-    [x: string]: any;
-  }) => {
-    const [position] = useAtom(positionAtom);
-    return (
-      <circle
-        {...props}
-        cx={position.x}
-        cy={position.y}
-        fill="white"
-        stroke="blue"
-        r={7}
-      />
-    );
-  }
-);
+import { InputCircle, OutputCircle } from "./IOCircle";
 
 const RenderNode = ({ atom }: { atom: NodeAtom<number, number> }) => {
   const [node] = useAtom(atom);
   const [rectProp] = useAtom(node.rect);
   const [dragTarget, setDragTarget] = useAtom(dragTargetAtom);
-  const [, setConnectTarget] = useAtom(connectTargetAtom);
-  const [, setHovered] = useAtom(hoveredInputSocketAtom);
   const isTarget = atom === dragTarget;
   return (
     <>
@@ -44,23 +20,13 @@ const RenderNode = ({ atom }: { atom: NodeAtom<number, number> }) => {
           setDragTarget(atom);
         }}
       />
+      <g transform={`translate(${rectProp.x} ${rectProp.y} )`}>
+        <text>{node.op.name}</text>
+      </g>
       {isTarget && <rect {...rectProp} fill="none" stroke="red" />}
       <SliderNode node={node} />
-      <IOCircle
-        positionAtom={node.input.position}
-        onMouseEnter={() => {
-          setHovered(node.input);
-        }}
-        onMouseLeave={() => {
-          setHovered(null);
-        }}
-      />
-      <IOCircle
-        positionAtom={node.output.position}
-        onMouseDown={() => {
-          setConnectTarget(node.output);
-        }}
-      />
+      <InputCircle input={node.input} />
+      <OutputCircle output={node.output} />
     </>
   );
 };
