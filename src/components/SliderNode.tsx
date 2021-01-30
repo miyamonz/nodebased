@@ -1,10 +1,10 @@
 import React from "react";
-import { RectProp } from "./types";
+import { RectProp } from "../types";
 import { useAtom } from "jotai";
 import { Atom, PrimitiveAtom } from "jotai";
-import type { Node, InputSocket, OutputSocket } from "./atoms";
+import type { Node, InputSocket, OutputSocket } from "../atoms";
 
-import { isPrimitive } from "./util";
+import { isPrimitive } from "../util";
 
 const SliderComponent = ({
   inputAtom,

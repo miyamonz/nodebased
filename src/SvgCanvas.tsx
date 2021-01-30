@@ -1,7 +1,7 @@
 import React from "react";
 import { useAtom } from "jotai";
 import { nodeAtomListAtom, addNodeAtom, dragAtom } from "./atoms";
-import RenderNode from "./RenderNode";
+import RenderNode from "./components/RenderNode";
 
 import TmpConnectLine from "./TmpConnectLine";
 

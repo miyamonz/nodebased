@@ -1,8 +1,8 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { dragTargetAtom } from "./atoms";
-import { connectTargetAtom, hoveredInputSocketAtom } from "./atoms";
-import type { NodeAtom, PositionAtom } from "./atoms";
+import { dragTargetAtom } from "../atoms";
+import { connectTargetAtom, hoveredInputSocketAtom } from "../atoms";
+import type { NodeAtom, PositionAtom } from "../atoms";
 import SliderNode from "./SliderNode";
 
 const IOCircle = React.memo(
