@@ -2,7 +2,9 @@ import React from "react";
 import { RectProp } from "../types";
 import { useAtom } from "jotai";
 import { Atom, PrimitiveAtom } from "jotai";
-import type { Node, InputSocket, OutputSocket } from "../atoms";
+
+import NullNode from "./NullNode";
+import type { Node } from "../atoms";
 
 import { isPrimitive } from "../util";
 
@@ -20,7 +22,6 @@ const SliderComponent = ({
   const [rect] = useAtom(rectAtom);
   return (
     <>
-      <text {...rect}>{num} </text>
       <foreignObject {...rect} y={rect.y + rect.height}>
         <input
           type="range"
@@ -34,60 +35,27 @@ const SliderComponent = ({
   );
 };
 
-const ReactiveComponent = ({
-  input,
-  rectAtom,
-  from,
-}: {
-  input: InputSocket<number>;
-  rectAtom: PrimitiveAtom<RectProp>;
-  from: OutputSocket<number>;
-}) => {
-  const [inputRef] = useAtom(input.atom);
-  const [num] = useAtom(inputRef);
-
-  const [pos] = useAtom(input.position);
-  const [rect] = useAtom(rectAtom);
-  const [fromPos] = useAtom(from.position);
-  const arm = Math.abs(fromPos.x - pos.x) / 3;
-
-  return (
-    <>
-      <text {...rect}>{num}</text>
-      {/*
-      <line stroke="blue" x1={pos.x} y1={pos.y} x2={fromPos.x} y2={fromPos.y} />
-      */}
-      <path
-        stroke="blue"
-        fill="none"
-        d={`M ${fromPos.x} ${fromPos.y} C ${fromPos.x + arm} ${fromPos.y}, ${
-          pos.x - arm
-        } ${pos.y}, ${pos.x} ${pos.y} `}
-      />
-    </>
-  );
-};
-
-const SliderNode = ({ node }: { node: Node<number, number> }) => {
+type NodeComponent<I, O> = React.FC<{ node: Node<I, O> }>;
+const SliderNode: NodeComponent<number, number> = ({ node }) => {
   const [input] = useAtom(node.input.atom);
 
-  if (isPrimitive(input)) {
-    return (
-      <SliderComponent
-        inputAtom={input}
-        outputAtom={node.output.atom}
-        rectAtom={node.rect}
-      />
-    );
-  } else {
-    return (
-      <ReactiveComponent
-        input={node.input}
-        rectAtom={node.rect}
-        from={node.input.from as OutputSocket<number>}
-      />
-    );
-  }
+  const [num] = useAtom(node.output.atom);
+  const [rect] = useAtom(node.rect);
+  const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+  return (
+    <>
+      <text {...center}>{num} </text>
+      {isPrimitive(input) ? (
+        <SliderComponent
+          inputAtom={input}
+          outputAtom={node.output.atom}
+          rectAtom={node.rect}
+        />
+      ) : (
+        <NullNode node={node} />
+      )}
+    </>
+  );
 };
 
 export default SliderNode;

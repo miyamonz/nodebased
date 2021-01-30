@@ -30,8 +30,8 @@ function dragNode(dragTarget: Node<any, any>, { get, set, pos }: any) {
   }
 }
 
-export const connectTargetAtom = atom<OutputSocket<any> | null>(null);
-export const hoveredInputSocketAtom = atom<InputSocket<any> | null>(null);
+export const connectTargetAtom = atom<OutputSocket<number> | null>(null);
+export const hoveredInputSocketAtom = atom<InputSocket<number> | null>(null);
 
 type Pos = readonly [number, number];
 const dragDataAtom = atom<Pos | "end">("end");
@@ -41,16 +41,17 @@ export const dragAtom = atom(
   (get, set, pos: Pos | "end") => {
     set(dragDataAtom, pos);
     const dragTarget = get(dragTargetAtom);
-    const connectTarget = get(connectTargetAtom);
     if (dragTarget) {
       const node = get(dragTarget);
       dragNode(node, { get, set, pos });
+      return;
     }
+    const connectTarget = get(connectTargetAtom);
     if (connectTarget) {
       if (pos === "end") {
         const hovered = get(hoveredInputSocketAtom);
         if (hovered) {
-          console.log("connect");
+          console.log("connect", connectTarget, hovered);
           const newAtom = atom((get) => get(connectTarget.atom));
           hovered.from = connectTarget;
           set(hovered.atom, newAtom);
