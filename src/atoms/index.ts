@@ -18,3 +18,7 @@ export const addNodeAtom = atom(null, (get, set) => {
   const nodeAtom = createNodeAtom({ x: 100, y: 20 });
   set(nodeAtomListAtom, [...get(nodeAtomListAtom), nodeAtom]);
 });
+
+//mouse
+type Pos = readonly [number, number];
+export const mousePosAtom = atom<Pos>([0, 0]);
