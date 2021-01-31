@@ -22,7 +22,7 @@ export type InputSocketNotConnected<T> = InputSocket<T> & {
 export function isConnected<T>(
   isocket: InputSocket<T>
 ): isocket is InputSocketConnected<T> {
-  return "write" in isocket.atom;
+  return isocket.from !== null;
 }
 
 export type OutputSocket<T> = Socket & {

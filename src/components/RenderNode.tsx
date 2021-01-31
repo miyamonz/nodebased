@@ -25,7 +25,10 @@ const RenderNode = ({ atom }: { atom: NodeAtom<number, number> }) => {
       </g>
       {isTarget && <rect {...rectProp} fill="none" stroke="red" />}
       <SliderNode node={node} />
-      <InputCircle input={node.input} />
+
+      {node.inputs.map((input, i) => {
+        return <InputCircle key={input.atom.toString()} input={input} />;
+      })}
       <OutputCircle output={node.output} />
     </>
   );

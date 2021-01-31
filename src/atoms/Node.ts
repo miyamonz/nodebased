@@ -16,7 +16,7 @@ export type RectAtom = PrimitiveAtom<RectProp>;
 
 export type Node<I, O> = {
   rect: RectAtom;
-  input: InputSocket<I>;
+  inputs: InputSocket<I>[];
   output: OutputSocket<O>;
   op: Operator;
 };
@@ -24,13 +24,13 @@ export type NodeAtom<I, O> = PrimitiveAtom<Node<I, O>>;
 
 const createInputSocket = <IN>(
   defaultAtom: Input<IN>,
-  rectAtom: RectAtom
+  anchor: Atom<Position>
 ): InputSocket<IN> => {
   return {
     type: "input",
     position: atom((get) => {
-      const rect = get(rectAtom);
-      return { x: rect.x, y: rect.y + rect.height / 2 };
+      const p = get(anchor);
+      return { x: p.x, y: p.y };
     }),
     atom: atom(defaultAtom),
     from: null,
@@ -39,7 +39,7 @@ const createInputSocket = <IN>(
 
 const createOutputSocket = <IN, OUT>(
   rectAtom: RectAtom,
-  inputAtom: InputAtom<IN>,
+  inputs: InputSocket<IN>[],
   fn: (...args: IN[]) => OUT
 ): OutputSocket<OUT> => {
   return {
@@ -49,8 +49,11 @@ const createOutputSocket = <IN, OUT>(
       return { x: rect.x + rect.width, y: rect.y + rect.height / 2 };
     }),
     atom: atom((get) => {
-      const input = get(inputAtom);
-      return fn(get(input));
+      const inputValues = inputs
+        .map((i) => i.atom)
+        .map(get)
+        .map(get);
+      return fn(...inputValues);
     }),
   };
 };
@@ -67,11 +70,28 @@ export const createNodeAtom = <IN, OUT>({
     width: 100,
     height: 50,
   });
-  const input = (createInputSocket(
-    atom(0),
-    rect
-  ) as unknown) as InputSocket<IN>;
-  const output = createOutputSocket<IN, OUT>(rect, input.atom, op.fn);
+  const inputPositionAnchor: Atom<Position> = atom((get) => {
+    const r = get(rect);
+    return { x: r.x, y: r.y + r.height / 2 };
+  });
+  let prev = inputPositionAnchor;
+  const inputs = [...Array(op.fn.length).keys()].map(() => {
+    const input = (createInputSocket(
+      atom(0),
+      prev
+    ) as unknown) as InputSocket<IN>;
+    prev = atom((get) => {
+      const p = get(input.position);
+      return { x: p.x, y: p.y + 20 };
+    });
+    return input;
+  });
 
-  return atom({ rect, input, output, op });
+  const output = createOutputSocket<IN, OUT>(
+    rect,
+    inputs,
+    op.fn as (...args: IN[]) => OUT
+  );
+
+  return atom({ rect, inputs, output, op });
 };

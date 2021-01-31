@@ -1,6 +1,8 @@
 import React from "react";
 import { useAtom } from "jotai";
 import { connectTargetAtom, hoveredInputSocketAtom } from "../atoms";
+import ConnectedLine from "./ConnectedLine";
+import { isConnected } from "../Socket";
 import type { PositionAtom } from "../atoms";
 import type { InputSocket, OutputSocket } from "../Socket";
 
@@ -14,12 +16,12 @@ const IOCircle = ({
   const [position] = useAtom(positionAtom);
   return (
     <circle
-      {...props}
       cx={position.x}
       cy={position.y}
       fill="white"
       stroke="blue"
       r={7}
+      {...props}
     />
   );
 };
@@ -29,17 +31,23 @@ export const InputCircle = <T extends unknown>({
 }: {
   input: InputSocket<T>;
 }) => {
-  const [, setHovered] = useAtom(hoveredInputSocketAtom);
+  const [hovered, setHovered] = useAtom(hoveredInputSocketAtom);
+  const isHovered = hovered === input;
   return (
-    <IOCircle
-      positionAtom={input.position}
-      onMouseEnter={() => {
-        setHovered(input as InputSocket<unknown>);
-      }}
-      onMouseLeave={() => {
-        setHovered(null);
-      }}
-    />
+    <>
+      <IOCircle
+        positionAtom={input.position}
+        onMouseEnter={() => {
+          setHovered(input as InputSocket<unknown>);
+        }}
+        onMouseLeave={() => {
+          setHovered(null);
+        }}
+        fill={isHovered ? "red" : isConnected(input) ? "blue" : "white"}
+      />
+
+      {isConnected(input) && <ConnectedLine input={input} />}
+    </>
   );
 };
 export const OutputCircle = <T extends unknown>({

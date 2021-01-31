@@ -24,8 +24,11 @@ type Option = {
 };
 const nodeOptions: Option[] = [
   { name: "slider" },
+  { name: "add", fn: (a, b) => a + b },
+  { name: "sub", fn: (a, b) => a - b },
+  { name: "mul", fn: (a, b) => a * b },
+  { name: "div", fn: (a, b) => a / b },
   { name: "minus", fn: (a) => -a },
-  { name: "double", fn: (a) => a * 2 },
 ];
 
 const size = { width: 200, height: 300 };
@@ -66,6 +69,7 @@ function NodeMenu() {
   const [pos] = useAtom(mousePosAtom);
   const posWhenOpen = React.useMemo(() => {
     return { x: pos[0], y: pos[1] };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
   useKeyDown("Space", () => setOpen((prev) => !prev));
   const rect = { ...posWhenOpen, ...size };

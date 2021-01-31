@@ -37,7 +37,7 @@ const SliderComponent = ({
 
 type NodeComponent<I, O> = React.FC<{ node: Node<I, O> }>;
 const SliderNode: NodeComponent<number, number> = ({ node }) => {
-  const [input] = useAtom(node.input.atom);
+  const [input] = useAtom(node.inputs[0].atom);
 
   const [num] = useAtom(node.output.atom);
   const [rect] = useAtom(node.rect);
@@ -45,14 +45,12 @@ const SliderNode: NodeComponent<number, number> = ({ node }) => {
   return (
     <>
       <text {...center}>{num} </text>
-      {isPrimitive(input) ? (
+      {isPrimitive(input) && (
         <SliderComponent
           inputAtom={input}
           outputAtom={node.output.atom}
           rectAtom={node.rect}
         />
-      ) : (
-        <NullNode node={node} />
       )}
     </>
   );

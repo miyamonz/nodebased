@@ -54,6 +54,7 @@ export const dragAtom = atom(
           console.log("connect", connectTarget, hovered);
           const newAtom = atom((get) => get(connectTarget.atom));
           hovered.from = connectTarget;
+          // set new atom that will return target atom's value into hovered inputSocket
           set(hovered.atom, newAtom);
         }
         set(connectTargetAtom, null);
