@@ -2,7 +2,7 @@ import React from "react";
 import { useAtom } from "jotai";
 import { nodeAtomListAtom, dragAtom, mousePosAtom } from "../atoms";
 import { NodeMenu } from "../NodeMenu";
-import RenderNode from "../components/RenderNode";
+import { RenderNode } from "../Node";
 
 import TmpConnectLine from "../TmpConnectLine";
 
