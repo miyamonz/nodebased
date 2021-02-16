@@ -1,5 +1,5 @@
 import React from "react";
-import { RectProp } from "../types";
+import { Rect } from "../types";
 import { useAtom } from "jotai";
 import { Atom, PrimitiveAtom } from "jotai";
 
@@ -14,7 +14,7 @@ const SliderComponent = ({
 }: {
   inputAtom: PrimitiveAtom<number>;
   outputAtom: Atom<number>;
-  rectAtom: PrimitiveAtom<RectProp>;
+  rectAtom: PrimitiveAtom<Rect>;
 }) => {
   const [, setInput] = useAtom(inputAtom);
   const [num] = useAtom(outputAtom);
