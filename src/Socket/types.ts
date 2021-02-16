@@ -24,3 +24,9 @@ export type OutputSocket<T> = Socket & {
   type: "output";
   atom: OutputAtom<T>;
 };
+
+export function isConnected<T>(
+  isocket: InputSocket<T>
+): isocket is InputSocketConnected<T> {
+  return isocket.from !== null;
+}
