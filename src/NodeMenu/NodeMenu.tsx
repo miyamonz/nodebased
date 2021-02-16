@@ -1,6 +1,6 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { addNodeAtom, mousePosAtom } from "../atoms";
+import { mousePosAtom, addNodeAtom } from "../atoms";
 import { createOperator } from "../Operator";
 
 const useKeyDown = (code: string, handler: any) => {
