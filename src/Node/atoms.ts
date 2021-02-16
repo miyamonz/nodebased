@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { createInputSocket, createOutputSocket } from "../Socket";
 
 import type { Atom, PrimitiveAtom } from "jotai";
 import type { Position, RectProp } from "../types";
@@ -21,42 +22,6 @@ export type Node<I, O> = {
   op: Operator;
 };
 export type NodeAtom<I, O> = PrimitiveAtom<Node<I, O>>;
-
-const createInputSocket = <IN>(
-  defaultAtom: Input<IN>,
-  anchor: Atom<Position>
-): InputSocket<IN> => {
-  return {
-    type: "input",
-    position: atom((get) => {
-      const p = get(anchor);
-      return { x: p.x, y: p.y };
-    }),
-    atom: atom(defaultAtom),
-    from: null,
-  };
-};
-
-const createOutputSocket = <IN, OUT>(
-  rectAtom: RectAtom,
-  inputs: InputSocket<IN>[],
-  fn: (...args: IN[]) => OUT
-): OutputSocket<OUT> => {
-  return {
-    type: "output",
-    position: atom((get) => {
-      const rect = get(rectAtom);
-      return { x: rect.x + rect.width, y: rect.y + rect.height / 2 };
-    }),
-    atom: atom((get) => {
-      const inputValues = inputs
-        .map((i) => i.atom)
-        .map(get)
-        .map(get);
-      return fn(...inputValues);
-    }),
-  };
-};
 
 export const createNodeAtom = <IN, OUT>({
   position,
@@ -95,3 +60,12 @@ export const createNodeAtom = <IN, OUT>({
 
   return atom({ rect, inputs, output, op });
 };
+
+export const nodeAtomListAtom = atom<NodeAtom<any, any>[]>([]);
+export const addNodeAtom = atom(
+  null,
+  (get, set, { position, op }: { position: Position; op: Operator }) => {
+    const nodeAtom = createNodeAtom({ position, op });
+    set(nodeAtomListAtom, [...get(nodeAtomListAtom), nodeAtom]);
+  }
+);

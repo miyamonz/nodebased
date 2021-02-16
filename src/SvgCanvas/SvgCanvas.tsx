@@ -1,6 +1,7 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { nodeAtomListAtom, dragAtom, mousePosAtom } from "../atoms";
+import { dragAtom, mousePosAtom } from "../atoms";
+import { nodeAtomListAtom } from "../Node/atoms";
 import { NodeMenu } from "../NodeMenu";
 import { RenderNode } from "../Node";
 
