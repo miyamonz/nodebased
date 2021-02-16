@@ -6,8 +6,6 @@ import type { Position, RectProp } from "../types";
 import type { InputSocket, OutputSocket } from "../Socket";
 import type { Operator } from "../Operator";
 
-export type PositionAtom = Atom<Position>;
-
 type Input<T> = Atom<T> | PrimitiveAtom<T>;
 
 export type InputAtom<T> = PrimitiveAtom<Input<T>>;

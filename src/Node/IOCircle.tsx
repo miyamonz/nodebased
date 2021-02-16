@@ -3,7 +3,7 @@ import { useAtom } from "jotai";
 import { connectTargetAtom, hoveredInputSocketAtom } from "../atoms";
 import ConnectedLine from "./ConnectedLine";
 import { isConnected } from "../Socket";
-import type { PositionAtom } from "../atoms";
+import type { PositionAtom } from "../types";
 import type { InputSocket, OutputSocket } from "../Socket";
 
 const IOCircle = ({
