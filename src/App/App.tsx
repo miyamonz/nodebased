@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Provider } from "jotai";
 import "./App.css";
-import { SvgCanvas } from "./SvgCanvas";
+import { SvgCanvas } from "../SvgCanvas";
 
 function App() {
   const [size, setSize] = useState([window.innerWidth, window.innerHeight]);
