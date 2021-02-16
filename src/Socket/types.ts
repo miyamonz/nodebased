@@ -1,5 +1,5 @@
 import type { Atom, PrimitiveAtom } from "jotai";
-import type { InputAtom, OutputAtom } from "../Node/atoms";
+import type { InputAtom, OutputAtom } from "../Node";
 import type { PositionAtom } from "../types";
 
 export type Input<T> = Atom<T> | PrimitiveAtom<T>;

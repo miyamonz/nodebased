@@ -7,7 +7,6 @@ import type { InputSocket, OutputSocket } from "../Socket";
 import type { Operator } from "../Operator";
 
 type Input<T> = Atom<T> | PrimitiveAtom<T>;
-
 export type InputAtom<T> = PrimitiveAtom<Input<T>>;
 export type OutputAtom<T> = Atom<T>;
 

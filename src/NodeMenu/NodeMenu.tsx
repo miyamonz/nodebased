@@ -1,6 +1,6 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { addNodeAtom } from "../Node/atoms";
+import { addNodeAtom } from "../Node";
 import { mousePosAtom } from "../atoms";
 import { createOperator } from "../Operator";
 
