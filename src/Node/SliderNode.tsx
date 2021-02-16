@@ -3,7 +3,6 @@ import { RectProp } from "../types";
 import { useAtom } from "jotai";
 import { Atom, PrimitiveAtom } from "jotai";
 
-import NullNode from "./NullNode";
 import type { Node } from "../atoms";
 
 import { isPrimitive } from "../util";
