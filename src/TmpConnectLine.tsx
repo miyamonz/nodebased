@@ -1,7 +1,7 @@
 import React from "react";
 import { useAtom } from "jotai";
 import { dragAtom, connectTargetAtom } from "./Drag";
-import type { OutputSocket } from "./atoms";
+import type { OutputSocket } from "./Socket";
 
 const TmpConnectLineImpl = <T extends unknown>({
   socket,
