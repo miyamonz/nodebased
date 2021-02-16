@@ -1,6 +1,6 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { connectTargetAtom, hoveredInputSocketAtom } from "../atoms";
+import { connectTargetAtom, hoveredInputSocketAtom } from "../Drag";
 import ConnectedLine from "./ConnectedLine";
 import { isConnected } from "../Socket";
 import type { PositionAtom } from "../types";

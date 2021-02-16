@@ -1,6 +1,6 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { dragTargetAtom } from "../atoms";
+import { dragTargetAtom } from "../Drag";
 import type { NodeAtom } from "./atoms";
 import SliderNode from "./SliderNode";
 import { InputCircle, OutputCircle } from "./IOCircle";
