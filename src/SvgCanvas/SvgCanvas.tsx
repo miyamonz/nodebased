@@ -2,15 +2,12 @@ import React from "react";
 import { useAtom } from "jotai";
 import { dragAtom } from "../Drag";
 import { mousePosAtom } from "../atoms";
-import { nodeAtomListAtom } from "../Node";
 import { NodeMenu } from "../NodeMenu";
-import { RenderNode } from "../Node";
+import { RenderAllNode } from "../Node";
 
 import TmpConnectLine from "../TmpConnectLine";
 
 function SvgCanvas({ width, height }: { width: number; height: number }) {
-  const [nodeAtomList] = useAtom(nodeAtomListAtom);
-
   const [, setDrag] = useAtom(dragAtom);
   const [, setPos] = useAtom(mousePosAtom);
   return (
@@ -32,9 +29,7 @@ function SvgCanvas({ width, height }: { width: number; height: number }) {
         nodebased
       </text>
       <TmpConnectLine />
-      {nodeAtomList.map((atom) => {
-        return <RenderNode key={atom.toString()} atom={atom} />;
-      })}
+      <RenderAllNode />
       <NodeMenu />
     </svg>
   );
