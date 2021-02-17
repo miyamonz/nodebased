@@ -1,6 +1,6 @@
 import React from "react";
 import { useAtom } from "jotai";
-import type { InputSocketConnected } from "../Socket";
+import type { InputSocketConnected } from "./types";
 
 const ConnectedLine = <T extends unknown>({
   input,

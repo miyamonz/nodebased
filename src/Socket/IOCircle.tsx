@@ -2,9 +2,9 @@ import React from "react";
 import { useAtom } from "jotai";
 import { connectTargetAtom, hoveredInputSocketAtom } from "../Drag";
 import ConnectedLine from "./ConnectedLine";
-import { isConnected } from "../Socket";
+import { isConnected } from "./types";
+import type { InputSocket, OutputSocket } from "./types";
 import type { PositionAtom } from "../types";
-import type { InputSocket, OutputSocket } from "../Socket";
 
 const IOCircle = ({
   positionAtom,

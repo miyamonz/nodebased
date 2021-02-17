@@ -3,7 +3,7 @@ import { useAtom } from "jotai";
 import { dragTargetAtom } from "../Drag";
 import type { NodeAtom } from "./types";
 import NodeSwitcher from "./NodeSwitcher";
-import { InputCircle, OutputCircle } from "./IOCircle";
+import { InputCircle, OutputCircle } from "../Socket";
 
 const RenderNode = ({ atom }: { atom: NodeAtom<number, number> }) => {
   const [node] = useAtom(atom);
