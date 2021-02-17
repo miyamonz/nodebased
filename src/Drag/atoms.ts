@@ -2,33 +2,11 @@ import { atom } from "jotai";
 
 import type { Node, NodeAtom } from "../Node";
 import type { InputSocket, OutputSocket } from "../Socket";
+import type { Position } from "../types";
 
-const dragStartAtom = atom<{ x: number; y: number } | null>(null);
+const dragStartAtom = atom<Position | null>(null);
 
-export const dragTargetAtom = atom<NodeAtom<any, any> | null>(null);
-
-function dragNode(dragTarget: Node<any, any>, { get, set, pos }: any) {
-  const dragStart = get(dragStartAtom);
-
-  if (pos === "end") {
-    set(dragStartAtom, null);
-    set(dragTargetAtom, null);
-  } else if (dragStart) {
-    set(dragTarget.rect, (prev: any) => {
-      return {
-        ...prev,
-        x: pos[0] + dragStart.x,
-        y: pos[1] + dragStart.y,
-      };
-    });
-  } else {
-    const { x, y } = get(dragTarget.rect);
-    set(dragStartAtom, {
-      x: x - pos[0],
-      y: y - pos[1],
-    });
-  }
-}
+export const dragTargetAtom = atom<NodeAtom<unknown, unknown> | null>(null);
 
 export const connectTargetAtom = atom<OutputSocket<unknown> | null>(null);
 export const hoveredInputSocketAtom = atom<InputSocket<unknown> | null>(null);
@@ -42,8 +20,8 @@ export const dragAtom = atom(
     set(dragDataAtom, pos);
     const dragTarget = get(dragTargetAtom);
     if (dragTarget) {
-      const node = get(dragTarget);
-      dragNode(node, { get, set, pos });
+      const target = get(dragTarget);
+      set(dragNodeAtom, { target, pos });
       return;
     }
     const connectTarget = get(connectTargetAtom);
@@ -59,6 +37,36 @@ export const dragAtom = atom(
         }
         set(connectTargetAtom, null);
       }
+    }
+  }
+);
+
+const dragNodeAtom = atom(
+  null,
+  (
+    get,
+    set,
+    { target, pos }: { target: Node<unknown, unknown>; pos: Pos | "end" }
+  ) => {
+    const dragStart = get(dragStartAtom);
+
+    if (pos === "end") {
+      set(dragStartAtom, null);
+      set(dragTargetAtom, null);
+    } else if (dragStart) {
+      set(target.rect, (prev: any) => {
+        return {
+          ...prev,
+          x: pos[0] + dragStart.x,
+          y: pos[1] + dragStart.y,
+        };
+      });
+    } else {
+      const { x, y } = get(target.rect);
+      set(dragStartAtom, {
+        x: x - pos[0],
+        y: y - pos[1],
+      });
     }
   }
 );
