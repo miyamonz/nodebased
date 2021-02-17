@@ -18,25 +18,19 @@ export const dragAtom = atom(
   (get) => get(dragDataAtom),
   (get, set, pos: Pos | "end") => {
     set(dragDataAtom, pos);
+
+    // drag node
     const dragTarget = get(dragTargetAtom);
     if (dragTarget) {
       const target = get(dragTarget);
       set(dragNodeAtom, { target, pos });
       return;
     }
+
+    // connect
     const connectTarget = get(connectTargetAtom);
-    if (connectTarget) {
-      if (pos === "end") {
-        const hovered = get(hoveredInputSocketAtom);
-        if (hovered) {
-          console.log("connect", connectTarget, hovered);
-          const newAtom = atom((get) => get(connectTarget.atom));
-          hovered.from = connectTarget;
-          // set new atom that will return target atom's value into hovered inputSocket
-          set(hovered.atom, newAtom);
-        }
-        set(connectTargetAtom, null);
-      }
+    if (pos === "end" && connectTarget) {
+      set(dragConnectAtom, connectTarget);
     }
   }
 );
@@ -68,5 +62,20 @@ const dragNodeAtom = atom(
         y: y - pos[1],
       });
     }
+  }
+);
+
+const dragConnectAtom = atom(
+  null,
+  (get, set, connectTarget: OutputSocket<unknown>) => {
+    const hovered = get(hoveredInputSocketAtom);
+    if (hovered) {
+      console.log("connect", connectTarget, hovered);
+      const newAtom = atom((get) => get(connectTarget.atom));
+      hovered.from = connectTarget;
+      // set new atom that will return target atom's value into hovered inputSocket
+      set(hovered.atom, newAtom);
+    }
+    set(connectTargetAtom, null);
   }
 );
