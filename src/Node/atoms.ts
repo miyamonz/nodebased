@@ -1,22 +1,10 @@
 import { atom } from "jotai";
 import { createInputSocket, createOutputSocket } from "../Socket";
 
-import type { Atom, PrimitiveAtom } from "jotai";
-import type { Position, RectAtom } from "../types";
-import type { InputSocket, OutputSocket } from "../Socket";
+import type { NodeAtom } from "./types";
+import type { Position, PositionAtom, RectAtom } from "../types";
+import type { InputSocket } from "../Socket";
 import type { Operator } from "../Operator";
-
-type Input<T> = Atom<T> | PrimitiveAtom<T>;
-export type InputAtom<T> = PrimitiveAtom<Input<T>>;
-export type OutputAtom<T> = Atom<T>;
-
-export type Node<I, O> = {
-  rect: RectAtom;
-  inputs: InputSocket<I>[];
-  output: OutputSocket<O>;
-  op: Operator;
-};
-export type NodeAtom<I, O> = PrimitiveAtom<Node<I, O>>;
 
 export const createNodeAtom = <IN, OUT>({
   position,
@@ -30,7 +18,7 @@ export const createNodeAtom = <IN, OUT>({
     width: 100,
     height: 50,
   });
-  const inputPositionAnchor: Atom<Position> = atom((get) => {
+  const inputPositionAnchor: PositionAtom = atom((get) => {
     const r = get(rect);
     return { x: r.x, y: r.y + r.height / 2 };
   });

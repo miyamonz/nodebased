@@ -1,10 +1,10 @@
 import React from "react";
-import { Rect } from "../types";
 import { useAtom } from "jotai";
-import { Atom, PrimitiveAtom } from "jotai";
 
-import type { Node } from "./atoms";
+import type { Atom, PrimitiveAtom } from "jotai";
+import type { Node } from "./types";
 
+import { RectAtom } from "../types";
 import { isPrimitive } from "../util";
 
 const SliderComponent = ({
@@ -14,7 +14,7 @@ const SliderComponent = ({
 }: {
   inputAtom: PrimitiveAtom<number>;
   outputAtom: Atom<number>;
-  rectAtom: PrimitiveAtom<Rect>;
+  rectAtom: RectAtom;
 }) => {
   const [, setInput] = useAtom(inputAtom);
   const [num] = useAtom(outputAtom);
