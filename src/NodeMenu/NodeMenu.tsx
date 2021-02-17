@@ -30,6 +30,7 @@ const nodeOptions: Option[] = [
   { name: "mul", fn: (a, b) => a * b },
   { name: "div", fn: (a, b) => a / b },
   { name: "minus", fn: (a) => -a },
+  { name: "clamp", fn: (a, min, max) => Math.max(min, Math.min(max, a)) },
 ];
 
 const size = { width: 200, height: 300 };
