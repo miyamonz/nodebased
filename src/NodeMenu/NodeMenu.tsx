@@ -42,13 +42,13 @@ function NodeMenuList({
   option: Option;
   onClick: () => void;
 }) {
-  const [, addAtom] = useAtom(addNodeAtom);
+  const [, addNode] = useAtom(addNodeAtom);
   const [pos] = useAtom(mousePosAtom);
   const _onClick = () => {
     onClick();
     const position = { x: pos[0], y: pos[1] };
     const op = createOperator(option.name, option?.fn ?? ((a) => a));
-    addAtom({ position, op });
+    addNode({ position, op });
   };
 
   return (
