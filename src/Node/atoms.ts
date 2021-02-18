@@ -27,7 +27,7 @@ export const createNodeAtom = <IN, OUT>({
     const input = (createInputSocket(
       atom(0),
       prev
-    ) as unknown) as InputSocket<IN>;
+    ) as unknown) as InputSocket<IN>; // force InputSocket<number> to InputSocket<IN>. you should initialize atom depends on its type
     prev = atom((get) => {
       const p = get(input.position);
       return { x: p.x, y: p.y + 20 };

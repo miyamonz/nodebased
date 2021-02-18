@@ -44,7 +44,7 @@ const dragNodeAtom = atom(
       set(dragStartAtom, null);
       set(dragTargetAtom, null);
     } else if (dragStart) {
-      set(target.rect, (prev: any) => {
+      set(target.rect, (prev) => {
         return {
           ...prev,
           x: pos[0] + dragStart.x,

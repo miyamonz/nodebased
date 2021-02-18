@@ -4,7 +4,7 @@ import { addNodeAtom } from "../Node";
 import { mousePosAtom } from "../atoms";
 import { createOperator } from "../Operator";
 
-const useKeyDown = (code: string, handler: any) => {
+const useKeyDown = (code: string, handler: (e: KeyboardEvent) => void) => {
   const listener = React.useCallback(
     (e) => {
       if (e.code === code) handler(e);
