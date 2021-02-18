@@ -47,8 +47,8 @@ export const createNodeAtom = <IN, OUT>({
 export const nodeAtomListAtom = atom<NodeAtom<any, any>[]>([]);
 export const addNodeAtom = atom(
   null,
-  (get, set, { position, op }: { position: Position; op: Operator }) => {
-    const nodeAtom = createNodeAtom({ position, op });
-    set(nodeAtomListAtom, [...get(nodeAtomListAtom), nodeAtom]);
+  (_get, set, args: Parameters<typeof createNodeAtom>[0]) => {
+    const nodeAtom = createNodeAtom(args);
+    set(nodeAtomListAtom, (prev) => [...prev, nodeAtom]);
   }
 );

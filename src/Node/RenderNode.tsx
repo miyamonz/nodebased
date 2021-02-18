@@ -20,7 +20,7 @@ const RenderNode = ({ atom }: { atom: NodeAtom<number, number> }) => {
           setDragTarget(atom as NodeAtom<unknown, unknown>);
         }}
       />
-      <g transform={`translate(${rectProp.x} ${rectProp.y} )`}>
+      <g transform={`translate(${rectProp.x} ${rectProp.y - 5} )`}>
         <text>{node.op.name}</text>
       </g>
       {isDragTarget && <rect {...rectProp} fill="none" stroke="red" />}
