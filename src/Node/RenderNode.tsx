@@ -5,7 +5,7 @@ import type { NodeAtom } from "./types";
 import NodeSwitcher from "./NodeSwitcher";
 import { InputCircle, OutputCircle } from "../Socket";
 
-const RenderNode = ({ atom }: { atom: NodeAtom<number, number> }) => {
+const RenderNode = ({ atom }: { atom: NodeAtom }) => {
   const [node] = useAtom(atom);
   const [rectProp] = useAtom(node.rect);
   const [dragTarget, setDragTarget] = useAtom(dragTargetAtom);
@@ -17,7 +17,7 @@ const RenderNode = ({ atom }: { atom: NodeAtom<number, number> }) => {
         fill="transparent"
         stroke="black"
         onMouseDown={() => {
-          setDragTarget(atom as NodeAtom<unknown, unknown>);
+          setDragTarget(atom);
         }}
       />
       <g transform={`translate(${rectProp.x} ${rectProp.y - 5} )`}>

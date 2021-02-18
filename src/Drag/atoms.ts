@@ -6,7 +6,7 @@ import type { Position } from "../types";
 
 const dragStartAtom = atom<Position | null>(null);
 
-export const dragTargetAtom = atom<NodeAtom<unknown, unknown> | null>(null);
+export const dragTargetAtom = atom<NodeAtom | null>(null);
 
 export const connectTargetAtom = atom<OutputSocket<unknown> | null>(null);
 export const hoveredInputSocketAtom = atom<InputSocket<unknown> | null>(null);
@@ -37,11 +37,7 @@ export const dragAtom = atom(
 
 const dragNodeAtom = atom(
   null,
-  (
-    get,
-    set,
-    { target, pos }: { target: Node<unknown, unknown>; pos: Pos | "end" }
-  ) => {
+  (get, set, { target, pos }: { target: Node; pos: Pos | "end" }) => {
     const dragStart = get(dragStartAtom);
 
     if (pos === "end") {

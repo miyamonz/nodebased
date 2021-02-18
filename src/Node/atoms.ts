@@ -12,7 +12,7 @@ export const createNodeAtom = <IN, OUT>({
 }: {
   position: Position;
   op: Operator;
-}): NodeAtom<IN, OUT> => {
+}) => {
   const rect: RectAtom = atom({
     ...position,
     width: 100,
@@ -44,7 +44,7 @@ export const createNodeAtom = <IN, OUT>({
   return atom({ rect, inputs, output, op });
 };
 
-export const nodeAtomListAtom = atom<NodeAtom<any, any>[]>([]);
+export const nodeAtomListAtom = atom<NodeAtom[]>([]);
 export const addNodeAtom = atom(
   null,
   (_get, set, args: Parameters<typeof createNodeAtom>[0]) => {

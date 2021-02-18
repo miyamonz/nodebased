@@ -7,10 +7,10 @@ type Input<T> = Atom<T> | PrimitiveAtom<T>;
 export type InputAtom<T> = PrimitiveAtom<Input<T>>;
 export type OutputAtom<T> = Atom<T>;
 
-export type Node<I, O> = {
+export type Node = {
   rect: RectAtom;
-  inputs: InputSocket<I>[];
-  output: OutputSocket<O>;
+  inputs: InputSocket<unknown>[];
+  output: OutputSocket<unknown>;
   op: Operator;
 };
-export type NodeAtom<I, O> = PrimitiveAtom<Node<I, O>>;
+export type NodeAtom = PrimitiveAtom<Node>;
