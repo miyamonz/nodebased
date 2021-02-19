@@ -7,7 +7,7 @@ import { isPrimitive } from "../util";
 
 type NodeComponent = React.FC<{ node: Node }>;
 const NodeSwitcher: NodeComponent = ({ node }) => {
-  const [input] = useAtom(node.inputs[0].atom);
+  const [inputAtom] = useAtom(node.inputs[0].atom);
 
   const [num] = useAtom(node.output.atom as Atom<number>);
   const [rect] = useAtom(node.rect);
@@ -15,15 +15,13 @@ const NodeSwitcher: NodeComponent = ({ node }) => {
   return (
     <>
       <text {...center}>{typeof num === "number" && num}</text>
-      {isPrimitive(input) &&
-        typeof input === "number" &&
-        typeof num === "number" && (
-          <SliderNode
-            inputAtom={input}
-            outputAtom={node.output.atom as Atom<number>}
-            rectAtom={node.rect}
-          />
-        )}
+      {isPrimitive(inputAtom) && typeof num === "number" && (
+        <SliderNode
+          inputAtom={inputAtom as any}
+          outputAtom={node.output.atom as Atom<number>}
+          rectAtom={node.rect}
+        />
+      )}
     </>
   );
 };

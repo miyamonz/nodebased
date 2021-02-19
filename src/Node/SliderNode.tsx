@@ -1,16 +1,17 @@
-import React from 'react'
+import React from "react";
 import { useAtom } from "jotai";
 import type { Atom, PrimitiveAtom } from "jotai";
 import { RectAtom } from "../types";
 
-const SliderNode = ({
-  inputAtom,
-  outputAtom,
-  rectAtom,
-}: {
+type SliderProps = {
   inputAtom: PrimitiveAtom<number>;
   outputAtom: Atom<number>;
   rectAtom: RectAtom;
+};
+export const SliderNode: React.FC<SliderProps> = ({
+  inputAtom,
+  outputAtom,
+  rectAtom,
 }) => {
   const [, setInput] = useAtom(inputAtom);
   const [num] = useAtom(outputAtom);

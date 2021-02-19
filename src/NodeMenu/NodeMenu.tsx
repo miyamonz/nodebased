@@ -4,6 +4,8 @@ import { addNodeAtom } from "../Node";
 import { mousePosAtom } from "../atoms";
 import { createOperator } from "../Operator";
 
+import { SliderNode } from "../Node/SliderNode";
+
 const useKeyDown = (code: string, handler: (e: KeyboardEvent) => void) => {
   const listener = React.useCallback(
     (e) => {
@@ -22,9 +24,10 @@ const useKeyDown = (code: string, handler: (e: KeyboardEvent) => void) => {
 type Option = {
   name: string;
   fn?: (...args: any[]) => any;
+  component?: React.FC<any>;
 };
 const nodeOptions: Option[] = [
-  { name: "slider" },
+  { name: "slider", component: SliderNode },
   { name: "add", fn: (a, b) => a + b },
   { name: "sub", fn: (a, b) => a - b },
   { name: "mul", fn: (a, b) => a * b },
@@ -48,7 +51,11 @@ function NodeMenuList({
   const _onClick = () => {
     onClick();
     const position = { x: pos[0], y: pos[1] };
-    const op = createOperator(option.name, option?.fn ?? ((a) => a));
+    const op = createOperator(
+      option.name,
+      option?.fn ?? ((a) => a),
+      option?.component
+    );
     addNode({ position, op });
   };
 
