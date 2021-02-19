@@ -5,6 +5,7 @@ import { mousePosAtom } from "../atoms";
 import { createOperator } from "../Operator";
 
 import { SliderNode } from "../Node/SliderNode";
+import { RenderElementNode } from "../Node/RenderElementNode";
 
 const useKeyDown = (code: string, handler: (e: KeyboardEvent) => void) => {
   const listener = React.useCallback(
@@ -34,6 +35,11 @@ const nodeOptions: Option[] = [
   { name: "div", fn: (a, b) => a / b },
   { name: "minus", fn: (a) => -a },
   { name: "clamp", fn: (a, min, max) => Math.max(min, Math.min(max, a)) },
+  {
+    name: "square",
+    fn: (x, y, r) => <rect x={x} y={y} width={r} height={r} fill="blue" />,
+  },
+  { name: "render", fn: (_) => {}, component: RenderElementNode },
 ];
 
 const size = { width: 200, height: 300 };
