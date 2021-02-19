@@ -1,21 +1,20 @@
 import React from "react";
 import { useAtom } from "jotai";
 import type { Atom, PrimitiveAtom } from "jotai";
-import { RectAtom } from "../types";
+import type { Node } from "./types";
+import type { InputSocketNotConnected } from "../Socket/types";
 
-type SliderProps = {
-  inputAtom: PrimitiveAtom<number>;
-  outputAtom: Atom<number>;
-  rectAtom: RectAtom;
+type Props = {
+  node: Node;
 };
-export const SliderNode: React.FC<SliderProps> = ({
-  inputAtom,
-  outputAtom,
-  rectAtom,
-}) => {
+export const SliderNode: React.FC<Props> = ({ node }) => {
+  const isocket = node.inputs[0] as InputSocketNotConnected<number>;
+  const [inputAtom] = useAtom(isocket.atom);
   const [, setInput] = useAtom(inputAtom);
-  const [num] = useAtom(outputAtom);
-  const [rect] = useAtom(rectAtom);
+
+  const [num] = useAtom(node.output.atom as Atom<number>);
+
+  const [rect] = useAtom(node.rect);
   return (
     <>
       <foreignObject {...rect} y={rect.y + rect.height}>

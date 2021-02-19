@@ -1,8 +1,9 @@
 import React from "react";
+import type { Node } from "./Node";
 export type Operator = {
   name: string;
   fn: (...args: unknown[]) => unknown;
-  component: React.ComponentType;
+  component: React.FC<{ node: Node }>;
 };
 
 const defaultNode = () => <></>;
@@ -10,7 +11,7 @@ const defaultNode = () => <></>;
 export function createOperator(
   name: string,
   fn: (...args: unknown[]) => unknown,
-  component: React.ComponentType = defaultNode
+  component: Operator["component"] = defaultNode
 ): Operator {
   return {
     name,
