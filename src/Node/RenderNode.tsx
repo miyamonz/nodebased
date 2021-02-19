@@ -10,6 +10,8 @@ const RenderNode = ({ atom }: { atom: NodeAtom }) => {
   const [rectProp] = useAtom(node.rect);
   const [dragTarget, setDragTarget] = useAtom(dragTargetAtom);
   const isDragTarget = atom === dragTarget;
+
+  const [outValue] = useAtom(node.output.atom);
   return (
     <>
       <rect
@@ -29,7 +31,7 @@ const RenderNode = ({ atom }: { atom: NodeAtom }) => {
       {node.inputs.map((input) => {
         return <InputCircle key={input.atom.toString()} input={input} />;
       })}
-      <OutputCircle output={node.output} />
+      {outValue !== undefined && <OutputCircle output={node.output} />}
     </>
   );
 };
