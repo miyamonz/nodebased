@@ -6,13 +6,10 @@ import { isConnected } from "./types";
 import type { InputSocket, OutputSocket } from "./types";
 import type { PositionAtom } from "../types";
 
-const IOCircle = ({
-  positionAtom,
-  ...props
-}: {
+type IOCircleProps = {
   positionAtom: PositionAtom;
-  [x: string]: any;
-}) => {
+} & JSX.IntrinsicElements["circle"];
+const IOCircle: React.FC<IOCircleProps> = ({ positionAtom, ...props }) => {
   const [position] = useAtom(positionAtom);
   return (
     <circle
