@@ -1,6 +1,6 @@
 import type { Atom, PrimitiveAtom } from "jotai";
 
-type Input<T> = Atom<T> | PrimitiveAtom<T>;
+type Input<T> = Atom<T>;
 // TODO: PrimitiveAtom is not covariance
 // you can't assign PrimitiveAtom<X> into PrimitiveAtom<X | Y>
 export type InputAtom<T> = PrimitiveAtom<Input<T>>;

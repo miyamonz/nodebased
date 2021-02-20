@@ -1,7 +1,4 @@
-import { SliderNode, RenderElementNode, RenderAtomNode } from "../NodeList";
-
-import { defaultNodeSizeAtom } from "../Node/atoms";
-import type { Fn } from "../Variable/types";
+import { SliderNode, RenderElementNode } from "../NodeList";
 
 type OptionBase = {
   name: string;

@@ -39,8 +39,8 @@ function NodeMenuList({
     onClick();
     const position = { x: pos[0], y: pos[1] };
     const op = createOperator(option.name, option?.component);
-    const createOutput = (input: Parameters<typeof createOutputAtom>[0]) =>
-      createOutputAtom(input, option.fn);
+    const createOutput = <IN,>(inputs: InputAtom<IN>[]) =>
+      createOutputAtom(inputs, option.fn);
 
     const num = option.fn.length;
 
