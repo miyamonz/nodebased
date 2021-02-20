@@ -12,15 +12,17 @@ export const createNodeAtom = <IN, OUT>({
   rect,
   op,
   variable,
+  name,
 }: {
   rect: RectAtom;
   op: Operator;
   variable: Variable<IN, OUT>;
+  name: string;
 }) => {
   const inputSockets = createInputSockets<IN>(rect, variable.inputAtoms);
   const outputSocket = createOutputSocket(rect, variable.outputAtom);
 
-  return atom({ rect, inputs: inputSockets, output: outputSocket, op });
+  return atom({ rect, inputs: inputSockets, output: outputSocket, op, name });
 };
 
 export const nodeAtomListAtom = atom<NodeAtom[]>([]);

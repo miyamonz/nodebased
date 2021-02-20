@@ -38,7 +38,7 @@ function NodeMenuList({
   const _onClick = () => {
     onClick();
     const position = { x: pos[0], y: pos[1] };
-    const op = createOperator(option.name, option?.component);
+    const op = createOperator(option?.component);
     const createOutput = <IN,>(inputs: InputAtom<IN>[]) =>
       createOutputAtom(inputs, option.fn);
 
@@ -48,7 +48,7 @@ function NodeMenuList({
       return atom(atom(0)) as any; // TODO: PrimitiveAtom is not covariance
     });
     const variable = createVariable(inputAtoms, createOutput);
-    appendNode({ position, op, variable });
+    appendNode({ position, op, variable, name: option.name });
   };
 
   return (

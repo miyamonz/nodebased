@@ -7,6 +7,7 @@ export type Node = {
   rect: RectAtom;
   inputs: InputSocket<unknown>[];
   output: OutputSocket<unknown>;
+  name: string;
   op: Operator;
 };
 export type NodeComponent = React.FC<{ node: Node }>;

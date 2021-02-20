@@ -23,7 +23,7 @@ const RenderNode = ({ atom }: { atom: NodeAtom }) => {
         }}
       />
       <g transform={`translate(${rectProp.x} ${rectProp.y - 5} )`}>
-        <text>{node.op.name}</text>
+        <text>{node.name}</text>
       </g>
       {isDragTarget && <rect {...rectProp} fill="none" stroke="red" />}
       <NodeSwitcher node={node} />
