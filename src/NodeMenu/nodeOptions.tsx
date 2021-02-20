@@ -1,5 +1,7 @@
 import { SliderNode, RenderElementNode } from "../NodeList";
 import { NodeComponent } from "../Node";
+import { defaultNodeSizeVariable } from "../Node";
+import type { Variable } from "../Variable";
 
 type OptionBase = {
   name: string;
@@ -8,7 +10,10 @@ type OptionBase = {
 type OptionFn = OptionBase & {
   fn: (...args: any[]) => unknown;
 };
-export type Option = OptionFn;
+type OptionVariable = OptionBase & {
+  variable: Variable<number, unknown>;
+};
+export type Option = OptionFn | OptionVariable;
 export const nodeOptions: Option[] = [
   { name: "slider", fn: (x) => x, component: SliderNode },
   { name: "add", fn: (a, b) => a + b },
@@ -22,4 +27,9 @@ export const nodeOptions: Option[] = [
     fn: (x, y, r) => <rect x={x} y={y} width={r} height={r} fill="blue" />,
   },
   { name: "render", fn: (_) => {}, component: RenderElementNode },
+  {
+    name: "nodeSize",
+    variable: defaultNodeSizeVariable,
+    component: RenderElementNode,
+  },
 ];

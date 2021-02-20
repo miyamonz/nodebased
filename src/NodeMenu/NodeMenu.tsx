@@ -25,6 +25,19 @@ const useKeyDown = (code: string, handler: (e: KeyboardEvent) => void) => {
 const size = { width: 200, height: 300 };
 const optionHeight = 20;
 
+function createVariableFromOption(option: Option) {
+  if ("variable" in option) return option.variable;
+  const createOutput = <IN,>(inputs: InputAtom<IN>[]) =>
+    createOutputAtom(inputs, option.fn);
+
+  const num = option.fn.length;
+
+  const inputAtoms: InputAtom<unknown>[] = [...Array(num).keys()].map(() => {
+    return atom(atom(0)) as any; // TODO: PrimitiveAtom is not covariance
+  });
+  return createVariable(inputAtoms, createOutput);
+}
+
 function NodeMenuList({
   option,
   onClick,
@@ -37,16 +50,8 @@ function NodeMenuList({
   const _onClick = () => {
     onClick();
     const position = { x: pos[0], y: pos[1] };
-    const createOutput = <IN,>(inputs: InputAtom<IN>[]) =>
-      createOutputAtom(inputs, option.fn);
-
-    const num = option.fn.length;
-
-    const inputAtoms: InputAtom<unknown>[] = [...Array(num).keys()].map(() => {
-      return atom(atom(0)) as any; // TODO: PrimitiveAtom is not covariance
-    });
-    const variable = createVariable(inputAtoms, createOutput);
     const component = option?.component ?? (() => <></>);
+    const variable = createVariableFromOption(option) as any;
     appendNode({
       position,
       variable,
