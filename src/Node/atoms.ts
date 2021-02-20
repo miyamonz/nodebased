@@ -1,54 +1,27 @@
 import { atom } from "jotai";
-import type { PrimitiveAtom } from "jotai";
 import { createInputSocket, createOutputSocket } from "../Socket";
 
-import type { NodeAtom, NodeFn } from "./types";
-import type { Position, PositionAtom, RectAtom } from "../types";
+import type { NodeAtom, NodeFn, InputAtom } from "./types";
+import type { Position, PositionAtom } from "../types";
 import type { InputSocket } from "../Socket";
 import type { Operator } from "../Operator";
 
+import { createRectAtom, RectAtom } from "../Rect";
+
 export const defaultNodeSizeAtom = atom({ width: 100, height: 50 });
 
-function createRectAtom(posAtom: PrimitiveAtom<Position>): RectAtom {
-  const rect = atom(
-    (get) => {
-      const defaultSize = get(defaultNodeSizeAtom);
-      const position = get(posAtom);
-      return {
-        ...position,
-        ...defaultSize,
-      };
-    },
-    (get, set, action) => {
-      const newRect = typeof action === "function" ? action(get(rect)) : action;
-      set(posAtom, { x: newRect.x, y: newRect.y });
-    }
-  );
-  return rect;
-}
-
-export const createNodeAtom = <IN, OUT>({
-  position,
-  op,
-  createOutput,
-}: {
-  position: Position;
-  op: Operator;
-  createOutput: NodeFn<IN, OUT>;
-}) => {
-  const rectPos = atom(position);
-  const rect = createRectAtom(rectPos);
-
+// input sockets depend on rect because they contain their own position.
+function createInputSockets<IN>(
+  rect: RectAtom,
+  inputAtoms: InputAtom<IN>[]
+): InputSocket<IN>[] {
   const inputPositionAnchor: PositionAtom = atom((get) => {
     const r = get(rect);
     return { x: r.x, y: r.y + r.height / 2 };
   });
   let prev = inputPositionAnchor;
-  const inputSockets = [...Array(op.fn.length).keys()].map(() => {
-    const input = (createInputSocket(
-      atom(0),
-      prev
-    ) as unknown) as InputSocket<IN>; // force InputSocket<number> to InputSocket<IN>. you should initialize atom depends on its type
+  const inputSockets = inputAtoms.map((inputAtom) => {
+    const input = createInputSocket(inputAtom, prev);
     prev = atom((get) => {
       const p = get(input.position);
       return { x: p.x, y: p.y + 20 };
@@ -56,18 +29,42 @@ export const createNodeAtom = <IN, OUT>({
     return input;
   });
 
-  const inputAtoms = inputSockets.map((i) => i.atom);
-  const outAtom = createOutput(inputAtoms);
-  const output = createOutputSocket(rect, outAtom);
+  return inputSockets;
+}
 
-  return atom({ rect, inputs: inputSockets, output, op });
+export const createNodeAtom = <IN, OUT>({
+  rect,
+  op,
+  createOutput,
+}: {
+  rect: RectAtom;
+  op: Operator;
+  createOutput: NodeFn<IN, OUT>;
+}) => {
+  const num = op.fn.length;
+  const inputAtoms: InputAtom<IN>[] = [...Array(num).keys()].map(() => {
+    return atom(atom(0)) as any; // TODO: PrimitiveAtom is not covariance
+  });
+  const outAtom = createOutput(inputAtoms);
+
+  const inputSockets = createInputSockets<IN>(rect, inputAtoms);
+  const outputSocket = createOutputSocket(rect, outAtom);
+
+  return atom({ rect, inputs: inputSockets, output: outputSocket, op });
 };
 
 export const nodeAtomListAtom = atom<NodeAtom[]>([]);
-export const appendNodeAtom = atom(
-  null,
-  (_get, set, args: Parameters<typeof createNodeAtom>[0]) => {
-    const nodeAtom = createNodeAtom(args);
-    set(nodeAtomListAtom, (prev) => [...prev, nodeAtom]);
-  }
-);
+
+type AppendProps = Omit<Parameters<typeof createNodeAtom>[0], "rect"> & {
+  position: Position;
+};
+export const appendNodeAtom = atom(null, (_get, set, args: AppendProps) => {
+  const { position, ...rest } = args;
+  const rectPos = atom(position);
+  const rect = createRectAtom(rectPos, defaultNodeSizeAtom);
+  const nodeAtom = createNodeAtom({
+    ...rest,
+    rect,
+  });
+  set(nodeAtomListAtom, (prev) => [...prev, nodeAtom]);
+});

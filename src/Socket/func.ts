@@ -1,9 +1,10 @@
 import { atom } from "jotai";
-import type { Input, InputSocket, OutputSocket } from "./types";
+import type { InputSocket, OutputSocket } from "./types";
+import type { InputAtom } from "../Node";
 import type { PositionAtom, RectAtom } from "../types";
 
 export const createInputSocket = <IN>(
-  defaultAtom: Input<IN>,
+  defaultAtom: InputAtom<IN>,
   anchor: PositionAtom
 ): InputSocket<IN> => {
   return {
@@ -12,7 +13,7 @@ export const createInputSocket = <IN>(
       const p = get(anchor);
       return { x: p.x, y: p.y };
     }),
-    atom: atom(defaultAtom),
+    atom: defaultAtom,
     from: null,
   };
 };

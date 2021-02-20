@@ -2,7 +2,6 @@ import type { Atom, PrimitiveAtom } from "jotai";
 import type { InputAtom, OutputAtom } from "../Node";
 import type { PositionAtom } from "../types";
 
-export type Input<T> = Atom<T> | PrimitiveAtom<T>;
 type Socket = {
   type: string;
   position: PositionAtom;
