@@ -1,7 +1,8 @@
+import { atom } from "jotai";
 import { SliderNode, RenderElementNode } from "../NodeList";
 import { NodeComponent } from "../Node";
 import { defaultNodeSizeVariable } from "../Node";
-import type { Variable } from "../Variable";
+import { createVariable, Variable } from "../Variable";
 
 type OptionBase = {
   name: string;
@@ -21,6 +22,7 @@ export const nodeOptions: Option[] = [
   { name: "mul", fn: (a, b) => a * b },
   { name: "div", fn: (a, b) => a / b },
   { name: "minus", fn: (a) => -a },
+  { name: "sin", fn: (a) => Math.sin(a) },
   { name: "clamp", fn: (a, min, max) => Math.max(min, Math.min(max, a)) },
   {
     name: "square",
@@ -30,6 +32,17 @@ export const nodeOptions: Option[] = [
   {
     name: "nodeSize",
     variable: defaultNodeSizeVariable,
-    component: RenderElementNode,
+  },
+  {
+    name: "inc",
+    variable: createVariable([], () => {
+      const oscAtom = atom(0);
+      oscAtom.onMount = (set) => {
+        const id = setInterval(() => set((prev) => prev + 1), 1);
+        return () => clearInterval(id);
+      };
+
+      return oscAtom;
+    }),
   },
 ];
