@@ -17,23 +17,17 @@ export const createInputSocket = <IN>(
   };
 };
 
-export const createOutputSocket = <IN, OUT>(
+export const createOutputSocket = <OUT>(
   rectAtom: RectAtom,
-  inputs: InputSocket<IN>[],
-  fn: (...args: IN[]) => OUT
+  outAtom: OutputSocket<OUT>["atom"]
 ): OutputSocket<OUT> => {
+  const position = atom((get) => {
+    const rect = get(rectAtom);
+    return { x: rect.x + rect.width, y: rect.y + rect.height / 2 };
+  });
   return {
     type: "output",
-    position: atom((get) => {
-      const rect = get(rectAtom);
-      return { x: rect.x + rect.width, y: rect.y + rect.height / 2 };
-    }),
-    atom: atom((get) => {
-      const inputValues = inputs
-        .map((i) => i.atom)
-        .map(get)
-        .map(get);
-      return fn(...inputValues);
-    }),
+    position,
+    atom: outAtom,
   };
 };

@@ -54,14 +54,26 @@ export const createNodeAtom = <IN, OUT>({
     return input;
   });
 
-  const output = createOutputSocket<IN, OUT>(
-    rect,
-    inputs,
-    op.fn as (...args: IN[]) => OUT
-  );
+  const fn = op.fn as (...args: IN[]) => OUT;
+  const outAtom = createOutAtom(inputs, fn);
+  const output = createOutputSocket(rect, outAtom);
 
   return atom({ rect, inputs, output, op });
 };
+
+function createOutAtom<IN, OUT>(
+  inputs: InputSocket<IN>[],
+  fn: (...args: IN[]) => OUT
+) {
+  const outAtom = atom((get) => {
+    const inputValues = inputs
+      .map((i) => i.atom)
+      .map(get)
+      .map(get);
+    return fn(...inputValues);
+  });
+  return outAtom;
+}
 
 export const nodeAtomListAtom = atom<NodeAtom[]>([]);
 export const addNodeAtom = atom(
