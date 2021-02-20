@@ -42,7 +42,7 @@ function NodeMenuList({
 
     const num = option.fn.length;
 
-    const inputAtoms: InputAtom<number>[] = [...Array(num).keys()].map(() => {
+    const inputAtoms: InputAtom<unknown>[] = [...Array(num).keys()].map(() => {
       return atom(atom(0)) as any; // TODO: PrimitiveAtom is not covariance
     });
     const variable = createVariable(inputAtoms, createOutput);

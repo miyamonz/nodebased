@@ -17,7 +17,7 @@ export const createNodeAtom = <IN, OUT>({
   variable: Variable<IN, OUT>;
   name: string;
   component: NodeComponent;
-}) => {
+}): NodeAtom => {
   const inputSockets = createInputSockets<IN>(rect, variable.inputAtoms);
   const outputSocket = createOutputSocket(rect, variable.outputAtom);
 
@@ -27,7 +27,7 @@ export const createNodeAtom = <IN, OUT>({
     output: outputSocket,
     name,
     component,
-  });
+  }) as any;
 };
 
 export const nodeAtomListAtom = atom<NodeAtom[]>([]);
