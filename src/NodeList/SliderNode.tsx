@@ -1,7 +1,7 @@
 import React from "react";
 import { useAtom } from "jotai";
 import type { Atom } from "jotai";
-import type { NodeComponent } from "./types";
+import type { NodeComponent } from "../Node";
 import type { InputSocketNotConnected } from "../Socket/types";
 
 export const SliderNode: NodeComponent = ({ node }) => {

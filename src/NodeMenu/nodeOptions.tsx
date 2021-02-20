@@ -1,5 +1,4 @@
-import { SliderNode } from "../Node/SliderNode";
-import { RenderElementNode } from "../Node/RenderElementNode";
+import { SliderNode, RenderElementNode } from "../NodeList";
 
 export type Option = {
   name: string;
