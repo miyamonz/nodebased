@@ -4,7 +4,7 @@ import type { Node, NodeAtom } from "../Node";
 import type { InputSocket, OutputSocket } from "../Socket";
 import type { Position } from "../types";
 
-const dragStartAtom = atom<Position | null>(null);
+const dragOffsetAtom = atom<Position | null>(null);
 
 export const dragTargetAtom = atom<NodeAtom | null>(null);
 
@@ -38,24 +38,24 @@ export const dragAtom = atom(
 const dragNodeAtom = atom(
   null,
   (get, set, { target, pos }: { target: Node; pos: Pos | "end" }) => {
-    const dragStart = get(dragStartAtom);
+    const dragOffset = get(dragOffsetAtom);
 
     if (pos === "end") {
-      set(dragStartAtom, null);
+      set(dragOffsetAtom, null);
       set(dragTargetAtom, null);
-    } else if (dragStart) {
+    } else if (dragOffset) {
       set(target.rect, (prev) => {
         return {
           ...prev,
-          x: pos[0] + dragStart.x,
-          y: pos[1] + dragStart.y,
+          x: pos[0] - dragOffset.x,
+          y: pos[1] - dragOffset.y,
         };
       });
     } else {
       const { x, y } = get(target.rect);
-      set(dragStartAtom, {
-        x: x - pos[0],
-        y: y - pos[1],
+      set(dragOffsetAtom, {
+        x: pos[0] - x,
+        y: pos[1] - y,
       });
     }
   }
