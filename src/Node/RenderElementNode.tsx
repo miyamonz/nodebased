@@ -12,7 +12,10 @@ export const RenderElementNode: React.FC<Props> = ({ node }) => {
   const [input] = useAtom(inputAtom);
 
   const [rect] = useAtom(node.rect);
-  return <>{React.isValidElement(input) && input}</>;
+
+  return (
+    <>{typeof input === "object" && React.isValidElement(input) && input}</>
+  );
 };
 
 export default React.memo(RenderElementNode);
