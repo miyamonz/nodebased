@@ -6,7 +6,7 @@ type Input<T> = Atom<T> | PrimitiveAtom<T>;
 export type InputAtom<T> = PrimitiveAtom<Input<T>>;
 export type OutputAtom<T> = Atom<T>;
 
-export type Fn<IN, OUT> = (inputs: InputAtom<IN>[]) => OutputAtom<OUT>;
+export type AtomFn<IN, OUT> = (inputs: InputAtom<IN>[]) => OutputAtom<OUT>;
 
 export type Variable<IN, OUT> = {
   inputAtoms: InputAtom<IN>[];
@@ -15,7 +15,7 @@ export type Variable<IN, OUT> = {
 
 export function createVariable<IN, OUT>(
   inputAtoms: InputAtom<IN>[],
-  createOutput: Fn<IN, OUT>
+  createOutput: AtomFn<IN, OUT>
 ): Variable<IN, OUT> {
   const outputAtom = createOutput(inputAtoms);
   return {
