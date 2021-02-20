@@ -1,5 +1,13 @@
 import { atom } from "jotai";
-import type { NodeFn, InputAtom, OutputAtom } from "../Node/types";
+import type { Atom, PrimitiveAtom } from "jotai";
+
+type Input<T> = Atom<T> | PrimitiveAtom<T>;
+// TODO: PrimitiveAtom is not covariance
+// you can't assign PrimitiveAtom<X> into PrimitiveAtom<X | Y>
+export type InputAtom<T> = PrimitiveAtom<Input<T>>;
+export type OutputAtom<T> = Atom<T>;
+
+export type Fn<IN, OUT> = (inputs: InputAtom<IN>[]) => OutputAtom<OUT>;
 
 export type Variable<IN, OUT> = {
   inputAtoms: InputAtom<IN>[];
@@ -8,7 +16,7 @@ export type Variable<IN, OUT> = {
 
 export function createVariable<IN, OUT>(
   inputAtoms: InputAtom<IN>[],
-  createOutput: NodeFn<IN, OUT>
+  createOutput: Fn<IN, OUT>
 ): Variable<IN, OUT> {
   const outputAtom = createOutput(inputAtoms);
   return {
@@ -19,7 +27,7 @@ export function createVariable<IN, OUT>(
 
 export function createDefaultVariable(
   num: number,
-  createOutput: NodeFn<number>
+  createOutput: Fn<number, number>
 ) {
   const inputAtoms: InputAtom<number>[] = [...Array(num).keys()].map(() => {
     return atom(atom(0)) as any; // TODO: PrimitiveAtom is not covariance

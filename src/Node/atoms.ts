@@ -1,8 +1,8 @@
 import { atom } from "jotai";
 import { createInputSockets, createOutputSocket } from "../Socket";
 
-import { createVariable, Variable } from "../Variable";
-import type { NodeAtom, NodeFn, InputAtom, OutputAtom } from "./types";
+import type { Variable } from "../Variable";
+import type { NodeAtom } from "./types";
 import type { Position } from "../types";
 import type { Operator } from "../Operator";
 

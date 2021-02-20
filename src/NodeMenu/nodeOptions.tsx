@@ -1,12 +1,12 @@
 import { SliderNode, RenderElementNode, RenderAtomNode } from "../NodeList";
 
 import { defaultNodeSizeAtom } from "../Node/atoms";
-import type { NodeFn } from "../Node/types";
+import type { Fn } from "../Variable/types";
 
 export type Option = {
   name: string;
   fn?: (...args: any[]) => any;
-  output?: NodeFn;
+  output?: Fn<unknown, unknown>;
   component?: React.FC<any>;
 };
 export const nodeOptions: Option[] = [

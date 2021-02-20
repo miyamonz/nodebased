@@ -1,5 +1,5 @@
 import type { Atom, PrimitiveAtom } from "jotai";
-import type { InputAtom, OutputAtom } from "../Node";
+import type { InputAtom, OutputAtom } from "../Variable";
 import type { PositionAtom } from "../types";
 
 type Socket = {
