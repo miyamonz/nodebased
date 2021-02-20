@@ -16,7 +16,7 @@ export const createNodeAtom = <IN, OUT>({
   rect: RectAtom;
   variable: Variable<IN, OUT>;
   name: string;
-  component?: NodeComponent;
+  component: NodeComponent;
 }) => {
   const inputSockets = createInputSockets<IN>(rect, variable.inputAtoms);
   const outputSocket = createOutputSocket(rect, variable.outputAtom);

@@ -7,7 +7,7 @@ export type Node = {
   inputs: InputSocket<unknown>[];
   output: OutputSocket<unknown>;
   name: string;
-  component?: NodeComponent;
+  component: NodeComponent;
 };
 export type NodeComponent = React.FC<{ node: Node }>;
 export type NodeAtom = Atom<Node>;

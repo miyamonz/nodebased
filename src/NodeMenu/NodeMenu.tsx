@@ -46,11 +46,12 @@ function NodeMenuList({
       return atom(atom(0)) as any; // TODO: PrimitiveAtom is not covariance
     });
     const variable = createVariable(inputAtoms, createOutput);
+    const component = option?.component ?? (() => <></>);
     appendNode({
       position,
       variable,
       name: option.name,
-      component: option?.component,
+      component,
     });
   };
 
