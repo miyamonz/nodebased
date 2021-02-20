@@ -1,9 +1,8 @@
 import React from "react";
 import { useAtom } from "jotai";
 
-import type { Node } from "./types";
+import type { NodeComponent } from "./types";
 
-type NodeComponent = React.FC<{ node: Node }>;
 const NodeSwitcher: NodeComponent = ({ node }) => {
   const [num] = useAtom(node.output.atom);
   const [rect] = useAtom(node.rect);

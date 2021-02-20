@@ -1,12 +1,8 @@
 import React from "react";
 import { useAtom } from "jotai";
-import type { Atom, PrimitiveAtom } from "jotai";
-import type { Node } from "./types";
+import type { NodeComponent } from "./types";
 
-type Props = {
-  node: Node;
-};
-export const RenderElementNode: React.FC<Props> = ({ node }) => {
+export const RenderElementNode: NodeComponent = ({ node }) => {
   const isocket = node.inputs[0];
   const [inputAtom] = useAtom(isocket.atom);
   const [input] = useAtom(inputAtom);

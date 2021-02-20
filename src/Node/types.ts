@@ -13,4 +13,5 @@ export type Node = {
   output: OutputSocket<unknown>;
   op: Operator;
 };
+export type NodeComponent = React.FC<{ node: Node }>;
 export type NodeAtom = PrimitiveAtom<Node>;

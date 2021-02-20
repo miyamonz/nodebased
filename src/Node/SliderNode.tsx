@@ -1,13 +1,10 @@
 import React from "react";
 import { useAtom } from "jotai";
-import type { Atom, PrimitiveAtom } from "jotai";
-import type { Node } from "./types";
+import type { Atom } from "jotai";
+import type { NodeComponent } from "./types";
 import type { InputSocketNotConnected } from "../Socket/types";
 
-type Props = {
-  node: Node;
-};
-export const SliderNode: React.FC<Props> = ({ node }) => {
+export const SliderNode: NodeComponent = ({ node }) => {
   const isocket = node.inputs[0] as InputSocketNotConnected<number>;
   const [inputAtom] = useAtom(isocket.atom);
   const [, setInput] = useAtom(inputAtom);
