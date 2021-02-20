@@ -12,7 +12,7 @@ const NodeSwitcher: NodeComponent = ({ node }) => {
       <text {...center}>
         {(typeof num === "number" || typeof num === "string") && num}
       </text>
-      {node.op.component !== undefined && <node.op.component node={node} />}
+      {node.component !== undefined && <node.component node={node} />}
     </>
   );
 };

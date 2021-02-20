@@ -2,27 +2,32 @@ import { atom } from "jotai";
 import { createInputSockets, createOutputSocket } from "../Socket";
 
 import type { Variable } from "../Variable";
-import type { NodeAtom } from "./types";
+import type { NodeAtom, NodeComponent } from "./types";
 import type { Position } from "../types";
-import type { Operator } from "../Operator";
 
 import { createRectAtom, RectAtom } from "../Rect";
 
 export const createNodeAtom = <IN, OUT>({
   rect,
-  op,
   variable,
   name,
+  component,
 }: {
   rect: RectAtom;
-  op: Operator;
   variable: Variable<IN, OUT>;
   name: string;
+  component?: NodeComponent;
 }) => {
   const inputSockets = createInputSockets<IN>(rect, variable.inputAtoms);
   const outputSocket = createOutputSocket(rect, variable.outputAtom);
 
-  return atom({ rect, inputs: inputSockets, output: outputSocket, op, name });
+  return atom({
+    rect,
+    inputs: inputSockets,
+    output: outputSocket,
+    name,
+    component,
+  });
 };
 
 export const nodeAtomListAtom = atom<NodeAtom[]>([]);

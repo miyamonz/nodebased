@@ -1,8 +1,9 @@
 import { SliderNode, RenderElementNode } from "../NodeList";
+import { NodeComponent } from "../Node";
 
 type OptionBase = {
   name: string;
-  component?: React.FC<any>;
+  component?: NodeComponent;
 };
 type OptionFn = OptionBase & {
   fn: (...args: any[]) => unknown;

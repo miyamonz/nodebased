@@ -2,7 +2,6 @@ import React from "react";
 import { atom, useAtom } from "jotai";
 import { appendNodeAtom } from "../Node";
 import { mousePosAtom } from "../atoms";
-import { createOperator } from "../Operator";
 import { nodeOptions, Option } from "./nodeOptions";
 
 import { createOutputAtom } from "./createOutputAtom";
@@ -38,7 +37,6 @@ function NodeMenuList({
   const _onClick = () => {
     onClick();
     const position = { x: pos[0], y: pos[1] };
-    const op = createOperator(option?.component);
     const createOutput = <IN,>(inputs: InputAtom<IN>[]) =>
       createOutputAtom(inputs, option.fn);
 
@@ -48,7 +46,12 @@ function NodeMenuList({
       return atom(atom(0)) as any; // TODO: PrimitiveAtom is not covariance
     });
     const variable = createVariable(inputAtoms, createOutput);
-    appendNode({ position, op, variable, name: option.name });
+    appendNode({
+      position,
+      variable,
+      name: option.name,
+      component: option?.component,
+    });
   };
 
   return (
