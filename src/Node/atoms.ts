@@ -1,10 +1,31 @@
 import { atom } from "jotai";
+import type { PrimitiveAtom } from "jotai";
 import { createInputSocket, createOutputSocket } from "../Socket";
 
 import type { NodeAtom } from "./types";
 import type { Position, PositionAtom, RectAtom } from "../types";
 import type { InputSocket } from "../Socket";
 import type { Operator } from "../Operator";
+
+export const defaultNodeSizeAtom = atom({ width: 100, height: 50 });
+
+function createRectAtom(posAtom: PrimitiveAtom<Position>): RectAtom {
+  const rect = atom(
+    (get) => {
+      const defaultSize = get(defaultNodeSizeAtom);
+      const position = get(posAtom);
+      return {
+        ...position,
+        ...defaultSize,
+      };
+    },
+    (get, set, action) => {
+      const newRect = typeof action === "function" ? action(get(rect)) : action;
+      set(posAtom, { x: newRect.x, y: newRect.y });
+    }
+  );
+  return rect;
+}
 
 export const createNodeAtom = <IN, OUT>({
   position,
@@ -13,11 +34,9 @@ export const createNodeAtom = <IN, OUT>({
   position: Position;
   op: Operator;
 }) => {
-  const rect: RectAtom = atom({
-    ...position,
-    width: 100,
-    height: 50,
-  });
+  const rectPos = atom(position);
+  const rect = createRectAtom(rectPos);
+
   const inputPositionAnchor: PositionAtom = atom((get) => {
     const r = get(rect);
     return { x: r.x, y: r.y + r.height / 2 };
