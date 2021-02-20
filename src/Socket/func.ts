@@ -18,6 +18,28 @@ export const createInputSocket = <IN>(
   };
 };
 
+// input sockets depend on rect because they contain their own position.
+export function createInputSockets<IN>(
+  rect: RectAtom,
+  inputAtoms: InputAtom<IN>[]
+): InputSocket<IN>[] {
+  const inputPositionAnchor: PositionAtom = atom((get) => {
+    const r = get(rect);
+    return { x: r.x, y: r.y + r.height / 2 };
+  });
+  let prevPos = inputPositionAnchor;
+  const inputSockets = inputAtoms.map((inputAtom) => {
+    const input = createInputSocket(inputAtom, prevPos);
+    prevPos = atom((get) => {
+      const p = get(input.position);
+      return { x: p.x, y: p.y + 20 };
+    });
+    return input;
+  });
+
+  return inputSockets;
+}
+
 export const createOutputSocket = <OUT>(
   rectAtom: RectAtom,
   outAtom: OutputSocket<OUT>["atom"]

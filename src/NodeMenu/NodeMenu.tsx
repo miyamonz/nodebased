@@ -6,6 +6,7 @@ import { createOperator } from "../Operator";
 import { nodeOptions, Option } from "./nodeOptions";
 
 import { createOutputAtom } from "./createOutputAtom";
+import { createDefaultVariable } from "../Variable/types";
 
 const useKeyDown = (code: string, handler: (e: KeyboardEvent) => void) => {
   const listener = React.useCallback(
@@ -43,7 +44,9 @@ function NodeMenuList({
       option?.output ??
       ((input: Parameters<typeof createOutputAtom>[0]) =>
         createOutputAtom(input, fn));
-    appendNode({ position, op, createOutput });
+
+    const variable = createDefaultVariable(op.fn.length, createOutput);
+    appendNode({ position, op, variable });
   };
 
   return (
