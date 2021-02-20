@@ -15,3 +15,7 @@ export type Node = {
 };
 export type NodeComponent = React.FC<{ node: Node }>;
 export type NodeAtom = PrimitiveAtom<Node>;
+
+export type NodeFn<IN = unknown, OUT = unknown> = (
+  inputs: InputAtom<IN>[]
+) => OutputAtom<OUT>;

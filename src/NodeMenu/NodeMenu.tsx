@@ -5,6 +5,8 @@ import { mousePosAtom } from "../atoms";
 import { createOperator } from "../Operator";
 import { nodeOptions, Option } from "./nodeOptions";
 
+import { createOutputAtom } from "./createOutputAtom";
+
 const useKeyDown = (code: string, handler: (e: KeyboardEvent) => void) => {
   const listener = React.useCallback(
     (e) => {
@@ -35,12 +37,13 @@ function NodeMenuList({
   const _onClick = () => {
     onClick();
     const position = { x: pos[0], y: pos[1] };
-    const op = createOperator(
-      option.name,
-      option?.fn ?? ((a) => a),
-      option?.component
-    );
-    addNode({ position, op });
+    const fn = option?.fn ?? ((a) => a);
+    const op = createOperator(option.name, fn, option?.component);
+    const createOutput =
+      option?.output ??
+      ((input: Parameters<typeof createOutputAtom>[0]) =>
+        createOutputAtom(input, fn));
+    addNode({ position, op, createOutput });
   };
 
   return (

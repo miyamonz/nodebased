@@ -1,8 +1,12 @@
-import { SliderNode, RenderElementNode } from "../NodeList";
+import { SliderNode, RenderElementNode, RenderAtomNode } from "../NodeList";
+
+import { defaultNodeSizeAtom } from "../Node/atoms";
+import type { NodeFn } from "../Node/types";
 
 export type Option = {
   name: string;
   fn?: (...args: any[]) => any;
+  output?: NodeFn;
   component?: React.FC<any>;
 };
 export const nodeOptions: Option[] = [
@@ -18,4 +22,11 @@ export const nodeOptions: Option[] = [
     fn: (x, y, r) => <rect x={x} y={y} width={r} height={r} fill="blue" />,
   },
   { name: "render", fn: (_) => {}, component: RenderElementNode },
+  {
+    name: "atom",
+    output: (_inputAtoms) => {
+      return defaultNodeSizeAtom;
+    },
+    component: RenderAtomNode,
+  },
 ];
