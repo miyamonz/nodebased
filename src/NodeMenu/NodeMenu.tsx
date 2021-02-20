@@ -1,6 +1,6 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { addNodeAtom } from "../Node";
+import { appendNodeAtom } from "../Node";
 import { mousePosAtom } from "../atoms";
 import { createOperator } from "../Operator";
 import { nodeOptions, Option } from "./nodeOptions";
@@ -32,7 +32,7 @@ function NodeMenuList({
   option: Option;
   onClick: () => void;
 }) {
-  const [, addNode] = useAtom(addNodeAtom);
+  const [, appendNode] = useAtom(appendNodeAtom);
   const [pos] = useAtom(mousePosAtom);
   const _onClick = () => {
     onClick();
@@ -43,7 +43,7 @@ function NodeMenuList({
       option?.output ??
       ((input: Parameters<typeof createOutputAtom>[0]) =>
         createOutputAtom(input, fn));
-    addNode({ position, op, createOutput });
+    appendNode({ position, op, createOutput });
   };
 
   return (

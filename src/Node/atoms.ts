@@ -64,7 +64,7 @@ export const createNodeAtom = <IN, OUT>({
 };
 
 export const nodeAtomListAtom = atom<NodeAtom[]>([]);
-export const addNodeAtom = atom(
+export const appendNodeAtom = atom(
   null,
   (_get, set, args: Parameters<typeof createNodeAtom>[0]) => {
     const nodeAtom = createNodeAtom(args);
