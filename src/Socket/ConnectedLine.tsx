@@ -1,12 +1,7 @@
-import React from "react";
 import { useAtom } from "jotai";
 import type { InputSocketConnected } from "./types";
 
-const ConnectedLine = <T extends unknown>({
-  input,
-}: {
-  input: InputSocketConnected<T>;
-}) => {
+const ConnectedLine = <T,>({ input }: { input: InputSocketConnected<T> }) => {
   const [pos] = useAtom(input.position);
   const [fromPos] = useAtom(input.from.position);
   const arm = Math.abs(fromPos.x - pos.x) / 3;

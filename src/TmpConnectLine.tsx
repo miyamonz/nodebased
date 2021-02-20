@@ -3,11 +3,7 @@ import { useAtom } from "jotai";
 import { dragAtom, connectTargetAtom } from "./Drag";
 import type { OutputSocket } from "./Socket";
 
-const TmpConnectLineImpl = <T extends unknown>({
-  socket,
-}: {
-  socket: OutputSocket<T>;
-}) => {
+const TmpConnectLineImpl = <T,>({ socket }: { socket: OutputSocket<T> }) => {
   const [position] = useAtom(socket.position);
   const [pos] = useAtom(dragAtom);
   return (

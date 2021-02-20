@@ -23,11 +23,7 @@ const IOCircle: React.FC<IOCircleProps> = ({ positionAtom, ...props }) => {
   );
 };
 
-export const InputCircle = <T extends unknown>({
-  input,
-}: {
-  input: InputSocket<T>;
-}) => {
+export const InputCircle = <T,>({ input }: { input: InputSocket<T> }) => {
   const [hovered, setHovered] = useAtom(hoveredInputSocketAtom);
   const isHovered = hovered === input;
   return (
@@ -47,11 +43,7 @@ export const InputCircle = <T extends unknown>({
     </>
   );
 };
-export const OutputCircle = <T extends unknown>({
-  output,
-}: {
-  output: OutputSocket<T>;
-}) => {
+export const OutputCircle = <T,>({ output }: { output: OutputSocket<T> }) => {
   const [, setConnectTarget] = useAtom(connectTargetAtom);
 
   return (
