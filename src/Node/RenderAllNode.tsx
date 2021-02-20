@@ -9,7 +9,7 @@ const RenderAllNode: React.FC = () => {
   return (
     <>
       {nodeAtomList.map((atom) => {
-        return <RenderNode key={atom.toString()} atom={atom} />;
+        return <RenderNode key={atom.toString()} nodeAtom={atom} />;
       })}
     </>
   );

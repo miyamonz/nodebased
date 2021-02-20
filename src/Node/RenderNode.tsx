@@ -5,11 +5,11 @@ import type { NodeAtom } from "./types";
 import NodeSwitcher from "./NodeSwitcher";
 import { InputCircle, OutputCircle } from "../Socket";
 
-const RenderNode = ({ atom }: { atom: NodeAtom }) => {
-  const [node] = useAtom(atom);
+const RenderNode: React.FC<{ nodeAtom: NodeAtom }> = ({ nodeAtom }) => {
+  const [node] = useAtom(nodeAtom);
   const [rectProp] = useAtom(node.rect);
   const [dragTarget, setDragTarget] = useAtom(dragTargetAtom);
-  const isDragTarget = atom === dragTarget;
+  const isDragTarget = nodeAtom === dragTarget;
 
   const [outValue] = useAtom(node.output.atom);
   return (
@@ -19,7 +19,7 @@ const RenderNode = ({ atom }: { atom: NodeAtom }) => {
         fill="transparent"
         stroke="black"
         onMouseDown={() => {
-          setDragTarget(atom);
+          setDragTarget(nodeAtom);
         }}
       />
       <g transform={`translate(${rectProp.x} ${rectProp.y - 5} )`}>
