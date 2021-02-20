@@ -1,4 +1,3 @@
-import { atom } from "jotai";
 import type { Atom, PrimitiveAtom } from "jotai";
 
 type Input<T> = Atom<T> | PrimitiveAtom<T>;
@@ -23,14 +22,4 @@ export function createVariable<IN, OUT>(
     inputAtoms,
     outputAtom,
   };
-}
-
-export function createDefaultVariable(
-  num: number,
-  createOutput: Fn<number, number>
-) {
-  const inputAtoms: InputAtom<number>[] = [...Array(num).keys()].map(() => {
-    return atom(atom(0)) as any; // TODO: PrimitiveAtom is not covariance
-  });
-  return createVariable(inputAtoms, createOutput);
 }

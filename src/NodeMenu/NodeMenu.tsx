@@ -1,12 +1,12 @@
 import React from "react";
-import { useAtom } from "jotai";
+import { atom, useAtom } from "jotai";
 import { appendNodeAtom } from "../Node";
 import { mousePosAtom } from "../atoms";
 import { createOperator } from "../Operator";
 import { nodeOptions, Option } from "./nodeOptions";
 
 import { createOutputAtom } from "./createOutputAtom";
-import { createDefaultVariable } from "../Variable/types";
+import { InputAtom, createVariable } from "../Variable/types";
 
 const useKeyDown = (code: string, handler: (e: KeyboardEvent) => void) => {
   const listener = React.useCallback(
@@ -38,14 +38,16 @@ function NodeMenuList({
   const _onClick = () => {
     onClick();
     const position = { x: pos[0], y: pos[1] };
-    const fn = option?.fn ?? ((a) => a);
-    const op = createOperator(option.name, fn, option?.component);
-    const createOutput =
-      option?.output ??
-      ((input: Parameters<typeof createOutputAtom>[0]) =>
-        createOutputAtom(input, fn));
+    const op = createOperator(option.name, option?.component);
+    const createOutput = (input: Parameters<typeof createOutputAtom>[0]) =>
+      createOutputAtom(input, option.fn);
 
-    const variable = createDefaultVariable(op.fn.length, createOutput);
+    const num = option.fn.length;
+
+    const inputAtoms: InputAtom<number>[] = [...Array(num).keys()].map(() => {
+      return atom(atom(0)) as any; // TODO: PrimitiveAtom is not covariance
+    });
+    const variable = createVariable(inputAtoms, createOutput);
     appendNode({ position, op, variable });
   };
 
