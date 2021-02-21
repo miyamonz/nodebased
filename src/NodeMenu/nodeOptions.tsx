@@ -23,6 +23,7 @@ export const nodeOptions: Option[] = [
   { name: "div", fn: (a, b) => a / b },
   { name: "minus", fn: (a) => -a },
   { name: "sin", fn: (a) => Math.sin(a) },
+  { name: "cos", fn: (a) => Math.cos(a) },
   { name: "clamp", fn: (a, min, max) => Math.max(min, Math.min(max, a)) },
   {
     name: "square",
