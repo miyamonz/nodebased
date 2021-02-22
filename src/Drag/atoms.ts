@@ -1,4 +1,4 @@
-import { atom } from "jotai";
+import { atom, useAtom } from "jotai";
 
 import type { Node, NodeAtom } from "../Node";
 import type { InputSocket, OutputSocket } from "../Socket";
@@ -34,6 +34,11 @@ export const dragAtom = atom(
     }
   }
 );
+
+export function useSetDragHook() {
+  const [, setDrag] = useAtom(dragAtom);
+  return setDrag;
+}
 
 const dragNodeAtom = atom(
   null,

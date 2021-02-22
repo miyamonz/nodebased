@@ -1,6 +1,6 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { dragAtom } from "../Drag";
+import { useSetDragHook } from "../Drag";
 import { mousePosAtom } from "../atoms";
 import { NodeMenu } from "../NodeMenu";
 import { RenderAllNode } from "../Node";
@@ -8,7 +8,7 @@ import { RenderAllNode } from "../Node";
 import TmpConnectLine from "../TmpConnectLine";
 
 function SvgCanvas({ width, height }: { width: number; height: number }) {
-  const [, setDrag] = useAtom(dragAtom);
+  const setDrag = useSetDragHook();
   const [, setPos] = useAtom(mousePosAtom);
   return (
     <svg
