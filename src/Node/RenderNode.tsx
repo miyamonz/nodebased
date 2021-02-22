@@ -1,8 +1,9 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { hoveredNodeAtom, dragTargetAtom } from "../MoveNode";
+import { hoveredNodeAtom } from "./atoms";
 import type { NodeAtom } from "./types";
 import NodeSwitcher from "./NodeSwitcher";
+import { dragTargetAtom } from "../MoveNode";
 import { InputCircle, OutputCircle } from "../Socket";
 
 const RenderNode: React.FC<{ nodeAtom: NodeAtom }> = ({ nodeAtom }) => {

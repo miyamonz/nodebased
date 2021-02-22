@@ -1,9 +1,9 @@
 import { atom } from "jotai";
+import { hoveredNodeAtom } from "../Node";
 import type { NodeAtom } from "../Node";
 import type { Position } from "../types";
 import type { SimpleMouseEvent } from "../Mouse";
 
-export const hoveredNodeAtom = atom<NodeAtom | null>(null);
 export const dragTargetAtom = atom<NodeAtom[] | null>(null);
 
 const positionsWhenGrabbed = atom<Map<string, Position>>(new Map());

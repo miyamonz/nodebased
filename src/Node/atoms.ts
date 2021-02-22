@@ -48,3 +48,5 @@ export const appendNodeAtom = atom(null, (_get, set, args: AppendProps) => {
   });
   set(nodeAtomListAtom, (prev) => [...prev, nodeAtom]);
 });
+
+export const hoveredNodeAtom = atom<NodeAtom | null>(null);
