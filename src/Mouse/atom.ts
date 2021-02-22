@@ -3,6 +3,7 @@ import type { WritableAtom } from "jotai";
 import type { SimpleMouseEvent } from "./types";
 
 import { dragAtomToSelect } from "../Select/drag";
+import { dragAtomToMoveNode } from "../MoveNode";
 
 const dragDataAtom = atom<SimpleMouseEvent>({
   type: "up",
@@ -11,7 +12,10 @@ const dragDataAtom = atom<SimpleMouseEvent>({
 
 export type WritableDragAtom = WritableAtom<null, SimpleMouseEvent>;
 
-const registeredDragAtoms = atom<WritableDragAtom[]>([dragAtomToSelect]);
+const registeredDragAtoms = atom<WritableDragAtom[]>([
+  dragAtomToSelect,
+  dragAtomToMoveNode,
+]);
 
 export const dragAtom = atom(
   (get) => get(dragDataAtom),
