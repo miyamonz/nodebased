@@ -1,13 +1,7 @@
-import { atom, useAtom } from "jotai";
-import type { Node, NodeAtom } from "../Node";
+import { atom } from "jotai";
+import type { NodeAtom } from "../Node";
 import type { Position } from "../types";
 import type { SimpleMouseEvent } from "../Mouse";
-
-const dragStartAtom = atom<Position | null>(null);
-export const isDraggingAtom = atom((get) => {
-  const p = get(dragStartAtom);
-  return p !== null;
-});
 
 export const hoveredNodeAtom = atom<NodeAtom | null>(null);
 export const dragTargetAtom = atom<NodeAtom[] | null>(null);
@@ -17,15 +11,28 @@ const positionsWhenGrabbed = atom<Map<string, Position>>(new Map());
 export const dragAtomToMoveNode = atom(
   null,
   (get, set, e: SimpleMouseEvent) => {
-    const pos = e.position;
     const hoveredNode = get(hoveredNodeAtom);
     if (e.type === "down") {
       if (hoveredNode !== null) {
         set(dragTargetAtom, [hoveredNode]);
       }
+    } else if (e.type === "drag") {
+    } else if (e.type === "up") {
+      set(dragTargetAtom, null);
+    }
+
+    set(dragAtomToMoveNode_, e);
+  }
+);
+
+const dragStartAtom = atom<Position | null>(null);
+export const dragAtomToMoveNode_ = atom(
+  null,
+  (get, set, e: SimpleMouseEvent) => {
+    const pos = e.position;
+    if (e.type === "down") {
       const dragTarget = get(dragTargetAtom);
       if (dragTarget) {
-        console.log(dragTarget);
         const keyValues = dragTarget.map((nodeAtom) => {
           const key = nodeAtom.toString();
           const rect = get(get(nodeAtom).rect);
@@ -56,7 +63,6 @@ export const dragAtomToMoveNode = atom(
       }
     } else if (e.type === "up") {
       set(dragStartAtom, null);
-      set(dragTargetAtom, null);
     }
   }
 );
