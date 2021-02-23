@@ -1,8 +1,8 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { dragAtom } from "./Mouse";
-import { useConnectTarget } from "./Socket";
-import type { OutputSocket } from "./Socket";
+import { dragAtom } from "../Mouse";
+import { useConnectTarget } from "../Socket";
+import type { OutputSocket } from "../Socket";
 
 const TmpConnectLineImpl = <T,>({ socket }: { socket: OutputSocket<T> }) => {
   const [position] = useAtom(socket.position);

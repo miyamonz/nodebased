@@ -7,7 +7,7 @@ import { NodeMenu } from "../NodeMenu";
 import { RenderAllNode } from "../Node";
 import { RenderSelectRect } from "../Select";
 
-import TmpConnectLine from "../TmpConnectLine";
+import { TmpConnectLine } from "../Connect";
 
 function SvgCanvas({ width, height }: { width: number; height: number }) {
   const [drag, setDrag] = useDragAtom();
