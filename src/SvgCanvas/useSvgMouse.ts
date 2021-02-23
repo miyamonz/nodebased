@@ -1,5 +1,5 @@
 import React from 'react'
-import { Position } from '../types'
+import { Position } from '../Position'
 
 const screenToSvg = (svg: SVGSVGElement) => (
   e: React.MouseEvent<SVGGraphicsElement>

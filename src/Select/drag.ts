@@ -4,7 +4,7 @@ import type { NodeAtom } from "../Node";
 import { connectTargetAtom } from "../Socket";
 import { intersect, rectFromPos } from "../Rect";
 import type { Rect } from "../Rect";
-import type { Position } from "../types";
+import type { Position } from "../Position";
 import type { SimpleMouseEvent } from "../Mouse";
 
 const dragStartAtom = atom<Position | null>(null);

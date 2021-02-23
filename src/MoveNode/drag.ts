@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { hoveredNodeAtom } from "../Node";
 import { selectedRectAtomListAtom } from "../Select/drag";
-import type { Position } from "../types";
+import type { Position } from "../Position";
 import type { SimpleMouseEvent } from "../Mouse";
 
 const isSetByClick = atom(false);

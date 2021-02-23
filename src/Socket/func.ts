@@ -2,7 +2,7 @@ import { atom } from "jotai";
 import type { InputSocket, OutputSocket } from "./types";
 import type { InputAtom } from "../Variable";
 import type { RectAtom } from "../Rect";
-import type { PositionAtom } from "../types";
+import type { PositionAtom } from "../Position";
 
 export const createInputSocket = <IN>(
   defaultAtom: InputAtom<IN>,

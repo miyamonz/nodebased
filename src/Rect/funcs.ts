@@ -1,5 +1,5 @@
 import type { Rect } from "./types";
-import type { Position } from "../types";
+import type { Position } from "../Position";
 
 export const intersect = (a: Rect) => (b: Rect) => {
   const leftA = a.x;

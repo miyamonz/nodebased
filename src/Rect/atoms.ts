@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import type { Atom, PrimitiveAtom } from "jotai";
 import type { RectAtom } from "./types";
-import type { Position } from "../types";
+import type { Position } from "../Position";
 
 export function createRectAtom(
   posAtom: PrimitiveAtom<Position>,

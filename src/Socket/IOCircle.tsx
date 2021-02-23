@@ -4,7 +4,7 @@ import { useSetConnectFrom, useHoveredInputSocket } from "./atoms";
 import ConnectedLine from "./ConnectedLine";
 import { isConnected } from "./types";
 import type { InputSocket, OutputSocket } from "./types";
-import type { PositionAtom } from "../types";
+import type { PositionAtom } from "../Position";
 
 type IOCircleProps = {
   positionAtom: PositionAtom;

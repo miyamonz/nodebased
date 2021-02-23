@@ -1,12 +1,11 @@
 import { atom } from "jotai";
-import { createInputSockets, createOutputSocket } from "../Socket";
-
-import type { Variable } from "../Variable";
 import type { NodeAtom, NodeComponent } from "./types";
-import type { Position } from "../types";
 
+import { createInputSockets, createOutputSocket } from "../Socket";
 import { createRectAtom, RectAtom } from "../Rect";
 import { defaultNodeSizeVariable } from "./variables";
+import type { Variable } from "../Variable";
+import type { Position } from "../Position";
 
 export const createNodeAtom = <IN, OUT>({
   rect,

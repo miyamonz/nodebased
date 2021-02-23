@@ -1,4 +1,4 @@
-import type { Position } from '../types'
+import type { Position } from '../Position'
 
 type MouseBase = {
   position: Position

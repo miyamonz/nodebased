@@ -1,6 +1,6 @@
 import type { Atom, PrimitiveAtom } from "jotai";
 import type { InputAtom, OutputAtom } from "../Variable";
-import type { PositionAtom } from "../types";
+import type { PositionAtom } from "../Position";
 
 type Socket = {
   type: string;
