@@ -17,7 +17,7 @@ const RenderNode: React.FC<{ nodeAtom: NodeAtom }> = ({ nodeAtom }) => {
   const [outValue] = useAtom(node.output.atom);
   return (
     <>
-      {isDragTarget && <rect {...rectProp} fill="none" stroke="red" />}
+      {isDragTarget && <rect {...rectProp} fill="lightpink" stroke="red" />}
       {isHovered && <rect {...rectProp} fill="none" stroke="red" />}
       <rect
         {...rectProp}

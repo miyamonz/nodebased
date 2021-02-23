@@ -1,5 +1,6 @@
 import { atom } from "jotai";
 import { hoveredNodeAtom } from "../Node";
+import { selectedRectAtomListAtom } from "../Select/drag";
 import type { NodeAtom } from "../Node";
 import type { Position } from "../types";
 import type { SimpleMouseEvent } from "../Mouse";
@@ -12,13 +13,17 @@ export const dragAtomToMoveNode = atom(
   null,
   (get, set, e: SimpleMouseEvent) => {
     const hoveredNode = get(hoveredNodeAtom);
+    const selectedRectAtomList = get(selectedRectAtomListAtom);
+    const notSelected = selectedRectAtomList.length === 0;
     if (e.type === "down") {
-      if (hoveredNode !== null) {
+      if (hoveredNode !== null && notSelected) {
         set(dragTargetAtom, [hoveredNode]);
       }
     } else if (e.type === "drag") {
     } else if (e.type === "up") {
       set(dragTargetAtom, null);
+      if (notSelected) return;
+      set(dragTargetAtom, selectedRectAtomList);
     }
 
     set(dragAtomToMoveNode_, e);
