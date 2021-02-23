@@ -4,7 +4,6 @@ import { selectedRectAtomListAtom } from "../Select/drag";
 import type { Position } from "../types";
 import type { SimpleMouseEvent } from "../Mouse";
 
-const positionsWhenGrabbed = atom<Map<string, Position>>(new Map());
 const isSetByClick = atom(false);
 
 export const dragAtomToMoveNode = atom(
@@ -31,6 +30,7 @@ export const dragAtomToMoveNode = atom(
 );
 
 const dragStartAtom = atom<Position | null>(null);
+const positionsWhenGrabbed = atom<Map<string, Position>>(new Map());
 export const dragAtomToMoveNode_ = atom(
   null,
   (get, set, e: SimpleMouseEvent) => {
