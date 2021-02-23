@@ -24,6 +24,7 @@ const RenderNode: React.FC<{ nodeAtom: NodeAtom }> = ({ nodeAtom }) => {
         fill="transparent"
         stroke={isHovered ? "none" : "black"}
         onMouseEnter={() => setHovered(nodeAtom)}
+        onMouseMove={() => setHovered(nodeAtom)}
         onMouseLeave={() => setHovered(null)}
       />
       <g transform={`translate(${rectProp.x} ${rectProp.y - 5} )`}>
