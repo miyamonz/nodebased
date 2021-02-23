@@ -1,34 +1,10 @@
 import { atom } from "jotai";
-import type { NodeAtom, NodeComponent } from "./types";
+import { createNodeAtom } from "./funcs";
+import type { NodeAtom } from "./types";
 
-import { createInputSockets, createOutputSocket } from "../Socket";
-import { createRectAtom, RectAtom } from "../Rect";
+import { createRectAtom } from "../Rect";
 import { defaultNodeSizeVariable } from "./variables";
-import type { Variable } from "../Variable";
 import type { Position } from "../Position";
-
-export const createNodeAtom = <IN, OUT>({
-  rect,
-  variable,
-  name,
-  component,
-}: {
-  rect: RectAtom;
-  variable: Variable<IN, OUT>;
-  name: string;
-  component: NodeComponent;
-}): NodeAtom => {
-  const inputSockets = createInputSockets<IN>(rect, variable.inputAtoms);
-  const outputSocket = createOutputSocket(rect, variable.outputAtom);
-
-  return atom({
-    rect,
-    inputs: inputSockets,
-    output: outputSocket,
-    name,
-    component,
-  }) as any;
-};
 
 export const nodeAtomListAtom = atom<NodeAtom[]>([]);
 
@@ -47,5 +23,16 @@ export const appendNodeAtom = atom(null, (_get, set, args: AppendProps) => {
   });
   set(nodeAtomListAtom, (prev) => [...prev, nodeAtom]);
 });
+
+export const removeNodeAtom = atom(
+  null,
+  (_get, set, args: NodeAtom | NodeAtom[]) => {
+    const nodeAtoms = Array.isArray(args) ? args : [args];
+
+    set(nodeAtomListAtom, (prev) =>
+      prev.filter((na) => !nodeAtoms.includes(na))
+    );
+  }
+);
 
 export const hoveredNodeAtom = atom<NodeAtom | null>(null);
