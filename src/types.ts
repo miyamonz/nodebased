@@ -23,4 +23,13 @@ export const intersect = (a: Rect) => (b: Rect) => {
 
   return !notOverX && !notOverY;
 };
+
+export const rectFromPos = (a: Position) => (b: Position): Rect => {
+  return {
+    x: Math.min(a.x, b.x),
+    y: Math.min(a.y, b.y),
+    width: Math.abs(b.x - a.x),
+    height: Math.abs(b.y - a.y),
+  };
+};
 export type RectAtom = PrimitiveAtom<Rect>;
