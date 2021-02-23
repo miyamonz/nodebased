@@ -1,23 +1,24 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { dragAtom, connectTargetAtom } from "./Drag";
+import { dragAtom } from "./Mouse";
+import { useConnectTarget } from "./Connect";
 import type { OutputSocket } from "./Socket";
 
 const TmpConnectLineImpl = <T,>({ socket }: { socket: OutputSocket<T> }) => {
   const [position] = useAtom(socket.position);
-  const [pos] = useAtom(dragAtom);
+  const [drag] = useAtom(dragAtom);
   return (
     <line
       x1={position.x}
       y1={position.y}
-      x2={pos[0]}
-      y2={pos[1]}
+      x2={drag.position.x}
+      y2={drag.position.y}
       stroke="red"
     />
   );
 };
 const TmpConnectLine = () => {
-  const [connectTarget] = useAtom(connectTargetAtom);
+  const connectTarget = useConnectTarget();
   if (connectTarget) {
     return <TmpConnectLineImpl socket={connectTarget} />;
   }

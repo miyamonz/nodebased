@@ -1,5 +1,6 @@
 import { atom, useAtom } from "jotai";
 import { hoveredNodeAtom, nodeAtomListAtom } from "../Node";
+import { connectTargetAtom } from "../Connect/atoms";
 import type { Position, Rect } from "../types";
 import type { SimpleMouseEvent } from "../Mouse";
 import { intersect } from "../types";
@@ -28,10 +29,11 @@ const isClick = atom(false);
 export const dragAtomToSelect = atom(null, (get, set, e: SimpleMouseEvent) => {
   const pos = e.position;
   const isNotHovered = get(hoveredNodeAtom) === null;
+  const notConnectTarget = get(connectTargetAtom) === null;
 
   const isSelected = get(selectedRectAtomListAtom).length > 0;
   if (e.type === "down") {
-    if (isNotHovered && !isSelected) {
+    if (isNotHovered && notConnectTarget && !isSelected) {
       set(dragStartAtom, {
         x: pos.x,
         y: pos.y,

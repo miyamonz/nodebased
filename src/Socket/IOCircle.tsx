@@ -1,6 +1,6 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { connectTargetAtom, hoveredInputSocketAtom } from "../Drag";
+import { useSetConnectFrom, useHoveredInputSocket } from "../Connect";
 import ConnectedLine from "./ConnectedLine";
 import { isConnected } from "./types";
 import type { InputSocket, OutputSocket } from "./types";
@@ -24,7 +24,7 @@ const IOCircle: React.FC<IOCircleProps> = ({ positionAtom, ...props }) => {
 };
 
 export const InputCircle = <T,>({ input }: { input: InputSocket<T> }) => {
-  const [hovered, setHovered] = useAtom(hoveredInputSocketAtom);
+  const [hovered, setHovered] = useHoveredInputSocket();
   const isHovered = hovered === input;
   return (
     <>
@@ -44,7 +44,7 @@ export const InputCircle = <T,>({ input }: { input: InputSocket<T> }) => {
   );
 };
 export const OutputCircle = <T,>({ output }: { output: OutputSocket<T> }) => {
-  const [, setConnectTarget] = useAtom(connectTargetAtom);
+  const setConnectTarget = useSetConnectFrom();
 
   return (
     <IOCircle

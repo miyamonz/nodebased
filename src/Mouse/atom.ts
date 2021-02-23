@@ -4,6 +4,7 @@ import type { SimpleMouseEvent } from "./types";
 
 import { dragAtomToSelect } from "../Select/drag";
 import { dragAtomToMoveNode } from "../MoveNode";
+import { dragAtomToConnect } from "../Connect";
 
 const dragDataAtom = atom<SimpleMouseEvent>({
   type: "up",
@@ -15,6 +16,7 @@ export type WritableDragAtom = WritableAtom<null, SimpleMouseEvent>;
 const registeredDragAtoms = atom<WritableDragAtom[]>([
   dragAtomToSelect,
   dragAtomToMoveNode,
+  dragAtomToConnect,
 ]);
 
 export const dragAtom = atom(
