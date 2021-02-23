@@ -1,6 +1,6 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { useSetConnectFrom, useHoveredInputSocket } from "../Connect";
+import { useSetConnectFrom, useHoveredInputSocket } from "./atoms";
 import ConnectedLine from "./ConnectedLine";
 import { isConnected } from "./types";
 import type { InputSocket, OutputSocket } from "./types";

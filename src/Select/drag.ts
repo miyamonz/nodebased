@@ -1,7 +1,7 @@
 import { atom, useAtom } from "jotai";
 import { hoveredNodeAtom, nodeAtomListAtom } from "../Node";
 import type { NodeAtom } from "../Node";
-import { connectTargetAtom } from "../Connect/atoms";
+import { connectTargetAtom } from "../Socket";
 import type { Position, Rect } from "../types";
 import type { SimpleMouseEvent } from "../Mouse";
 import { intersect, rectFromPos } from "../types";
