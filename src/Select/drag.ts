@@ -2,9 +2,10 @@ import { atom, useAtom } from "jotai";
 import { hoveredNodeAtom, nodeAtomListAtom } from "../Node";
 import type { NodeAtom } from "../Node";
 import { connectTargetAtom } from "../Socket";
-import type { Position, Rect } from "../types";
+import { intersect, rectFromPos } from "../Rect";
+import type { Rect } from "../Rect";
+import type { Position } from "../types";
 import type { SimpleMouseEvent } from "../Mouse";
-import { intersect, rectFromPos } from "../types";
 
 const dragStartAtom = atom<Position | null>(null);
 export const isDraggingAtom = atom((get) => {

@@ -1,4 +1,4 @@
-import type { Atom, PrimitiveAtom } from "jotai";
+import type { PrimitiveAtom } from "jotai";
 
 export type Rect = {
   x: number;
