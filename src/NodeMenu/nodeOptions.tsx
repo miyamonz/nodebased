@@ -35,7 +35,7 @@ export const nodeOptions: Option[] = [
     variable: () => defaultNodeSizeVariable,
   },
   {
-    name: "inc",
+    name: "elapsed",
     variable: () =>
       createVariable([], () => {
         const oscAtom = atom(0);
