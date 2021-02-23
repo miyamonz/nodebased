@@ -44,6 +44,7 @@ export const dragAtomToSelect = atom(null, (get, set, e: SimpleMouseEvent) => {
     if (connectTargetExists) {
       console.log("exists");
       set(selectRectAtom, null);
+      set(selectedRectAtomListAtom, []);
     }
 
     set(isClick, true);

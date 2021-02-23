@@ -1,1 +1,1 @@
-export { dragTargetAtom, dragAtomToMoveNode } from "./drag";
+export { dragAtomToMoveNode } from "./drag";

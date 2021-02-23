@@ -3,22 +3,24 @@ import { useAtom } from "jotai";
 import { hoveredNodeAtom } from "./atoms";
 import type { NodeAtom } from "./types";
 import NodeSwitcher from "./NodeSwitcher";
-import { dragTargetAtom } from "../MoveNode";
+import { selectedRectAtomListAtom } from "../Select/drag";
 import { InputCircle, OutputCircle } from "../Socket";
 
 const RenderNode: React.FC<{ nodeAtom: NodeAtom }> = ({ nodeAtom }) => {
   const [node] = useAtom(nodeAtom);
   const [rect] = useAtom(node.rect);
+
   const [hovered, setHovered] = useAtom(hoveredNodeAtom);
-  const [dragTarget] = useAtom(dragTargetAtom);
   const isHovered = nodeAtom === hovered;
-  const isDragTarget = dragTarget?.includes(nodeAtom);
+
+  const [selectedNodes] = useAtom(selectedRectAtomListAtom);
+  const isSelected = selectedNodes.includes(nodeAtom);
 
   const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
   const [outValue] = useAtom(node.output.atom);
   return (
     <>
-      {isDragTarget && <rect {...rect} fill="lightpink" stroke="red" />}
+      {isSelected && <rect {...rect} fill="lightpink" stroke="red" />}
       {isHovered && <rect {...rect} fill="none" stroke="red" />}
       <text {...center}>
         {(typeof outValue === "number" || typeof outValue === "string") &&
