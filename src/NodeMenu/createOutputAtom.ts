@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import type { AtomFn } from "../Variable/types";
+import type { AtomFn } from "../Variable";
 
 export function createOutputAtom<IN, OUT>(
   inputAtoms: Parameters<AtomFn<IN, OUT>>[0],

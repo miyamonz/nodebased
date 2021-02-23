@@ -1,4 +1,9 @@
-export type { InputSocket, InputSocketConnected, OutputSocket } from "./types";
+export type {
+  InputSocket,
+  InputSocketConnected,
+  InputSocketNotConnected,
+  OutputSocket,
+} from "./types";
 
 export {
   createInputSocket,

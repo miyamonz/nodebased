@@ -2,7 +2,7 @@ import React from "react";
 import { useAtom } from "jotai";
 import type { Atom } from "jotai";
 import type { NodeComponent } from "../Node";
-import type { InputSocketNotConnected } from "../Socket/types";
+import type { InputSocketNotConnected } from "../Socket";
 
 export const SliderNode: NodeComponent = ({ node }) => {
   const isocket = node.inputs[0] as InputSocketNotConnected<number>;

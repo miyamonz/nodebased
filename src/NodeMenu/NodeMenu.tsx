@@ -5,7 +5,7 @@ import { useDragAtom } from "../Mouse";
 import { nodeOptions, Option } from "./nodeOptions";
 
 import { createOutputAtom } from "./createOutputAtom";
-import { InputAtom, createVariable } from "../Variable/types";
+import { InputAtom, createVariable } from "../Variable";
 
 const useKeyDown = (code: string, handler: (e: KeyboardEvent) => void) => {
   const listener = React.useCallback(
