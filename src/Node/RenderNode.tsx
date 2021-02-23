@@ -8,26 +8,31 @@ import { InputCircle, OutputCircle } from "../Socket";
 
 const RenderNode: React.FC<{ nodeAtom: NodeAtom }> = ({ nodeAtom }) => {
   const [node] = useAtom(nodeAtom);
-  const [rectProp] = useAtom(node.rect);
+  const [rect] = useAtom(node.rect);
   const [hovered, setHovered] = useAtom(hoveredNodeAtom);
   const [dragTarget] = useAtom(dragTargetAtom);
   const isHovered = nodeAtom === hovered;
   const isDragTarget = dragTarget?.includes(nodeAtom);
 
+  const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
   const [outValue] = useAtom(node.output.atom);
   return (
     <>
-      {isDragTarget && <rect {...rectProp} fill="lightpink" stroke="red" />}
-      {isHovered && <rect {...rectProp} fill="none" stroke="red" />}
+      {isDragTarget && <rect {...rect} fill="lightpink" stroke="red" />}
+      {isHovered && <rect {...rect} fill="none" stroke="red" />}
+      <text {...center}>
+        {(typeof outValue === "number" || typeof outValue === "string") &&
+          outValue}
+      </text>
       <rect
-        {...rectProp}
+        {...rect}
         fill="transparent"
         stroke={isHovered ? "none" : "black"}
         onMouseEnter={() => setHovered(nodeAtom)}
         onMouseMove={() => setHovered(nodeAtom)}
         onMouseLeave={() => setHovered(null)}
       />
-      <g transform={`translate(${rectProp.x} ${rectProp.y - 5} )`}>
+      <g transform={`translate(${rect.x} ${rect.y - 5} )`}>
         <text>{node.name}</text>
       </g>
       <NodeSwitcher node={node} />

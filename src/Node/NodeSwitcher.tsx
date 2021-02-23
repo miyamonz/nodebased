@@ -1,20 +1,9 @@
 import React from "react";
-import { useAtom } from "jotai";
 
 import type { NodeComponent } from "./types";
 
 const NodeSwitcher: NodeComponent = ({ node }) => {
-  const [num] = useAtom(node.output.atom);
-  const [rect] = useAtom(node.rect);
-  const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
-  return (
-    <>
-      <text {...center}>
-        {(typeof num === "number" || typeof num === "string") && num}
-      </text>
-      {node.component !== undefined && <node.component node={node} />}
-    </>
-  );
+  return <>{node.component !== undefined && <node.component node={node} />}</>;
 };
 
 export default React.memo(NodeSwitcher);
