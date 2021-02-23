@@ -26,7 +26,7 @@ const size = { width: 200, height: 300 };
 const optionHeight = 20;
 
 function createVariableFromOption(option: Option) {
-  if ("variable" in option) return option.variable;
+  if ("variable" in option) return option.variable();
   const createOutput = <IN,>(inputs: InputAtom<IN>[]) =>
     createOutputAtom(inputs, option.fn);
 

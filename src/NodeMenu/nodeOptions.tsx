@@ -12,7 +12,7 @@ type OptionFn = OptionBase & {
   fn: (...args: any[]) => unknown;
 };
 type OptionVariable = OptionBase & {
-  variable: Variable<number, unknown>;
+  variable: () => Variable<number, unknown>;
 };
 export type Option = OptionFn | OptionVariable;
 export const nodeOptions: Option[] = [
@@ -32,18 +32,20 @@ export const nodeOptions: Option[] = [
   { name: "render", fn: (_) => {}, component: RenderElementNode },
   {
     name: "nodeSize",
-    variable: defaultNodeSizeVariable,
+    variable: () => defaultNodeSizeVariable,
   },
   {
     name: "inc",
-    variable: createVariable([], () => {
-      const oscAtom = atom(0);
-      oscAtom.onMount = (set) => {
-        const id = setInterval(() => set((prev) => prev + 1), 1);
-        return () => clearInterval(id);
-      };
+    variable: () =>
+      createVariable([], () => {
+        const oscAtom = atom(0);
+        console.log("atom created");
+        oscAtom.onMount = (set) => {
+          const id = setInterval(() => set((prev) => prev + 1));
+          return () => clearInterval(id);
+        };
 
-      return oscAtom;
-    }),
+        return oscAtom;
+      }),
   },
 ];
