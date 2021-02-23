@@ -3,7 +3,7 @@ import { useDragAtom } from "../Mouse";
 import { useSVGMouse } from "./useSvgMouse";
 import { NodeMenu } from "../NodeMenu";
 import { RenderAllNode } from "../Node";
-import { RenderSelectRect } from "../Select";
+import { RenderSelectRect, RenderBoundingRect } from "../Select";
 
 import { TmpConnectLine } from "../Connect";
 
@@ -36,6 +36,7 @@ function SvgCanvas({ width, height }: { width: number; height: number }) {
       <text x={0} y={20}>
         nodebased
       </text>
+      <RenderBoundingRect />
       <RenderSelectRect />
       <circle
         cx={drag.position.x}

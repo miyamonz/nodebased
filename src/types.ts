@@ -23,6 +23,34 @@ export const intersect = (a: Rect) => (b: Rect) => {
 
   return !notOverX && !notOverY;
 };
+export const boundingRect = (rects: Rect[]): Rect => {
+  let left = Infinity;
+  let top = Infinity;
+  let right = 0;
+  let bottom = 0;
+
+  rects.forEach((rect) => {
+    left = Math.min(rect.x, left);
+    top = Math.min(rect.y, top);
+    right = Math.max(rect.x + rect.width, right);
+    bottom = Math.max(rect.y + rect.height, bottom);
+  });
+
+  return {
+    x: left,
+    y: top,
+    width: right - left,
+    height: bottom - top,
+  };
+};
+export const offsetRect = (rect: Rect) => (n: number): Rect => {
+  return {
+    x: rect.x - n,
+    y: rect.y - n,
+    width: rect.width + 2 * n,
+    height: rect.height + 2 * n,
+  };
+};
 
 export const rectFromPos = (a: Position) => (b: Position): Rect => {
   return {
