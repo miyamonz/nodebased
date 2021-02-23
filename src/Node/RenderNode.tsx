@@ -1,15 +1,20 @@
 import React from "react";
 import { useAtom } from "jotai";
 import { hoveredNodeAtom } from "./atoms";
-import type { NodeAtom, NodeComponent } from "./types";
+import type { NodeAtom } from "./types";
 import { selectedRectAtomListAtom } from "../Select/drag";
 import { InputCircle, OutputCircle } from "../Socket";
 
 type NodeAtomComponent = React.FC<{ nodeAtom: NodeAtom }>;
 
-const ShowSelect: NodeAtomComponent = ({ nodeAtom }) => {
+function useRectAtom(nodeAtom: NodeAtom) {
   const [node] = useAtom(nodeAtom);
   const [rect] = useAtom(node.rect);
+  return rect;
+}
+
+const ShowSelect: NodeAtomComponent = ({ nodeAtom }) => {
+  const rect = useRectAtom(nodeAtom);
   const [selectedNodes] = useAtom(selectedRectAtomListAtom);
   const isSelected = selectedNodes.includes(nodeAtom);
 
@@ -20,8 +25,7 @@ const ShowSelect: NodeAtomComponent = ({ nodeAtom }) => {
 };
 
 const ShowHovered: NodeAtomComponent = ({ nodeAtom }) => {
-  const [node] = useAtom(nodeAtom);
-  const [rect] = useAtom(node.rect);
+  const rect = useRectAtom(nodeAtom);
   const [hovered, setHovered] = useAtom(hoveredNodeAtom);
   const isHovered = nodeAtom === hovered;
 
@@ -40,7 +44,7 @@ const ShowHovered: NodeAtomComponent = ({ nodeAtom }) => {
   );
 };
 
-const RenderNode: React.FC<{ nodeAtom: NodeAtom }> = ({ nodeAtom }) => {
+const RenderNode: NodeAtomComponent = ({ nodeAtom }) => {
   const [node] = useAtom(nodeAtom);
   const [rect] = useAtom(node.rect);
 
@@ -53,11 +57,11 @@ const RenderNode: React.FC<{ nodeAtom: NodeAtom }> = ({ nodeAtom }) => {
         {(typeof outValue === "number" || typeof outValue === "string") &&
           outValue}
       </text>
-      <ShowHovered nodeAtom={nodeAtom} />
       <g transform={`translate(${rect.x} ${rect.y - 5} )`}>
         <text>{node.name}</text>
       </g>
-      <>{node.component !== undefined && <node.component node={node} />}</>
+      <ShowHovered nodeAtom={nodeAtom} />
+      {node.component !== undefined && <node.component node={node} />}
       {node.inputs.map((input) => {
         return <InputCircle key={input.atom.toString()} input={input} />;
       })}
