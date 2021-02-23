@@ -1,7 +1,7 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
 import { appendNodeAtom } from "../Node";
-import { mousePosAtom } from "../atoms";
+import { useDragAtom } from "../Mouse";
 import { nodeOptions, Option } from "./nodeOptions";
 
 import { createOutputAtom } from "./createOutputAtom";
@@ -46,10 +46,9 @@ function NodeMenuList({
   onClick: () => void;
 }) {
   const [, appendNode] = useAtom(appendNodeAtom);
-  const [pos] = useAtom(mousePosAtom);
+  const [{ position }] = useDragAtom();
   const _onClick = () => {
     onClick();
-    const position = { x: pos[0], y: pos[1] };
     const component = option?.component ?? (() => <></>);
     const variable = createVariableFromOption(option) as any;
     appendNode({
@@ -76,9 +75,9 @@ function NodeMenuList({
 
 function NodeMenu() {
   const [open, setOpen] = React.useState(false);
-  const [pos] = useAtom(mousePosAtom);
+  const [{ position }] = useDragAtom();
   const posWhenOpen = React.useMemo(() => {
-    return { x: pos[0], y: pos[1] };
+    return position;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
   useKeyDown("Space", () => setOpen((prev) => !prev));

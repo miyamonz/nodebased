@@ -1,8 +1,6 @@
 import React from "react";
-import { useAtom } from "jotai";
 import { useDragAtom } from "../Mouse";
 import { useSVGMouse } from "./useSvgMouse";
-import { mousePosAtom } from "../atoms";
 import { NodeMenu } from "../NodeMenu";
 import { RenderAllNode } from "../Node";
 import { RenderSelectRect } from "../Select";
@@ -13,7 +11,6 @@ function SvgCanvas({ width, height }: { width: number; height: number }) {
   const [drag, setDrag] = useDragAtom();
   const isDown = React.useRef<"mouse" | null>(null);
   const [ref, transform] = useSVGMouse();
-  const [, setPos] = useAtom(mousePosAtom);
   return (
     <svg
       ref={ref}
@@ -22,7 +19,6 @@ function SvgCanvas({ width, height }: { width: number; height: number }) {
         isDown.current = "mouse";
         const position = transform(e);
         setDrag({ type: "down", position });
-        setPos([e.clientX, e.clientY]);
       }}
       onMouseMove={(e) => {
         const position = transform(e);
@@ -30,7 +26,6 @@ function SvgCanvas({ width, height }: { width: number; height: number }) {
           type: isDown.current === "mouse" ? "drag" : "move",
           position,
         });
-        setPos([e.clientX, e.clientY]);
       }}
       onMouseUp={(e) => {
         isDown.current = null;
