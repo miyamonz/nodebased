@@ -5,7 +5,7 @@ const dragDataAtom = atom<Event>({} as Event);
 export type Event = React.MouseEvent<SVGSVGElement, MouseEvent> & {
   position: { x: number; y: number };
 };
-export const dragAtom = atom(
+const dragAtom = atom(
   (get) => get(dragDataAtom),
   (_get, set, e: Event) => {
     set(dragDataAtom, e);
