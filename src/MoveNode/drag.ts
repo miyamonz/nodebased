@@ -6,7 +6,7 @@ import { useEvent, Event } from "../SVGContext";
 
 const isSetByClick = atom(false);
 
-export const dragAtomToMoveNode = atom(null, (get, set, e: Event) => {
+const dragAtomToMoveNode = atom(null, (get, set, e: Event) => {
   const hoveredNode = get(hoveredNodeAtom);
   const selectedRectAtomList = get(selectedRectAtomListAtom);
   const notSelected = selectedRectAtomList.length === 0;
