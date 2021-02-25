@@ -7,8 +7,6 @@ export const RenderElementNode: NodeComponent = ({ node }) => {
   const [inputAtom] = useAtom(isocket.atom);
   const [input] = useAtom(inputAtom);
 
-  const [rect] = useAtom(node.rect);
-
   return (
     <>{typeof input === "object" && React.isValidElement(input) && input}</>
   );

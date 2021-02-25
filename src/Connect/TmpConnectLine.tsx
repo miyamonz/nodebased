@@ -1,20 +1,20 @@
 import React from "react";
 import { useAtom } from "jotai";
 import { useMouseToConnect } from "./atoms";
-import { useDragAtom } from "../Mouse";
+import { useMousePosition } from "../SVGContext";
 import { useConnectTarget } from "../Socket";
 import type { OutputSocket } from "../Socket";
 
 const TmpConnectLineImpl = <T,>({ socket }: { socket: OutputSocket<T> }) => {
-  const [position] = useAtom(socket.position);
-  const [drag] = useDragAtom();
+  const [socketPos] = useAtom(socket.position);
+  const mousePos = useMousePosition();
   useMouseToConnect();
   return (
     <line
-      x1={position.x}
-      y1={position.y}
-      x2={drag.position.x}
-      y2={drag.position.y}
+      x1={socketPos.x}
+      y1={socketPos.y}
+      x2={mousePos.x}
+      y2={mousePos.y}
       stroke="red"
     />
   );

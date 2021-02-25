@@ -8,7 +8,7 @@ export type Event = React.MouseEvent<SVGSVGElement, MouseEvent> & {
     y: number;
   };
 };
-export function useDrag(atom: WritableAtom<null, Event>) {
+export function useEvent(atom: WritableAtom<null, Event>) {
   const [, setDrag] = useAtom(atom);
   const e = useMouseEvent();
   const transform = useTransform();

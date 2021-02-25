@@ -2,8 +2,7 @@ import { atom } from "jotai";
 import { hoveredNodeAtom } from "../Node";
 import { selectedRectAtomListAtom } from "../Select/drag";
 import type { Position } from "../Position";
-import type { Event } from "../Mouse";
-import { useDrag } from "../useDrag";
+import { useEvent, Event } from "../SVGContext";
 
 const isSetByClick = atom(false);
 
@@ -27,7 +26,7 @@ export const dragAtomToMoveNode = atom(null, (get, set, e: Event) => {
 });
 
 export function useDragMoveNode() {
-  return useDrag(dragAtomToMoveNode);
+  return useEvent(dragAtomToMoveNode);
 }
 
 const isDown = atom(false);

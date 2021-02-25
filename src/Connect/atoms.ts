@@ -2,8 +2,7 @@ import { atom } from "jotai";
 
 import { connectTargetAtom, hoveredInputSocketAtom } from "../Socket";
 import type { OutputSocket } from "../Socket";
-import type { Event } from "../Mouse";
-import { useDrag } from "../useDrag";
+import { useEvent, Event } from "../SVGContext";
 
 const dragAtom = atom(null, (get, set, e: Event) => {
   // connect
@@ -13,7 +12,7 @@ const dragAtom = atom(null, (get, set, e: Event) => {
   }
 });
 export function useMouseToConnect() {
-  return useDrag(dragAtom);
+  return useEvent(dragAtom);
 }
 
 const dragConnectAtom = atom(

@@ -1,7 +1,7 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
 import { appendNodeAtom } from "../Node";
-import { useDragAtom } from "../Mouse";
+import { useMousePosition } from "../SVGContext";
 import { nodeOptions, Option } from "./nodeOptions";
 
 import { createOutputAtom } from "./createOutputAtom";
@@ -46,7 +46,7 @@ function NodeMenuList({
   onClick: () => void;
 }) {
   const [, appendNode] = useAtom(appendNodeAtom);
-  const [{ position }] = useDragAtom();
+  const position = useMousePosition();
   const _onClick = () => {
     onClick();
     const component = option?.component ?? (() => <></>);
@@ -75,7 +75,7 @@ function NodeMenuList({
 
 function NodeMenu() {
   const [open, setOpen] = React.useState(false);
-  const [{ position }] = useDragAtom();
+  const position = useMousePosition();
   const posWhenOpen = React.useMemo(() => {
     return position;
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -5,8 +5,7 @@ import { connectTargetAtom } from "../Socket";
 import { intersect, rectFromPos } from "../Rect";
 import type { Rect } from "../Rect";
 import type { Position } from "../Position";
-import type { Event } from "../Mouse";
-import { useDrag } from "../useDrag";
+import { useEvent, Event } from "../SVGContext";
 
 const dragStartAtom = atom<Position | null>(null);
 export const isDraggingAtom = atom((get) => {
@@ -71,5 +70,5 @@ const dragAtomToSelect = atom(null, (get, set, e: Event) => {
 });
 
 export function useMouseToSelect() {
-  return useDrag(dragAtomToSelect);
+  return useEvent(dragAtomToSelect);
 }
