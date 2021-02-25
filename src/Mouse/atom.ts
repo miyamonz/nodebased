@@ -1,31 +1,14 @@
 import { atom, useAtom } from "jotai";
-import type { WritableAtom } from "jotai";
-import type { SimpleMouseEvent } from "./types";
 
-import { dragAtomToSelect } from "../Select/drag";
-import { dragAtomToMoveNode } from "../MoveNode";
-import { dragAtomToConnect } from "../Connect";
+const dragDataAtom = atom<Event>({} as Event);
 
-const dragDataAtom = atom<SimpleMouseEvent>({
-  type: "up",
-  position: { x: 0, y: 0 },
-});
-
-export type WritableDragAtom = WritableAtom<null, SimpleMouseEvent>;
-
-const registeredDragAtoms = atom<WritableDragAtom[]>([
-  dragAtomToSelect,
-  dragAtomToMoveNode,
-  dragAtomToConnect,
-]);
-
+export type Event = React.MouseEvent<SVGSVGElement, MouseEvent> & {
+  position: { x: number; y: number };
+};
 export const dragAtom = atom(
   (get) => get(dragDataAtom),
-  (get, set, pos: SimpleMouseEvent) => {
-    set(dragDataAtom, pos);
-
-    const atoms = get(registeredDragAtoms);
-    atoms.forEach((a) => set(a, pos));
+  (_get, set, e: Event) => {
+    set(dragDataAtom, e);
   }
 );
 

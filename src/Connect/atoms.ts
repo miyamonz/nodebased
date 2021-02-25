@@ -2,15 +2,19 @@ import { atom } from "jotai";
 
 import { connectTargetAtom, hoveredInputSocketAtom } from "../Socket";
 import type { OutputSocket } from "../Socket";
-import type { SimpleMouseEvent } from "../Mouse";
+import type { Event } from "../Mouse";
+import { useDrag } from "../useDrag";
 
-export const dragAtomToConnect = atom(null, (get, set, e: SimpleMouseEvent) => {
+const dragAtom = atom(null, (get, set, e: Event) => {
   // connect
   const connectTarget = get(connectTargetAtom);
-  if (e.type === "up" && connectTarget) {
+  if (e.type === "mouseup" && connectTarget) {
     set(dragConnectAtom, connectTarget);
   }
 });
+export function useMouseToConnect() {
+  return useDrag(dragAtom);
+}
 
 const dragConnectAtom = atom(
   null,

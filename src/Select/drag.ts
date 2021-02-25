@@ -5,7 +5,8 @@ import { connectTargetAtom } from "../Socket";
 import { intersect, rectFromPos } from "../Rect";
 import type { Rect } from "../Rect";
 import type { Position } from "../Position";
-import type { SimpleMouseEvent } from "../Mouse";
+import type { Event } from "../Mouse";
+import { useDrag } from "../useDrag";
 
 const dragStartAtom = atom<Position | null>(null);
 export const isDraggingAtom = atom((get) => {
@@ -28,8 +29,9 @@ const filteredRectAtomListAtom = atom((get) => {
 });
 export const selectedRectAtomListAtom = atom<NodeAtom[]>([]);
 
+const isDown = atom(false);
 const isClick = atom(false);
-export const dragAtomToSelect = atom(null, (get, set, e: SimpleMouseEvent) => {
+const dragAtomToSelect = atom(null, (get, set, e: Event) => {
   const pos = e.position;
   const isNotHovered = get(hoveredNodeAtom) === null;
   const connectTargetExists = get(connectTargetAtom) !== null;
@@ -37,7 +39,8 @@ export const dragAtomToSelect = atom(null, (get, set, e: SimpleMouseEvent) => {
   const isSelected = get(selectedRectAtomListAtom).length > 0;
 
   const startPos = get(dragStartAtom);
-  if (e.type === "down") {
+  if (e.type === "mousedown") {
+    set(isDown, true);
     if (isNotHovered && !connectTargetExists && !isSelected) {
       set(dragStartAtom, pos);
       set(selectRectAtom, null);
@@ -49,12 +52,13 @@ export const dragAtomToSelect = atom(null, (get, set, e: SimpleMouseEvent) => {
     }
 
     set(isClick, true);
-  } else if (e.type === "drag") {
+  } else if (e.type === "mousemove" && get(isDown)) {
     if (startPos !== null) {
       set(selectRectAtom, rectFromPos(startPos)(pos));
     }
     set(isClick, false);
-  } else if (e.type === "up") {
+  } else if (e.type === "mouseup") {
+    set(isDown, false);
     if (startPos !== null) {
       set(selectedRectAtomListAtom, get(filteredRectAtomListAtom));
       set(dragStartAtom, null);
@@ -65,3 +69,7 @@ export const dragAtomToSelect = atom(null, (get, set, e: SimpleMouseEvent) => {
     }
   }
 });
+
+export function useMouseToSelect() {
+  return useDrag(dragAtomToSelect);
+}

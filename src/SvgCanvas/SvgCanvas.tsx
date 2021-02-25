@@ -6,30 +6,24 @@ import { RenderAllNode } from "../Node";
 import { RenderSelectRect, RenderBoundingRect } from "../Select";
 
 import { TmpConnectLine } from "../Connect";
+import { useDragMoveNode } from "../MoveNode";
 
-function SVGContent() {
-  const [drag, setDrag] = useDragAtom();
-  const isDown = React.useRef<"mouse" | null>(null);
+function useSetDrag() {
+  const [, setDrag] = useDragAtom();
+
   const e = useMouseEvent();
   const transform = useTransform();
-
   React.useEffect(() => {
     if (e === null) return;
     const { x, y } = transform(e);
     const position = { x, y };
-    if (e.type === "mousedown") {
-      isDown.current = "mouse";
-      setDrag({ type: "down", position });
-    } else if (e.type === "mousemove") {
-      setDrag({
-        type: isDown.current === "mouse" ? "drag" : "move",
-        position,
-      });
-    } else if (e.type === "mouseup") {
-      isDown.current = null;
-      setDrag({ type: "up", position });
-    }
+    setDrag(Object.assign(e, { position }));
   }, [e]);
+}
+function SVGContent() {
+  useSetDrag();
+
+  useDragMoveNode();
 
   return (
     <>
@@ -38,13 +32,6 @@ function SVGContent() {
       </text>
       <RenderBoundingRect />
       <RenderSelectRect />
-      <circle
-        cx={drag.position.x}
-        cy={drag.position.y}
-        r={20}
-        fill="none"
-        stroke="black"
-      />
       <TmpConnectLine />
       <RenderAllNode />
       <NodeMenu />
