@@ -8,7 +8,6 @@ import type { OutputSocket } from "../Socket";
 const TmpConnectLineImpl = <T,>({ socket }: { socket: OutputSocket<T> }) => {
   const [socketPos] = useAtom(socket.position);
   const mousePos = useMousePosition();
-  useMouseToConnect();
   return (
     <line
       x1={socketPos.x}
@@ -20,6 +19,7 @@ const TmpConnectLineImpl = <T,>({ socket }: { socket: OutputSocket<T> }) => {
   );
 };
 const TmpConnectLine = () => {
+  useMouseToConnect();
   const connectTarget = useConnectTarget();
   if (connectTarget) {
     return <TmpConnectLineImpl socket={connectTarget} />;

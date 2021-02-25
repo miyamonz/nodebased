@@ -13,9 +13,9 @@ export function useEvent(atom: WritableAtom<null, Event>) {
   const e = useMouseEvent();
   const transform = useTransform();
   React.useEffect(() => {
-    if (e === null) return;
+    if (e === null || transform === null) return;
     const { x, y } = transform(e);
     const position = { x, y };
     setDrag(Object.assign(e, { position }));
-  }, [e]);
+  }, [e, transform, setDrag]);
 }
