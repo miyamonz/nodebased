@@ -12,4 +12,3 @@ export {
 } from "./func";
 export { InputCircle, OutputCircle } from "./IOCircle";
 export { hoveredInputSocketAtom, hoveredOutputSocketAtom } from "./IOCircle";
-export { connectTargetAtom, useConnectTarget } from "./atoms";

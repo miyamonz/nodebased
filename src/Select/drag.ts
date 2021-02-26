@@ -2,7 +2,7 @@ import React from "react";
 import { atom, useAtom } from "jotai";
 import { useHoveredNode, nodeAtomListAtom } from "../Node";
 import type { NodeAtom } from "../Node";
-import { useConnectTarget } from "../Socket";
+import { useConnectTarget } from "../Connect";
 import { intersect, rectFromPos } from "../Rect";
 import type { Rect } from "../Rect";
 import { useMouseStream } from "../SVGContext";
