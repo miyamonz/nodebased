@@ -1,1 +1,7 @@
-export { useDragMoveNode } from "./drag";
+import { useDragSelected } from "./useDragSelected";
+import { useDragHoveredNode } from "./useDragHoveredNode";
+
+export function useDragMoveNode() {
+  useDragSelected();
+  useDragHoveredNode();
+}
