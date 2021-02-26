@@ -2,7 +2,8 @@ import React from "react";
 import { atom, useAtom } from "jotai";
 import { selectedNodesAtom } from "./drag";
 import { boundingRect, offsetRect } from "../Rect";
-import { removeNodeAtom } from "../Node";
+
+import { removeNodeAtom } from "../atoms";
 
 const boundingRectAtom = atom((get) => {
   const selectedRectAtoms = get(selectedNodesAtom);

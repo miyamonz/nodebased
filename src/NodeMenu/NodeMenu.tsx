@@ -1,6 +1,6 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
-import { appendNodeAtom } from "../Node";
+import { appendNodeAtom } from "../atoms";
 import { useMousePosition } from "../SVGContext";
 import { nodeOptions, Option } from "./nodeOptions";
 

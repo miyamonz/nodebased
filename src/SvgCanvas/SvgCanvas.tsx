@@ -2,6 +2,8 @@ import React from "react";
 import { SVGProvider } from "../SVGContext";
 import { NodeMenu } from "../NodeMenu";
 import { RenderAllNode } from "../Node";
+import { useAtom } from "jotai";
+import { currentScopeAtom, RenderScopeNode } from "../Scope";
 import { RenderSelectRect, RenderBoundingRect } from "../Select";
 
 import { TmpConnectLine } from "../Connect";
@@ -9,6 +11,7 @@ import { useDragMoveNode } from "../MoveNode";
 
 function SVGContent() {
   useDragMoveNode();
+  const [scope] = useAtom(currentScopeAtom);
   return (
     <>
       <text x={0} y={20}>
@@ -17,7 +20,7 @@ function SVGContent() {
       <RenderBoundingRect />
       <RenderSelectRect />
       <TmpConnectLine />
-      <RenderAllNode />
+      {scope && <RenderScopeNode scope={scope} />}
       <NodeMenu />
     </>
   );
