@@ -1,18 +1,15 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
-import { hoveredNodeAtom, nodeAtomListAtom } from "../Node";
+import { useHoveredNode, nodeAtomListAtom } from "../Node";
 import type { NodeAtom } from "../Node";
-import { connectTargetAtom } from "../Socket";
+import { useConnectTarget } from "../Socket";
 import { intersect, rectFromPos } from "../Rect";
 import type { Rect } from "../Rect";
 import type { Position } from "../Position";
 import { useMouseEvent, useMousePosition } from "../SVGContext";
 
-const dragStartAtom = atom<Position | null>(null);
-export const isDraggingAtom = atom((get) => {
-  const p = get(dragStartAtom);
-  return p !== null;
-});
+export const isDraggingAtom = atom(false);
+
 const selectRectAtom = atom<Rect | null>(null);
 export function useSelectRectAtom() {
   const [rect] = useAtom(selectRectAtom);
@@ -33,9 +30,9 @@ export function useMouseToSelect() {
   const { start, drag, end } = useMouseStream();
   const [, setSelectRect] = useAtom(selectRectAtom);
 
-  const [hoveredNode] = useAtom(hoveredNodeAtom);
-  const [connectTarget] = useAtom(connectTargetAtom);
-  const [, setDragStart] = useAtom(dragStartAtom);
+  const hoveredNode = useHoveredNode();
+  const connectTarget = useConnectTarget();
+  const [, setDragging] = useAtom(isDraggingAtom);
   const [selectedRectAtomList, setSelectedRectAtomList] = useAtom(
     selectedRectAtomListAtom
   );
@@ -46,13 +43,13 @@ export function useMouseToSelect() {
   React.useEffect(() => {
     if (hoveredNode === null && connectTarget === null && !isSelected) {
       setSelectRect(null);
-      setDragStart(start);
+      setDragging(true);
     }
     if (connectTarget !== null) {
       setSelectRect(null);
       setSelectedRectAtomList([]);
     }
-    if (start === null) setDragStart(null);
+    if (start === null) setDragging(false);
     setClick(true);
   }, [start]);
 
@@ -68,7 +65,7 @@ export function useMouseToSelect() {
   React.useEffect(() => {
     if (end === null) return;
     setSelectedRectAtomList(filteredRectAtomList);
-    setDragStart(null);
+    setDragging(false);
     if (isClick && isSelected) {
       setSelectRect(null);
       setSelectedRectAtomList([]);
