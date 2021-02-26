@@ -1,6 +1,6 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
-import { currentNodesAtom } from "../atoms";
+import { currentNodesAtom } from "../actions";
 import { hoveredNodeAtom } from "../Node";
 import type { NodeAtom } from "../Node";
 import { hoveredInputSocketAtom, hoveredOutputSocketAtom } from "../Socket";

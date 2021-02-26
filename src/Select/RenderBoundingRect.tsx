@@ -3,7 +3,7 @@ import { atom, useAtom } from "jotai";
 import { selectedNodesAtom } from "./drag";
 import { boundingRect, offsetRect } from "../Rect";
 
-import { removeNodeAtom } from "../atoms";
+import { removeNodeAtom } from "../actions";
 
 const boundingRectAtom = atom((get) => {
   const selectedRectAtoms = get(selectedNodesAtom);
