@@ -1,6 +1,5 @@
 import React from "react";
-import { useAtom } from "jotai";
-import { hoveredNodeAtom } from "./atoms";
+import { atom, useAtom } from "jotai";
 import type { NodeAtom } from "./types";
 import { selectedRectAtomListAtom } from "../Select/drag";
 import { InputCircle, OutputCircle } from "../Socket";
@@ -23,6 +22,12 @@ const ShowSelect: NodeAtomComponent = ({ nodeAtom }) => {
   }
   return null;
 };
+
+export const hoveredNodeAtom = atom<NodeAtom | null>(null);
+export function useHoveredNode() {
+  const [node] = useAtom(hoveredNodeAtom);
+  return node;
+}
 
 const ShowHovered: NodeAtomComponent = ({ nodeAtom }) => {
   const rect = useRectAtom(nodeAtom);

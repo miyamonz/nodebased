@@ -34,5 +34,3 @@ export const removeNodeAtom = atom(
     );
   }
 );
-
-export const hoveredNodeAtom = atom<NodeAtom | null>(null);
