@@ -2,6 +2,7 @@ import { atom } from "jotai";
 import { SliderNode, RenderElementNode } from "../NodeList";
 import { NodeComponent } from "../Node";
 import { defaultNodeSizeVariable } from "../Node";
+import { socketRadiusVariable } from "../Socket";
 import { createVariable, Variable } from "../Variable";
 
 type OptionBase = {
@@ -33,6 +34,10 @@ export const nodeOptions: Option[] = [
   {
     name: "nodeSize",
     variable: () => defaultNodeSizeVariable,
+  },
+  {
+    name: "socketRadius",
+    variable: () => socketRadiusVariable,
   },
   {
     name: "elapsed",

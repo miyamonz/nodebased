@@ -5,18 +5,21 @@ import { isConnected } from "./types";
 import type { InputSocket, OutputSocket } from "./types";
 import type { PositionAtom } from "../Position";
 
+import { socketRadiusVariable } from "./variables";
+
 type IOCircleProps = {
   positionAtom: PositionAtom;
 } & JSX.IntrinsicElements["circle"];
 const IOCircle: React.FC<IOCircleProps> = ({ positionAtom, ...props }) => {
   const [position] = useAtom(positionAtom);
+  const [r] = useAtom(socketRadiusVariable.outputAtom);
   return (
     <circle
       cx={position.x}
       cy={position.y}
       fill="white"
       stroke="blue"
-      r={7}
+      r={r}
       {...props}
     />
   );

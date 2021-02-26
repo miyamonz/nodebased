@@ -12,3 +12,5 @@ export {
 } from "./func";
 export { InputCircle, OutputCircle } from "./IOCircle";
 export { hoveredInputSocketAtom, hoveredOutputSocketAtom } from "./IOCircle";
+
+export { socketRadiusVariable } from "./variables";
