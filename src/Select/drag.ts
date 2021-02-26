@@ -21,7 +21,11 @@ const filteredRectAtomListAtom = atom((get) => {
     intersect(selectRect)(get(get(node).rect))
   );
 });
-export const selectedRectAtomListAtom = atom<NodeAtom[]>([]);
+export const selectedNodesAtom = atom<NodeAtom[]>([]);
+export function useSelectedNodes() {
+  const [nodes] = useAtom(selectedNodesAtom);
+  return nodes;
+}
 
 const startConditionAtom = atom((get) => {
   const cond = [
@@ -29,13 +33,13 @@ const startConditionAtom = atom((get) => {
     get(hoveredInputSocketAtom),
     get(hoveredOutputSocketAtom),
   ].reduce((acc, next) => acc && next === null, true);
-  const isSelected = get(selectedRectAtomListAtom).length > 0;
+  const isSelected = get(selectedNodesAtom).length > 0;
 
   return cond && !isSelected;
 });
 
 function useClickThenUnselect() {
-  const [, setSelectedRectAtomList] = useAtom(selectedRectAtomListAtom);
+  const [, setSelectedRectAtomList] = useAtom(selectedNodesAtom);
   const { start, drag, end } = useMouseStream();
   // on click
   const isClick = React.useMemo(() => {
@@ -55,13 +59,13 @@ export function useMouseToSelect() {
   const [startCond] = useAtom(startConditionAtom);
   const { start, drag, end } = useMouseStream(startCond);
 
-  const [, setSelectedRectAtomList] = useAtom(selectedRectAtomListAtom);
+  const [, setSelectedNodes] = useAtom(selectedNodesAtom);
   const [, setSelectRect] = useAtom(selectRectAtom);
 
   //start
   React.useEffect(() => {
     if (start === null) return;
-    setSelectedRectAtomList([]);
+    setSelectedNodes([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [start]);
 
@@ -76,7 +80,7 @@ export function useMouseToSelect() {
   //end
   React.useEffect(() => {
     if (end === null) return;
-    setSelectedRectAtomList(filteredRectAtomList);
+    setSelectedNodes(filteredRectAtomList);
     setSelectRect(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [end]);

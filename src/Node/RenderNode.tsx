@@ -1,7 +1,7 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
 import type { NodeAtom } from "./types";
-import { selectedRectAtomListAtom } from "../Select/drag";
+import { useSelectedNodes } from "../Select";
 import { InputCircle, OutputCircle } from "../Socket";
 
 type NodeAtomComponent = React.FC<{ nodeAtom: NodeAtom }>;
@@ -14,7 +14,7 @@ function useRectAtom(nodeAtom: NodeAtom) {
 
 const ShowSelect: NodeAtomComponent = ({ nodeAtom }) => {
   const rect = useRectAtom(nodeAtom);
-  const [selectedNodes] = useAtom(selectedRectAtomListAtom);
+  const selectedNodes = useSelectedNodes();
   const isSelected = selectedNodes.includes(nodeAtom);
 
   if (isSelected) {

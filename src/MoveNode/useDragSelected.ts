@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useAtom } from "jotai";
-import { selectedRectAtomListAtom } from "../Select/drag";
+import { useSelectedNodes } from "../Select";
 import { useMouseStream } from "../SVGContext";
 import { setGrabAtom, setDragDiffAtom } from "./drag";
 
 export function useDragSelected() {
-  const [dragTarget] = useAtom(selectedRectAtomListAtom);
+  const dragTarget = useSelectedNodes();
   const { start, drag } = useMouseStream(
     dragTarget !== null,
     dragTarget !== null
