@@ -1,6 +1,7 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
-import { hoveredNodeAtom, nodeAtomListAtom } from "../Node";
+import { currentNodesAtom } from "../atoms";
+import { hoveredNodeAtom } from "../Node";
 import type { NodeAtom } from "../Node";
 import { hoveredInputSocketAtom, hoveredOutputSocketAtom } from "../Socket";
 import { intersect, rectFromPos } from "../Rect";
@@ -14,10 +15,10 @@ export function useSelectRectAtom() {
 }
 
 const filteredRectAtomListAtom = atom((get) => {
-  const nodeAtomList = get(nodeAtomListAtom);
+  const currentNodes = get(currentNodesAtom);
   const selectRect = get(selectRectAtom);
   if (selectRect === null) return [];
-  return nodeAtomList.filter((node) =>
+  return currentNodes.filter((node) =>
     intersect(selectRect)(get(get(node).rect))
   );
 });
