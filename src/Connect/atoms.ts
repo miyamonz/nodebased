@@ -1,31 +1,51 @@
-import { atom } from "jotai";
+import { useEffect } from "react";
+import { atom, useAtom } from "jotai";
 
-import { connectTargetAtom, hoveredInputSocketAtom } from "../Socket";
-import type { OutputSocket } from "../Socket";
-import { useEvent, Event } from "../SVGContext";
+import {
+  hoveredInputSocketAtom,
+  hoveredOutputSocketAtom,
+  connectTargetAtom,
+} from "../Socket";
+import type { InputSocket, OutputSocket } from "../Socket";
+import { useMouseStream } from "../SVGContext";
 
-const dragAtom = atom(null, (get, set, e: Event) => {
-  // connect
-  const connectTarget = get(connectTargetAtom);
-  if (e.type === "mouseup" && connectTarget) {
-    set(dragConnectAtom, connectTarget);
-  }
-});
 export function useMouseToConnect() {
-  return useEvent(dragAtom);
+  const [hoveredOutput] = useAtom(hoveredOutputSocketAtom);
+  const [hovered] = useAtom(hoveredInputSocketAtom);
+  const { start, end } = useMouseStream(hoveredOutput !== null, true);
+
+  const [connectTarget, setConnectTarget] = useAtom(connectTargetAtom);
+
+  useEffect(() => {
+    if (start === null) return;
+    if (hoveredOutput === null) return;
+    setConnectTarget(hoveredOutput);
+  }, [start]);
+
+  const [, setConnect] = useAtom(connectAtom);
+  useEffect(() => {
+    if (end === null) return;
+    if (hovered === null) {
+      setConnectTarget(null);
+      return;
+    }
+    if (connectTarget === null) return;
+    setConnect([connectTarget, hovered]);
+  }, [end]);
 }
 
-const dragConnectAtom = atom(
+const connectAtom = atom(
   null,
-  (get, set, connectTarget: OutputSocket<unknown>) => {
-    const hovered = get(hoveredInputSocketAtom);
-    if (hovered) {
-      console.log("connect", connectTarget, hovered);
-      const newAtom = atom((get) => get(connectTarget.atom));
-      hovered.from = connectTarget;
-      // set new atom that will return target atom's value into hovered inputSocket
-      set(hovered.atom, newAtom);
-    }
+  (
+    _get,
+    set,
+    [connectTarget, hovered]: [OutputSocket<unknown>, InputSocket<unknown>]
+  ) => {
+    console.log("connect", connectTarget, hovered);
+    const newAtom = atom((get) => get(connectTarget.atom));
+    hovered.from = connectTarget;
+    // set new atom that will return target atom's value into hovered inputSocket
+    set(hovered.atom, newAtom);
     set(connectTargetAtom, null);
   }
 );

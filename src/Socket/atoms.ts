@@ -12,8 +12,3 @@ export function useSetConnectFrom() {
   return setConnectTarget;
 }
 
-// input
-export const hoveredInputSocketAtom = atom<InputSocket<unknown> | null>(null);
-export function useHoveredInputSocket() {
-  return useAtom(hoveredInputSocketAtom);
-}

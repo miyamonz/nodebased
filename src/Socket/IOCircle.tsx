@@ -1,6 +1,5 @@
 import React from "react";
-import { useAtom } from "jotai";
-import { useSetConnectFrom, useHoveredInputSocket } from "./atoms";
+import { atom, useAtom } from "jotai";
 import ConnectedLine from "./ConnectedLine";
 import { isConnected } from "./types";
 import type { InputSocket, OutputSocket } from "./types";
@@ -23,8 +22,9 @@ const IOCircle: React.FC<IOCircleProps> = ({ positionAtom, ...props }) => {
   );
 };
 
+export const hoveredInputSocketAtom = atom<InputSocket<unknown> | null>(null);
 export const InputCircle = <T,>({ input }: { input: InputSocket<T> }) => {
-  const [hovered, setHovered] = useHoveredInputSocket();
+  const [hovered, setHovered] = useAtom(hoveredInputSocketAtom);
   const isHovered = hovered === input;
   return (
     <>
@@ -43,15 +43,22 @@ export const InputCircle = <T,>({ input }: { input: InputSocket<T> }) => {
     </>
   );
 };
+
+export const hoveredOutputSocketAtom = atom<OutputSocket<unknown> | null>(null);
 export const OutputCircle = <T,>({ output }: { output: OutputSocket<T> }) => {
-  const setConnectTarget = useSetConnectFrom();
+  const [hovered, setHovered] = useAtom(hoveredOutputSocketAtom);
+  const isHovered = hovered === output;
 
   return (
     <IOCircle
       positionAtom={output.position}
-      onMouseDown={() => {
-        setConnectTarget(output);
+      onMouseEnter={() => {
+        setHovered(output);
       }}
+      onMouseLeave={() => {
+        setHovered(null);
+      }}
+      fill={isHovered ? "red" : "white"}
     />
   );
 };
