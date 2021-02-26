@@ -1,8 +1,8 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
-import { useHoveredNode, nodeAtomListAtom } from "../Node";
+import { hoveredNodeAtom, nodeAtomListAtom } from "../Node";
 import type { NodeAtom } from "../Node";
-import { useConnectTarget } from "../Connect";
+import { hoveredInputSocketAtom, hoveredOutputSocketAtom } from "../Socket";
 import { intersect, rectFromPos } from "../Rect";
 import type { Rect } from "../Rect";
 import { useMouseStream } from "../SVGContext";
@@ -23,17 +23,16 @@ const filteredRectAtomListAtom = atom((get) => {
 });
 export const selectedRectAtomListAtom = atom<NodeAtom[]>([]);
 
-function useStartCond() {
-  const hoveredNode = useHoveredNode();
-  const connectTarget = useConnectTarget();
-  const [selectedRectAtomList] = useAtom(selectedRectAtomListAtom);
-  const isSelected = selectedRectAtomList.length > 0;
+const startConditionAtom = atom((get) => {
+  const cond = [
+    get(hoveredNodeAtom),
+    get(hoveredInputSocketAtom),
+    get(hoveredOutputSocketAtom),
+  ].reduce((acc, next) => acc && next === null, true);
+  const isSelected = get(selectedRectAtomListAtom).length > 0;
 
-  return React.useMemo(
-    () => hoveredNode === null && connectTarget === null && !isSelected,
-    [hoveredNode, connectTarget, isSelected]
-  );
-}
+  return cond && !isSelected;
+});
 
 function useClickThenUnselect() {
   const [, setSelectedRectAtomList] = useAtom(selectedRectAtomListAtom);
@@ -53,7 +52,7 @@ function useClickThenUnselect() {
 export function useMouseToSelect() {
   useClickThenUnselect();
 
-  const startCond = useStartCond();
+  const [startCond] = useAtom(startConditionAtom);
   const { start, drag, end } = useMouseStream(startCond);
 
   const [, setSelectedRectAtomList] = useAtom(selectedRectAtomListAtom);
