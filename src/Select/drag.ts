@@ -5,8 +5,7 @@ import type { NodeAtom } from "../Node";
 import { useConnectTarget } from "../Socket";
 import { intersect, rectFromPos } from "../Rect";
 import type { Rect } from "../Rect";
-import type { Position } from "../Position";
-import { useMouseEvent, useMousePosition } from "../SVGContext";
+import { useMouseStream } from "../SVGContext";
 
 const selectRectAtom = atom<Rect | null>(null);
 export function useSelectRectAtom() {
@@ -36,7 +35,24 @@ function useStartCond() {
   );
 }
 
+function useClickThenUnselect() {
+  const [, setSelectedRectAtomList] = useAtom(selectedRectAtomListAtom);
+  const { start, drag, end } = useMouseStream();
+  // on click
+  const isClick = React.useMemo(() => {
+    return start !== null && drag == null && end !== null;
+  }, [start, drag, end]);
+  React.useEffect(() => {
+    if (isClick) {
+      setSelectedRectAtomList([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isClick]);
+}
+
 export function useMouseToSelect() {
+  useClickThenUnselect();
+
   const startCond = useStartCond();
   const { start, drag, end } = useMouseStream(startCond);
 
@@ -47,12 +63,14 @@ export function useMouseToSelect() {
   React.useEffect(() => {
     if (start === null) return;
     setSelectedRectAtomList([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [start]);
 
   //drag
   React.useEffect(() => {
     if (start === null || drag === null) return;
     setSelectRect(rectFromPos(start)(drag));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [drag]);
 
   const [filteredRectAtomList] = useAtom(filteredRectAtomListAtom);
@@ -61,42 +79,6 @@ export function useMouseToSelect() {
     if (end === null) return;
     setSelectedRectAtomList(filteredRectAtomList);
     setSelectRect(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [end]);
-
-  // on click
-  const isClick = React.useMemo(() => {
-    return start !== null && drag == null && end !== null;
-  }, [start, drag, end]);
-  React.useEffect(() => {
-    if (isClick) {
-      setSelectedRectAtomList([]);
-    }
-  }, [isClick]);
-}
-
-function useMouseStream(startCond = true, dragCond = true, endCond = true) {
-  const [start, setStart] = React.useState<Position | null>(null);
-  const [drag, setDrag] = React.useState<Position | null>(null);
-  const [end, setEnd] = React.useState<Position | null>(null);
-  const e = useMouseEvent();
-  const position = useMousePosition();
-  React.useEffect(() => {
-    if (e === null) return;
-    if (e.type === "mousedown" && startCond) {
-      setDrag(null);
-      setEnd(null);
-      setStart(position);
-    } else if (
-      e.type === "mousemove" &&
-      dragCond &&
-      start !== null &&
-      end === null
-    ) {
-      setDrag(position);
-    } else if (e.type === "mouseup" && endCond) {
-      setEnd(position);
-    }
-  }, [e, start, drag, end]);
-
-  return { start, drag, end };
 }
