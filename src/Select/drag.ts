@@ -24,42 +24,42 @@ const filteredRectAtomListAtom = atom((get) => {
 });
 export const selectedRectAtomListAtom = atom<NodeAtom[]>([]);
 
-export function useMouseToSelect() {
-  const { start, drag, end } = useMouseStream();
-  const [, setSelectRect] = useAtom(selectRectAtom);
-
+function useStartCond() {
   const hoveredNode = useHoveredNode();
   const connectTarget = useConnectTarget();
-  const [isDragging, setDragging] = React.useState(false);
-  const [selectedRectAtomList, setSelectedRectAtomList] = useAtom(
-    selectedRectAtomListAtom
-  );
-
+  const [selectedRectAtomList] = useAtom(selectedRectAtomListAtom);
   const isSelected = selectedRectAtomList.length > 0;
+
+  return React.useMemo(
+    () => hoveredNode === null && connectTarget === null && !isSelected,
+    [hoveredNode, connectTarget, isSelected]
+  );
+}
+
+export function useMouseToSelect() {
+  const startCond = useStartCond();
+  const { start, drag, end } = useMouseStream(startCond);
+
+  const [, setSelectedRectAtomList] = useAtom(selectedRectAtomListAtom);
+  const [, setSelectRect] = useAtom(selectRectAtom);
+
   //start
   React.useEffect(() => {
-    if (hoveredNode === null && connectTarget === null && !isSelected) {
-      setSelectRect(null);
-      setDragging(true);
-    }
-    if (connectTarget !== null) {
-      setSelectedRectAtomList([]);
-    }
-    if (start === null) setDragging(false);
+    if (start === null) return;
+    setSelectedRectAtomList([]);
   }, [start]);
 
   //drag
   React.useEffect(() => {
     if (start === null || drag === null) return;
-    if (isDragging) setSelectRect(rectFromPos(start)(drag));
-  }, [start, drag]);
+    setSelectRect(rectFromPos(start)(drag));
+  }, [drag]);
 
   const [filteredRectAtomList] = useAtom(filteredRectAtomListAtom);
   //end
   React.useEffect(() => {
     if (end === null) return;
     setSelectedRectAtomList(filteredRectAtomList);
-    setDragging(false);
     setSelectRect(null);
   }, [end]);
 
@@ -68,13 +68,13 @@ export function useMouseToSelect() {
     return start !== null && drag == null && end !== null;
   }, [start, drag, end]);
   React.useEffect(() => {
-    if (isClick && isSelected) {
+    if (isClick) {
       setSelectedRectAtomList([]);
     }
   }, [isClick]);
 }
 
-function useMouseStream() {
+function useMouseStream(startCond = true, dragCond = true, endCond = true) {
   const [start, setStart] = React.useState<Position | null>(null);
   const [drag, setDrag] = React.useState<Position | null>(null);
   const [end, setEnd] = React.useState<Position | null>(null);
@@ -82,13 +82,18 @@ function useMouseStream() {
   const position = useMousePosition();
   React.useEffect(() => {
     if (e === null) return;
-    if (e.type === "mousedown") {
+    if (e.type === "mousedown" && startCond) {
       setDrag(null);
       setEnd(null);
       setStart(position);
-    } else if (e.type === "mousemove" && start !== null && end === null) {
+    } else if (
+      e.type === "mousemove" &&
+      dragCond &&
+      start !== null &&
+      end === null
+    ) {
       setDrag(position);
-    } else if (e.type === "mouseup") {
+    } else if (e.type === "mouseup" && endCond) {
       setEnd(position);
     }
   }, [e, start, drag, end]);
