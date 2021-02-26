@@ -35,7 +35,6 @@ export function useMouseToSelect() {
     selectedRectAtomListAtom
   );
 
-  const [isClick, setClick] = React.useState(false);
   const isSelected = selectedRectAtomList.length > 0;
   //start
   React.useEffect(() => {
@@ -44,18 +43,15 @@ export function useMouseToSelect() {
       setDragging(true);
     }
     if (connectTarget !== null) {
-      setSelectRect(null);
       setSelectedRectAtomList([]);
     }
     if (start === null) setDragging(false);
-    setClick(true);
   }, [start]);
 
   //drag
   React.useEffect(() => {
     if (start === null || drag === null) return;
-    setSelectRect(rectFromPos(start)(drag));
-    setClick(false);
+    if (isDragging) setSelectRect(rectFromPos(start)(drag));
   }, [start, drag]);
 
   const [filteredRectAtomList] = useAtom(filteredRectAtomListAtom);
@@ -64,11 +60,18 @@ export function useMouseToSelect() {
     if (end === null) return;
     setSelectedRectAtomList(filteredRectAtomList);
     setDragging(false);
+    setSelectRect(null);
+  }, [end]);
+
+  // on click
+  const isClick = React.useMemo(() => {
+    return start !== null && drag == null && end !== null;
+  }, [start, drag, end]);
+  React.useEffect(() => {
     if (isClick && isSelected) {
-      setSelectRect(null);
       setSelectedRectAtomList([]);
     }
-  }, [end]);
+  }, [isClick]);
 }
 
 function useMouseStream() {
@@ -80,14 +83,13 @@ function useMouseStream() {
   React.useEffect(() => {
     if (e === null) return;
     if (e.type === "mousedown") {
+      setDrag(null);
       setEnd(null);
       setStart(position);
-    } else if (e.type === "mousemove" && start !== null) {
+    } else if (e.type === "mousemove" && start !== null && end === null) {
       setDrag(position);
-    } else if (e.type === "mouseup" && drag !== null) {
+    } else if (e.type === "mouseup") {
       setEnd(position);
-      setStart(null);
-      setDrag(null);
     }
   }, [e, start, drag, end]);
 
