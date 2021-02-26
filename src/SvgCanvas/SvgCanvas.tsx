@@ -1,7 +1,6 @@
 import React from "react";
 import { SVGProvider } from "../SVGContext";
 import { NodeMenu } from "../NodeMenu";
-import { RenderAllNode } from "../Node";
 import { useAtom } from "jotai";
 import { currentScopeAtom, RenderScopeNode } from "../Scope";
 import { RenderSelectRect, RenderBoundingRect } from "../Select";
