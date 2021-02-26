@@ -3,7 +3,7 @@ import { atom, useAtom } from "jotai";
 import { selectedNodesAtom } from "./drag";
 import { boundingRect, offsetRect } from "../Rect";
 
-import { removeNodeAtom } from "../actions";
+import { removeNodeAtom, createSubNodeAtom } from "../actions";
 
 const boundingRectAtom = atom((get) => {
   const selectedRectAtoms = get(selectedNodesAtom);
@@ -14,6 +14,7 @@ const RenderBoundingRect = () => {
 
   const [boundingRect] = useAtom(boundingRectAtom);
   const [, removeNode] = useAtom(removeNodeAtom);
+  const [, createSubNode] = useAtom(createSubNodeAtom);
   const r = offsetRect(boundingRect)(15);
 
   const u = 20;
@@ -28,6 +29,17 @@ const RenderBoundingRect = () => {
         fill="lightblue"
         onMouseUp={() => {
           removeNode(nodeAtoms);
+          setNodeAtoms([]);
+        }}
+      />
+      <rect
+        x={r.x + r.width - u * 2}
+        y={r.y - u}
+        width={u}
+        height={u}
+        fill="lightgreen"
+        onMouseUp={() => {
+          createSubNode(nodeAtoms);
           setNodeAtoms([]);
         }}
       />
