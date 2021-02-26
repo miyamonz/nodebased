@@ -8,8 +8,6 @@ import type { Rect } from "../Rect";
 import type { Position } from "../Position";
 import { useMouseEvent, useMousePosition } from "../SVGContext";
 
-export const isDraggingAtom = atom(false);
-
 const selectRectAtom = atom<Rect | null>(null);
 export function useSelectRectAtom() {
   const [rect] = useAtom(selectRectAtom);
@@ -32,7 +30,7 @@ export function useMouseToSelect() {
 
   const hoveredNode = useHoveredNode();
   const connectTarget = useConnectTarget();
-  const [, setDragging] = useAtom(isDraggingAtom);
+  const [isDragging, setDragging] = React.useState(false);
   const [selectedRectAtomList, setSelectedRectAtomList] = useAtom(
     selectedRectAtomListAtom
   );
