@@ -30,7 +30,7 @@ export const createSubNodeAtom = atom(
       y: sum.y / nodeAtoms.length,
     };
 
-    const variable = createVariable([], () => atom(undefined));
+    const variable = createVariable(atom([]), () => atom(undefined));
 
     const node = {
       position,

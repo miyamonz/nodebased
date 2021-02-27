@@ -13,7 +13,7 @@ type OptionFn = OptionBase & {
   fn: (...args: any[]) => unknown;
 };
 type OptionVariable = OptionBase & {
-  variable: () => Variable<number, unknown>;
+  variable: () => Variable<unknown[], unknown>;
 };
 export type Option = OptionFn | OptionVariable;
 export const nodeOptions: Option[] = [
@@ -33,16 +33,16 @@ export const nodeOptions: Option[] = [
   { name: "render", fn: (_) => {}, component: RenderElementNode },
   {
     name: "nodeSize",
-    variable: () => defaultNodeSizeVariable,
+    variable: () => defaultNodeSizeVariable as any,
   },
   {
     name: "socketRadius",
-    variable: () => socketRadiusVariable,
+    variable: () => socketRadiusVariable as any,
   },
   {
     name: "elapsed",
     variable: () =>
-      createVariable([], () => {
+      createVariable(atom([]), () => {
         const oscAtom = atom(0);
         console.log("atom created");
         oscAtom.onMount = (set) => {

@@ -2,24 +2,24 @@ import { atom } from "jotai";
 import type { Atom } from "jotai";
 import type { AtomRef } from "../AtomRef";
 
-export type InputAtom<T> = AtomRef<T>;
+type Refnize<T> = { [Key in keyof T]: AtomRef<T[Key]> };
+export type InputAtom<Args extends unknown[]> = Atom<Refnize<Args>>;
+
 export type OutputAtom<T> = Atom<T>;
 
-export type AtomFn<IN, OUT> = (inputs: Atom<IN>[]) => OutputAtom<OUT>;
-
-export type Variable<IN, OUT> = {
-  inputAtoms: InputAtom<IN>[];
+export type Variable<IN extends unknown[], OUT> = {
+  inputsAtom: InputAtom<IN>;
   outputAtom: OutputAtom<OUT>;
 };
 
-export function createVariable<IN, OUT>(
-  inputAtoms: InputAtom<IN>[],
-  createOutput: AtomFn<IN, OUT>
+export function createVariable<IN extends unknown[], OUT>(
+  inputsAtom: InputAtom<IN>,
+  createOutput: (inputValuesAtom: Atom<IN>) => OutputAtom<OUT>
 ): Variable<IN, OUT> {
-  const input = inputAtoms.map((a) => atom((get) => get(get(a))));
-  const outputAtom = createOutput(input);
+  const input = atom((get) => get(inputsAtom).map(get).map(get) as IN);
+  const outputAtom: OutputAtom<OUT> = createOutput(input);
   return {
-    inputAtoms,
+    inputsAtom,
     outputAtom,
   };
 }

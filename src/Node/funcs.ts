@@ -5,7 +5,7 @@ import { createInputSockets, createOutputSocket } from "../Socket";
 import { RectAtom } from "../Rect";
 import type { Variable } from "../Variable";
 
-export const createNodeAtom = <IN, OUT>({
+export const createNodeAtom = <IN extends unknown[], OUT>({
   rect,
   variable,
   name,
@@ -16,7 +16,7 @@ export const createNodeAtom = <IN, OUT>({
   name: string;
   component: NodeComponent;
 }): NodeAtom => {
-  const inputSockets = createInputSockets<IN>(rect, variable.inputAtoms);
+  const inputSockets = createInputSockets<IN>(rect, variable.inputsAtom);
   const outputSocket = createOutputSocket(rect, variable.outputAtom);
 
   return atom({
@@ -25,5 +25,5 @@ export const createNodeAtom = <IN, OUT>({
     output: outputSocket,
     name,
     component,
-  }) as any;
+  });
 };

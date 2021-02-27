@@ -6,19 +6,15 @@ type Size = {
   width: number;
   height: number;
 };
-const inputAtoms: InputAtom<number>[] = [
+const inputAtoms: InputAtom<[number, number]> = atom([
   createAtomRef(atom(100)),
   createAtomRef(atom(50)),
-];
-export const defaultNodeSizeVariable = createVariable<number, Size>(
+]);
+export const defaultNodeSizeVariable = createVariable(
   inputAtoms,
-  (atoms) => {
-    return atom((get) => {
-      const inputValues = atoms.map(get);
-      return {
-        width: inputValues[0],
-        height: inputValues[1],
-      };
-    });
-  }
+  (inputsAtom) =>
+    atom((get) => {
+      const [width, height] = get(inputsAtom);
+      return { width, height };
+    })
 );

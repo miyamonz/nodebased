@@ -1,6 +1,7 @@
 import type { Atom, PrimitiveAtom } from "jotai";
 import type { InputAtom, OutputAtom } from "../Variable";
 import type { PositionAtom } from "../Position";
+import type { AtomRef } from "../AtomRef";
 
 type Socket = {
   type: string;
@@ -8,7 +9,7 @@ type Socket = {
 };
 export type InputSocket<T> = Socket & {
   type: "input";
-  ref: InputAtom<T>;
+  ref: AtomRef<T>;
   atom: Atom<T>;
   from: OutputSocket<T> | null;
 };

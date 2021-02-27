@@ -4,7 +4,7 @@ import type { InputSocket, OutputSocket } from "../Socket";
 
 export type Node = {
   rect: RectAtom;
-  inputs: InputSocket<unknown>[];
+  inputs: Atom<InputSocket<unknown>[]>;
   output: OutputSocket<unknown>;
   name: string;
   component: NodeComponent;

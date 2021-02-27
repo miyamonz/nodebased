@@ -3,7 +3,7 @@ import { useAtom } from "jotai";
 import type { NodeComponent } from "../Node";
 
 export const RenderAtomNode: NodeComponent = ({ node }) => {
-  const isocket = node.inputs[0];
+  const [[isocket]] = useAtom(node.inputs);
   const [input] = useAtom(isocket.atom);
 
   return (

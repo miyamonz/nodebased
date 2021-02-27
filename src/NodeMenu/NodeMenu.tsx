@@ -4,7 +4,6 @@ import { appendNodeAtom } from "../actions";
 import { useMousePosition } from "../SVGContext";
 import { nodeOptions, Option } from "./nodeOptions";
 
-import { createOutputAtom } from "./createOutputAtom";
 import { createVariable } from "../Variable";
 
 import { createAtomRef } from "../AtomRef";
@@ -33,11 +32,11 @@ function createVariableFromOption(option: Option) {
   if ("variable" in option) return option.variable();
 
   const num = option.fn.length;
-  const inputAtoms = range(num).map(() => {
-    return createAtomRef(atom(0));
+  const inputAtoms = atom(() => {
+    return range(num).map(() => createAtomRef(atom(0)));
   });
   return createVariable(inputAtoms, (inputs) =>
-    createOutputAtom(inputs, option.fn)
+    atom((get) => option.fn(...get(inputs)))
   );
 }
 

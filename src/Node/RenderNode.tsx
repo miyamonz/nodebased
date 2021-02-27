@@ -55,6 +55,8 @@ const RenderNode: NodeAtomComponent = ({ nodeAtom }) => {
 
   const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
   const [outValue] = useAtom(node.output.atom);
+
+  const [isockets] = useAtom(node.inputs);
   return (
     <>
       <ShowSelect nodeAtom={nodeAtom} />
@@ -67,7 +69,7 @@ const RenderNode: NodeAtomComponent = ({ nodeAtom }) => {
       </g>
       <ShowHovered nodeAtom={nodeAtom} />
       {node.component !== undefined && <node.component node={node} />}
-      {node.inputs.map((input) => {
+      {isockets.map((input) => {
         return <InputCircle key={input.atom.toString()} input={input} />;
       })}
       {outValue !== undefined && <OutputCircle output={node.output} />}

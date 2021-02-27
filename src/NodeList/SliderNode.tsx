@@ -5,7 +5,7 @@ import type { NodeComponent } from "../Node";
 import { isConnected } from "../Socket";
 
 export const SliderNode: NodeComponent = ({ node }) => {
-  const isocket = node.inputs[0];
+  const [[isocket]] = useAtom(node.inputs);
   const [inputAtom] = useAtom(isocket.ref);
   // TODO: input socket should be readable only
   const [, setInput] = useAtom(inputAtom as WritableAtom<null, number>);
