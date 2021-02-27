@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useEffect } from "react";
 import { useAtom } from "jotai";
 import { useHoveredNode } from "../Node";
@@ -11,19 +12,21 @@ export function useDragHoveredNode() {
   const selectedNodes = useSelectedNodes();
   const startCond = hoveredNode !== null && selectedNodes.length <= 1;
   const { start, drag } = useMouseStream(startCond);
+  const [grabbed, setGrabbed] = useState<typeof hoveredNode | null>(null);
 
   const [, setGrab] = useAtom(setGrabAtom);
   useEffect(() => {
     if (start === null) return;
     if (hoveredNode === null) return;
     setGrab([hoveredNode]);
+    setGrabbed(hoveredNode);
   }, [start]);
   const [, setDragDiff] = useAtom(setDragDiffAtom);
 
   useEffect(() => {
     if (start === null || drag === null) return;
-    if (hoveredNode === null) return;
+    if (grabbed === null) return;
     const mouseDiff = { x: drag.x - start.x, y: drag.y - start.y };
-    setDragDiff([mouseDiff, [hoveredNode]]);
+    setDragDiff([mouseDiff, [grabbed]]);
   }, [drag]);
 }
