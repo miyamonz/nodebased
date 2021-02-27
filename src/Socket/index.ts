@@ -1,3 +1,4 @@
+export { isConnected } from "./types";
 export type {
   InputSocket,
   InputSocketConnected,
