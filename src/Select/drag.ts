@@ -50,7 +50,6 @@ function useClickThenUnselect() {
     if (isClick) {
       setSelectedRectAtomList([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isClick]);
 }
 
@@ -67,14 +66,12 @@ export function useMouseToSelect() {
   React.useEffect(() => {
     if (start === null) return;
     setSelectedNodes([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [start]);
 
   //drag
   React.useEffect(() => {
     if (start === null || drag === null) return;
     setSelectRect(rectFromPos(start)(drag));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [drag]);
 
   const [filteredRectAtomList] = useAtom(filteredRectAtomListAtom);
@@ -83,6 +80,5 @@ export function useMouseToSelect() {
     if (end === null) return;
     setSelectedNodes(filteredRectAtomList);
     setSelectRect(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [end]);
 }

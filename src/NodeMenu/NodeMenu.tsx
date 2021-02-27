@@ -78,7 +78,6 @@ function NodeMenu() {
   const position = useMousePosition();
   const posWhenOpen = React.useMemo(() => {
     return position;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
   useKeyDown("Space", () => setOpen((prev) => !prev));
   const rect = { ...posWhenOpen, ...size };

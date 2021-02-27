@@ -34,7 +34,6 @@ export function useMouseStream(
       setDrag(null);
       setEnd(null);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [e, start, drag, end]);
 
   return { start, drag, end };
