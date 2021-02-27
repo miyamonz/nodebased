@@ -3,11 +3,18 @@ import { useAtom } from "jotai";
 import type { NodeComponent } from "../Node";
 
 export const RenderElementNode: NodeComponent = ({ node }) => {
-  const [[isocket]] = useAtom(node.inputs);
-  const [input] = useAtom(isocket.atom);
+  const [inputs] = useAtom(node.inputValues);
 
   return (
-    <>{typeof input === "object" && React.isValidElement(input) && input}</>
+    <>
+      {inputs
+        .filter(
+          (input) => typeof input === "object" && React.isValidElement(input)
+        )
+        .map((input) => (
+          <g key={input.toString()}>{input}</g>
+        ))}
+    </>
   );
 };
 

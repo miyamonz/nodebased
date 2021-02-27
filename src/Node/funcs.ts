@@ -19,9 +19,14 @@ export const createNodeAtom = <IN extends unknown[], OUT>({
   const inputSockets = createInputSockets<IN>(rect, variable.inputsAtom);
   const outputSocket = createOutputSocket(rect, variable.outputAtom);
 
+  const inputValues = atom((get) => {
+    return get(variable.inputsAtom).map(get).map(get);
+  });
+
   return atom({
     rect,
     inputs: inputSockets,
+    inputValues,
     output: outputSocket,
     name,
     component,
