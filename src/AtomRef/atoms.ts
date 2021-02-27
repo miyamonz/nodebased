@@ -1,11 +1,7 @@
 import { atom, Atom, WritableAtom } from "jotai";
-export function createAtomRef<T>(initialAtom: Atom<T>) {
+export function createAtomRef<T>(initialAtom: Atom<T>): AtomRef<T> {
   const refAtom = atom(initialAtom);
-  const a = atom(
-    (get) => get(get(refAtom)),
-    (_get, set, newAtom: Atom<T>) => set(refAtom, newAtom)
-  );
-  return a;
+  return refAtom;
 }
 
-export type AtomRef<T> = WritableAtom<T, Atom<T>>;
+export type AtomRef<T> = WritableAtom<Atom<T>, Atom<T>>;

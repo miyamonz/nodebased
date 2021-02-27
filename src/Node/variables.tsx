@@ -12,7 +12,7 @@ const inputAtoms: InputAtom<number>[] = [
 ];
 export const defaultNodeSizeVariable = createVariable<number, Size>(
   inputAtoms,
-  (atoms: typeof inputAtoms) => {
+  (atoms) => {
     return atom((get) => {
       const inputValues = atoms.map(get);
       return {

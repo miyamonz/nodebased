@@ -5,9 +5,11 @@ import { useMousePosition } from "../SVGContext";
 import { nodeOptions, Option } from "./nodeOptions";
 
 import { createOutputAtom } from "./createOutputAtom";
-import { InputAtom, createVariable } from "../Variable";
+import { createVariable } from "../Variable";
 
 import { createAtomRef } from "../AtomRef";
+
+const range = (num: number) => [...Array(num).keys()];
 
 const useKeyDown = (code: string, handler: (e: KeyboardEvent) => void) => {
   const listener = React.useCallback(
@@ -29,15 +31,14 @@ const optionHeight = 20;
 
 function createVariableFromOption(option: Option) {
   if ("variable" in option) return option.variable();
-  const createOutput = <IN,>(inputs: InputAtom<IN>[]) =>
-    createOutputAtom(inputs, option.fn);
 
   const num = option.fn.length;
-
-  const inputAtoms = [...Array(num).keys()].map(() => {
+  const inputAtoms = range(num).map(() => {
     return createAtomRef(atom(0));
   });
-  return createVariable(inputAtoms, createOutput);
+  return createVariable(inputAtoms, (inputs) =>
+    createOutputAtom(inputs, option.fn)
+  );
 }
 
 function NodeMenuList({

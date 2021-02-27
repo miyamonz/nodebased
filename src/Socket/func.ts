@@ -14,7 +14,8 @@ export const createInputSocket = <IN>(
       const p = get(anchor);
       return { x: p.x, y: p.y };
     }),
-    atom: defaultAtom,
+    ref: defaultAtom,
+    atom: atom((get) => get(get(defaultAtom))),
     from: null,
   };
 };

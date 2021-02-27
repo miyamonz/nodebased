@@ -8,7 +8,8 @@ type Socket = {
 };
 export type InputSocket<T> = Socket & {
   type: "input";
-  atom: InputAtom<T>;
+  ref: InputAtom<T>;
+  atom: Atom<T>;
   from: OutputSocket<T> | null;
 };
 export type InputSocketConnected<T> = InputSocket<T> & {
