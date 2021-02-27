@@ -1,21 +1,21 @@
 import React from "react";
 import { useAtom } from "jotai";
-import type { Atom } from "jotai";
 import type { NodeComponent } from "../Node";
 import { InputSocket, isConnected } from "../Socket";
 
 export const SliderNode: NodeComponent = ({ node }) => {
-  const isocket = node.inputs[0] as InputSocket<number>;
+  const isocket = node.inputs[0];
   const [, setInput] = useAtom(isocket.atom);
 
-  const [num] = useAtom(node.output.atom as Atom<number>);
+  const [num] = useAtom(node.output.atom);
 
   const [rect] = useAtom(node.rect);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isConnected(isocket)) return;
-    // @ts-ignore-next-line
-    setInput(parseInt(e.target.value, 10));
+    const value = parseInt(e.target.value, 10);
+
+    // TODO: send this value input output
   };
   return (
     <>
