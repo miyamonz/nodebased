@@ -6,8 +6,7 @@ import { InputSocket, isConnected } from "../Socket";
 
 export const SliderNode: NodeComponent = ({ node }) => {
   const isocket = node.inputs[0] as InputSocket<number>;
-  const [inputAtom] = useAtom(isocket.atom);
-  const [, setInput] = useAtom(inputAtom);
+  const [, setInput] = useAtom(isocket.atom);
 
   const [num] = useAtom(node.output.atom as Atom<number>);
 

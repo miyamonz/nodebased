@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { createAtomRef } from "../AtomRef";
 import { createVariable, InputAtom } from "../Variable";
 
 type Size = {
@@ -6,14 +7,14 @@ type Size = {
   height: number;
 };
 const inputAtoms: InputAtom<number>[] = [
-  atom(atom(100)),
-  atom(atom(50)),
-] as any;
+  createAtomRef(atom(100)),
+  createAtomRef(atom(50)),
+];
 export const defaultNodeSizeVariable = createVariable<number, Size>(
   inputAtoms,
   (atoms: typeof inputAtoms) => {
     return atom((get) => {
-      const inputValues = atoms.map(get).map(get);
+      const inputValues = atoms.map(get);
       return {
         width: inputValues[0],
         height: inputValues[1],

@@ -4,8 +4,7 @@ import type { NodeComponent } from "../Node";
 
 export const RenderElementNode: NodeComponent = ({ node }) => {
   const isocket = node.inputs[0];
-  const [inputAtom] = useAtom(isocket.atom);
-  const [input] = useAtom(inputAtom);
+  const [input] = useAtom(isocket.atom);
 
   return (
     <>{typeof input === "object" && React.isValidElement(input) && input}</>

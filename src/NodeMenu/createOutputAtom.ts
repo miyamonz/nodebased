@@ -6,7 +6,7 @@ export function createOutputAtom<IN, OUT>(
   fn: (...args: IN[]) => OUT
 ): ReturnType<AtomFn<IN, OUT>> {
   const outAtom = atom((get) => {
-    const inputValues = inputAtoms.map(get).map(get);
+    const inputValues = inputAtoms.map(get);
     return fn(...inputValues);
   });
   return outAtom;

@@ -7,6 +7,8 @@ import { nodeOptions, Option } from "./nodeOptions";
 import { createOutputAtom } from "./createOutputAtom";
 import { InputAtom, createVariable } from "../Variable";
 
+import { createAtomRef } from "../AtomRef";
+
 const useKeyDown = (code: string, handler: (e: KeyboardEvent) => void) => {
   const listener = React.useCallback(
     (e) => {
@@ -32,8 +34,8 @@ function createVariableFromOption(option: Option) {
 
   const num = option.fn.length;
 
-  const inputAtoms: InputAtom<unknown>[] = [...Array(num).keys()].map(() => {
-    return atom(atom(0)) as any; // TODO: PrimitiveAtom is not covariance
+  const inputAtoms = [...Array(num).keys()].map(() => {
+    return createAtomRef(atom(0));
   });
   return createVariable(inputAtoms, createOutput);
 }

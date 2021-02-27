@@ -1,9 +1,7 @@
-import type { Atom, PrimitiveAtom } from "jotai";
+import type { Atom } from "jotai";
+import type { AtomRef } from "../AtomRef";
 
-type Input<T> = Atom<T>;
-// TODO: PrimitiveAtom is not covariance
-// you can't assign PrimitiveAtom<X> into PrimitiveAtom<X | Y>
-export type InputAtom<T> = PrimitiveAtom<Input<T>>;
+export type InputAtom<T> = AtomRef<T>;
 export type OutputAtom<T> = Atom<T>;
 
 export type AtomFn<IN, OUT> = (inputs: InputAtom<IN>[]) => OutputAtom<OUT>;
