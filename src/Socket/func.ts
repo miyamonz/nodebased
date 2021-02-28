@@ -43,11 +43,10 @@ export function createInputSockets<IN extends unknown[]>(
         return { x: p.x, y: p.y + 20 };
       });
       return input;
-    });
+    }) as InputSockets<IN>; // you cannot keep type while Array.map
   });
 
-  // TODO
-  return inputSockets as any;
+  return inputSockets;
 }
 
 export const createOutputSocket = <OUT>(
