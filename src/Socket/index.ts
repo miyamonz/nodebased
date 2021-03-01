@@ -1,4 +1,4 @@
-export { isConnected } from "./types";
+export { useConnected } from "./utils";
 export type {
   InputSocket,
   InputSocketConnected,

@@ -2,6 +2,7 @@ import type { Atom, PrimitiveAtom } from "jotai";
 import type { InputAtom, OutputAtom } from "../Variable";
 import type { PositionAtom } from "../Position";
 import type { AtomRef } from "../AtomRef";
+import type { Connection } from "../Connect";
 
 type Socket = {
   type: string;
@@ -11,23 +12,16 @@ export type InputSocket<T> = Socket & {
   type: "input";
   ref: AtomRef<T>;
   atom: Atom<T>;
-  from: OutputSocket<T> | null;
+  connection: Atom<Connection<T> | null>;
 };
 export type InputSocketConnected<T> = InputSocket<T> & {
   atom: PrimitiveAtom<Atom<T>>;
-  from: OutputSocket<T>;
+  connection: Atom<Connection<T>>;
 };
 export type InputSocketNotConnected<T> = InputSocket<T> & {
   atom: PrimitiveAtom<PrimitiveAtom<T>>;
-  from: null;
 };
 export type OutputSocket<T> = Socket & {
   type: "output";
   atom: OutputAtom<T>;
 };
-
-export function isConnected<T>(
-  isocket: InputSocket<T>
-): isocket is InputSocketConnected<T> {
-  return isocket.from !== null;
-}

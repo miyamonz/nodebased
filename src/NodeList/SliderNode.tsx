@@ -13,10 +13,12 @@ export const SliderNode: NodeComponent = ({ node }) => {
   const [num] = useAtom(node.output.atom);
 
   const [rect] = useAtom(node.rect);
+  const [connection] = useAtom(isocket.connection);
+  const isConnected = connection !== null;
   if (typeof num !== "number") return null;
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (isConnected(isocket)) return;
+    if (isConnected) return;
     const value = parseInt(e.target.value, 10);
     setInput(value);
   };

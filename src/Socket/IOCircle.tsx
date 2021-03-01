@@ -29,6 +29,9 @@ export const hoveredInputSocketAtom = atom<InputSocket<unknown> | null>(null);
 export const InputCircle = <T,>({ input }: { input: InputSocket<T> }) => {
   const [hovered, setHovered] = useAtom(hoveredInputSocketAtom);
   const isHovered = hovered === input;
+
+  const [connection] = useAtom(input.connection);
+  const isConnected = connection !== null;
   return (
     <>
       <IOCircle
@@ -39,10 +42,10 @@ export const InputCircle = <T,>({ input }: { input: InputSocket<T> }) => {
         onMouseLeave={() => {
           setHovered(null);
         }}
-        fill={isHovered ? "red" : isConnected(input) ? "blue" : "white"}
+        fill={isHovered ? "red" : isConnected ? "blue" : "white"}
       />
 
-      {isConnected(input) && <ConnectedLine input={input} />}
+      {isConnected && <ConnectedLine input={input} />}
     </>
   );
 };

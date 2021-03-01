@@ -39,9 +39,9 @@ const connectAtom = atom(
     [connectTarget, hovered]: [OutputSocket<unknown>, InputSocket<unknown>]
   ) => {
     console.log("connect", connectTarget, hovered);
-    hovered.from = connectTarget;
     // set new atom that will return target atom's value into hovered inputSocket
     set(hovered.ref, connectTarget.atom);
+
     set(connectTargetAtom, null);
   }
 );

@@ -6,6 +6,9 @@ import type { AtomRef } from "../AtomRef";
 import type { RectAtom } from "../Rect";
 import type { PositionAtom } from "../Position";
 
+import { connectionAtom } from "../Connect/atoms";
+import { Connection } from "../Connect/types";
+
 export const createInputSocket = <IN>(
   defaultAtom: AtomRef<IN>,
   anchor: PositionAtom
@@ -18,7 +21,12 @@ export const createInputSocket = <IN>(
     }),
     ref: defaultAtom,
     atom: atom((get) => get(get(defaultAtom))),
-    from: null,
+    connection: atom((get) => {
+      const connections = get(connectionAtom);
+      const ref = get(defaultAtom);
+      const found = connections.find(({ from }) => from.atom === ref);
+      return (found as Connection<IN>) || null;
+    }),
   };
 };
 

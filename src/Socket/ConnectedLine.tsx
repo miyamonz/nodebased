@@ -3,7 +3,8 @@ import type { InputSocketConnected } from "./types";
 
 const ConnectedLine = <T,>({ input }: { input: InputSocketConnected<T> }) => {
   const [pos] = useAtom(input.position);
-  const [fromPos] = useAtom(input.from.position);
+  const [connection] = useAtom(input.connection);
+  const [fromPos] = useAtom(connection.from.position);
   const arm = Math.abs(fromPos.x - pos.x) / 3;
 
   return (
