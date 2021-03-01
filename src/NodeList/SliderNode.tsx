@@ -2,7 +2,6 @@ import React from "react";
 import { useAtom } from "jotai";
 import type { WritableAtom } from "jotai";
 import type { NodeComponent } from "../Node";
-import { isConnected } from "../Socket";
 
 export const SliderNode: NodeComponent = ({ node }) => {
   const [[isocket]] = useAtom(node.inputs);

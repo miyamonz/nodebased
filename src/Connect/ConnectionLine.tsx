@@ -1,9 +1,8 @@
 import { useAtom } from "jotai";
-import type { InputSocketConnected } from "./types";
+import type { Connection } from "./types";
 
-const ConnectedLine = <T,>({ input }: { input: InputSocketConnected<T> }) => {
-  const [pos] = useAtom(input.position);
-  const [connection] = useAtom(input.connection);
+const ConnectionLine = <T,>({ connection }: { connection: Connection<T> }) => {
+  const [pos] = useAtom(connection.to.position);
   const [fromPos] = useAtom(connection.from.position);
   const arm = Math.abs(fromPos.x - pos.x) / 3;
 
@@ -23,4 +22,4 @@ const ConnectedLine = <T,>({ input }: { input: InputSocketConnected<T> }) => {
   );
 };
 
-export default ConnectedLine;
+export default ConnectionLine;

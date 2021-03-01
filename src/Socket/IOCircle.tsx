@@ -1,7 +1,5 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
-import ConnectedLine from "./ConnectedLine";
-import { isConnected } from "./types";
 import type { InputSocket, OutputSocket } from "./types";
 import type { PositionAtom } from "../Position";
 
@@ -44,8 +42,6 @@ export const InputCircle = <T,>({ input }: { input: InputSocket<T> }) => {
         }}
         fill={isHovered ? "red" : isConnected ? "blue" : "white"}
       />
-
-      {isConnected && <ConnectedLine input={input} />}
     </>
   );
 };

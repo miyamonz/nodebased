@@ -4,6 +4,7 @@ import { NodeMenu } from "../NodeMenu";
 import { useAtom } from "jotai";
 import { currentScopeAtom, RenderScopeNode } from "../Scope";
 import { RenderSelectRect, RenderBoundingRect } from "../Select";
+import { RenderConnectionLines } from "../Connect";
 
 import { TmpConnectLine } from "../Connect";
 import { useDragMoveNode } from "../MoveNode";
@@ -18,6 +19,7 @@ function SVGContent() {
       </text>
       <RenderBoundingRect />
       <RenderSelectRect />
+      <RenderConnectionLines />
       <TmpConnectLine />
       {scope && <RenderScopeNode scope={scope} />}
       <NodeMenu />
