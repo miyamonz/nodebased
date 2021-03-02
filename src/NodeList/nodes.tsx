@@ -1,6 +1,7 @@
 import { atom } from "jotai";
-import { SliderNode, RenderElementNode } from "./components";
+import { SliderNode, RenderElementNode, RenderButtonNode } from "./components";
 import { NodeComponent } from "../Node";
+import type { CreateNodeProps } from "../actions";
 
 // variables
 import { defaultNodeSizeVariable } from "../Node";
@@ -15,9 +16,6 @@ type OptionBase = {
 };
 type OptionFn = OptionBase & {
   fn: (...args: any[]) => unknown;
-};
-type OptionVariable = OptionBase & {
-  variable: () => Variable<unknown[], unknown>;
 };
 
 const fnNodes: OptionFn[] = [
@@ -37,33 +35,68 @@ const fnNodes: OptionFn[] = [
   { name: "render", fn: (_) => {}, component: RenderElementNode },
 ];
 
-export const nodeOptions: OptionVariable[] = [
-  ...fnNodes.map((option) => {
-    const { name, component, fn } = option;
+type Option = {
+  name: string;
+  init: () => Omit<CreateNodeProps, "position" | "name">;
+};
+const converted = fnNodes.map((option) => {
+  const { name, fn, ...rest } = option;
+  return {
+    name,
+    init: () => {
+      const variable = createVariableFromFn(fn) as Variable<unknown[], unknown>;
+      return {
+        variable,
+        ...rest,
+      };
+    },
+  };
+});
 
-    const variable = createVariableFromFn(fn) as Variable<unknown[], unknown>;
-    return { name, component, variable: () => variable };
-  }),
+const _nodeOptions = [
+  ...converted,
   {
     name: "nodeSize",
-    variable: () => defaultNodeSizeVariable as Variable<unknown[], unknown>,
+    init: () => ({
+      variable: defaultNodeSizeVariable as Variable<unknown[], unknown>,
+    }),
   },
   {
     name: "socketRadius",
-    variable: () => socketRadiusVariable as Variable<unknown[], unknown>,
+    init: () => ({
+      variable: socketRadiusVariable as Variable<unknown[], unknown>,
+    }),
   },
   {
     name: "elapsed",
-    variable: () =>
-      createVariable(atom([]), () => {
+    init: () => {
+      const variable = createVariable(atom([]), () => {
         const oscAtom = atom(0);
-        console.log("atom created");
         oscAtom.onMount = (set) => {
           const id = setInterval(() => set((prev) => prev + 1));
           return () => clearInterval(id);
         };
-
         return oscAtom;
-      }),
+      });
+      return {
+        variable,
+      };
+    },
+  },
+  {
+    name: "button",
+    init: () => {
+      const buttonAtom = atom(false);
+      const variable = createVariable(atom([]), () => buttonAtom);
+      return {
+        component: RenderButtonNode,
+        variable,
+        state: buttonAtom,
+      };
+    },
   },
 ];
+export const nodeOptions: Option[] = _nodeOptions.map((option) => ({
+  name: option.name,
+  init: () => ({ component: () => null, ...option.init() }),
+}));

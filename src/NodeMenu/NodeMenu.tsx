@@ -34,14 +34,13 @@ function NodeMenuList({
   const position = useMousePosition();
   const _onClick = () => {
     onClick();
-    const component = option?.component ?? (() => <></>);
-    const variable = option.variable();
-    appendNode({
-      position,
-      variable,
+
+    const props = {
       name: option.name,
-      component,
-    });
+      position,
+      ...option.init(),
+    };
+    appendNode(props);
   };
 
   return (

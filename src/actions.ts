@@ -5,15 +5,13 @@ import { currentScopeAtom } from "./Scope";
 
 export const currentNodesAtom = atom((get) => get(get(currentScopeAtom).nodes));
 
-export const appendNodeAtom = atom(
-  null,
-  (get, set, args: Parameters<typeof createNodeAtomFromPosition>[0]) => {
-    const nodeAtom = createNodeAtomFromPosition(args);
+export type CreateNodeProps = Parameters<typeof createNodeAtomFromPosition>[0];
+export const appendNodeAtom = atom(null, (get, set, args: CreateNodeProps) => {
+  const nodeAtom = createNodeAtomFromPosition(args);
 
-    const currentScope = get(currentScopeAtom);
-    set(currentScope.nodes, (prev) => [...prev, nodeAtom]);
-  }
-);
+  const currentScope = get(currentScopeAtom);
+  set(currentScope.nodes, (prev) => [...prev, nodeAtom]);
+});
 export function useAppendNode() {
   const [, set] = useAtom(appendNodeAtom);
   return set;

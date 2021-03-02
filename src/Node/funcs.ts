@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import type { PrimitiveAtom } from "jotai";
 import type { NodeAtom, NodeComponent } from "./types";
 
 import { createInputSockets, createOutputSocket } from "../Socket";
@@ -10,11 +11,13 @@ export const createNodeAtom = <IN extends unknown[], OUT>({
   variable,
   name,
   component,
+  state,
 }: {
   rect: RectAtom;
   variable: Variable<IN, OUT>;
   name: string;
   component: NodeComponent;
+  state?: PrimitiveAtom<unknown>;
 }): NodeAtom => {
   const inputSockets = createInputSockets<IN>(rect, variable.inputsAtom);
   const outputSocket = createOutputSocket(rect, variable.outputAtom);
@@ -30,5 +33,6 @@ export const createNodeAtom = <IN extends unknown[], OUT>({
     output: outputSocket,
     name,
     component,
+    state,
   });
 };
