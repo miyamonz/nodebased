@@ -1,6 +1,6 @@
 import React from "react";
 import { useAtom } from "jotai";
-import type { NodeComponent } from "../Node";
+import type { NodeComponent } from "../../Node";
 
 const isValidElement = (input: unknown): input is React.ReactElement =>
   typeof input === "object" && React.isValidElement(input);
