@@ -1,5 +1,5 @@
 import type { Atom, PrimitiveAtom } from "jotai";
-import type { InputAtom, OutputAtom } from "../Variable";
+import type { OutputAtom } from "../Variable";
 import type { PositionAtom } from "../Position";
 import type { AtomRef } from "../AtomRef";
 import type { Connection } from "../Connect";

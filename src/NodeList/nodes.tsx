@@ -91,7 +91,7 @@ const _nodeOptions = [
       const variable = createVariable(atom([input]) as any, (input_) => {
         return atom((get) => {
           const [in_] = get(input_);
-          return in_ || get(buttonAtom);
+          return Boolean(in_ || get(buttonAtom));
         });
       });
       return {
