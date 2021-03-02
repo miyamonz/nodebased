@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import type { Atom } from "jotai";
 import { SliderNode, RenderElementNode, RenderButtonNode } from "./components";
 import { NodeComponent } from "../Node";
 import type { CreateNodeProps } from "../actions";
@@ -113,6 +114,38 @@ const _nodeOptions = [
       return {
         variable,
       };
+    },
+  },
+  {
+    name: "circle",
+    init: () => {
+      const x = atom(atom(0));
+      const y = atom(atom(0));
+      const r = atom(atom(0));
+      const inputsAtom = atom([x, y, r]);
+      const isDownAtom = atom(false);
+      let setter: any;
+      isDownAtom.onMount = (set) => {
+        setter = set;
+      };
+      const outputAtoms = [
+        atom((get) => {
+          const get_ = <T,>(a: Atom<Atom<T>>) => get(get(a));
+          return (
+            <circle
+              cx={get_(x)}
+              cy={get_(y)}
+              r={get_(r)}
+              onMouseDown={() => setter(true)}
+              onMouseUp={() => setter(false)}
+              fill="blue"
+            />
+          );
+        }),
+        isDownAtom,
+      ];
+      const variable = { inputsAtom, outputAtoms } as any;
+      return { variable };
     },
   },
 ];
