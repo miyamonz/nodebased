@@ -1,14 +1,7 @@
 import React from "react";
-import { atom, useAtom } from "jotai";
-import { appendNodeAtom } from "../actions";
+import { useAppendNode } from "../actions";
 import { useMousePosition } from "../SVGContext";
-import { nodeOptions, Option } from "./nodeOptions";
-
-import { createVariable } from "../Variable";
-
-import { createAtomRef } from "../AtomRef";
-
-const range = (num: number) => [...Array(num).keys()];
+import { nodeOptions } from "../NodeList/nodes";
 
 const useKeyDown = (code: string, handler: (e: KeyboardEvent) => void) => {
   const listener = React.useCallback(
@@ -28,17 +21,7 @@ const useKeyDown = (code: string, handler: (e: KeyboardEvent) => void) => {
 const size = { width: 200, height: 300 };
 const optionHeight = 20;
 
-function createVariableFromOption(option: Option) {
-  if ("variable" in option) return option.variable();
-
-  const num = option.fn.length;
-  const inputAtoms = atom(() => {
-    return range(num).map(() => createAtomRef(atom(0)));
-  });
-  return createVariable(inputAtoms, (inputs) =>
-    atom((get) => option.fn(...get(inputs)))
-  );
-}
+type Option = typeof nodeOptions extends Array<infer T> ? T : never;
 
 function NodeMenuList({
   option,
@@ -47,12 +30,12 @@ function NodeMenuList({
   option: Option;
   onClick: () => void;
 }) {
-  const [, appendNode] = useAtom(appendNodeAtom);
+  const appendNode = useAppendNode();
   const position = useMousePosition();
   const _onClick = () => {
     onClick();
     const component = option?.component ?? (() => <></>);
-    const variable = createVariableFromOption(option) as any;
+    const variable = option.variable();
     appendNode({
       position,
       variable,

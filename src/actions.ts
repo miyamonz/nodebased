@@ -1,4 +1,4 @@
-import { atom } from "jotai";
+import { atom, useAtom } from "jotai";
 import { createNodeAtomFromPosition } from "./Node";
 import type { NodeAtom } from "./Node";
 import { currentScopeAtom } from "./Scope";
@@ -14,6 +14,10 @@ export const appendNodeAtom = atom(
     set(currentScope.nodes, (prev) => [...prev, nodeAtom]);
   }
 );
+export function useAppendNode() {
+  const [, set] = useAtom(appendNodeAtom);
+  return set;
+}
 
 export const removeNodeAtom = atom(
   null,
