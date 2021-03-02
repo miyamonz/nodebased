@@ -3,6 +3,7 @@ import { atom, useAtom } from "jotai";
 import type { NodeAtom } from "./types";
 import { useSelectedNodes } from "../Select";
 import { InputCircle, OutputCircle } from "../Socket";
+import type { OutputSocket } from "../Socket";
 
 type NodeAtomComponent = React.FC<{ nodeAtom: NodeAtom }>;
 
@@ -54,7 +55,7 @@ const RenderNode: NodeAtomComponent = ({ nodeAtom }) => {
   const [rect] = useAtom(node.rect);
 
   const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
-  const [outValue] = useAtom(node.output.atom);
+  const [outValue] = useAtom(node.outputs[0].atom);
 
   const [isockets] = useAtom(node.inputs);
   return (
@@ -72,9 +73,16 @@ const RenderNode: NodeAtomComponent = ({ nodeAtom }) => {
       {isockets.map((input) => {
         return <InputCircle key={input.atom.toString()} input={input} />;
       })}
-      {outValue !== undefined && <OutputCircle output={node.output} />}
+      {node.outputs.map((socket) => (
+        <RenderOutSocket key={socket.atom.toString()} socket={socket} />
+      ))}
     </>
   );
 };
+
+function RenderOutSocket({ socket }: { socket: OutputSocket<unknown> }) {
+  const outValue = useAtom(socket.atom);
+  return <>{outValue !== undefined && <OutputCircle output={socket} />}</>;
+}
 
 export default React.memo(RenderNode);

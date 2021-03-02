@@ -98,7 +98,7 @@ const _nodeOptions = [
         component: RenderButtonNode,
         variable,
         state: atom(
-          (get) => get(variable.outputAtom),
+          (get) => get(variable.outputAtoms[0]),
           (_get, set, arg: boolean) => set(buttonAtom, arg)
         ),
       };

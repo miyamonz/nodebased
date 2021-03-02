@@ -6,7 +6,7 @@ export type Node = {
   rect: RectAtom;
   inputs: Atom<InputSocket<unknown>[]>;
   inputValues: Atom<unknown[]>;
-  output: OutputSocket<unknown>;
+  outputs: OutputSocket<unknown>[];
   name: string;
   component: NodeComponent;
   state?: PrimitiveAtom<unknown>;

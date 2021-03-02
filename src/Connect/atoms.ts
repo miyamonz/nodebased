@@ -30,13 +30,14 @@ function getConnections(scope: Scope): Atom<Connection<unknown>[]> {
       .map((node) => node.inputs)
       .map(get)
       .flatMap((a) => a);
+    const osockets = nodes.map((node) => node.outputs).flatMap((a) => a);
     const connections = isockets
       .map((isocket) => {
-        const found = nodes.find(
-          (node) => node.output.atom === get(isocket.ref)
+        const found = osockets.find(
+          (osocket) => osocket.atom === get(isocket.ref)
         );
         if (found === undefined) return undefined;
-        return { from: found.output, to: isocket };
+        return { from: found, to: isocket };
       })
       .filter((a): a is Connection<unknown> => a !== undefined);
 

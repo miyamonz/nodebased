@@ -43,14 +43,12 @@ export function createInputSockets<IN extends unknown[]>(
     return { x: r.x, y: r.y + r.height / 2 };
   });
   const inputSockets = atom((get) => {
-    let prevPos = inputPositionAnchor;
-    return get(inputsAtom).map((inputAtom) => {
-      const input = createInputSocket(inputAtom, prevPos);
-      prevPos = atom((get) => {
-        const p = get(input.position);
-        return { x: p.x, y: p.y + 20 };
+    const p = get(inputPositionAnchor);
+    return get(inputsAtom).map((inputAtom, i) => {
+      const position = atom(() => {
+        return { x: p.x, y: p.y + 25 * i };
       });
-      return input;
+      return createInputSocket(inputAtom, position);
     }) as InputSockets<IN>; // you cannot keep type while Array.map
   });
 
@@ -58,16 +56,29 @@ export function createInputSockets<IN extends unknown[]>(
 }
 
 export const createOutputSocket = <OUT>(
-  rectAtom: RectAtom,
+  position: PositionAtom,
   outAtom: OutputSocket<OUT>["atom"]
 ): OutputSocket<OUT> => {
-  const position = atom((get) => {
-    const rect = get(rectAtom);
-    return { x: rect.x + rect.width, y: rect.y + rect.height / 2 };
-  });
   return {
     type: "output",
     position,
     atom: outAtom,
   };
+};
+
+export const createOutputSockets = (
+  rectAtom: RectAtom,
+  outAtoms: OutputSocket<unknown>["atom"][]
+) => {
+  const anchor = atom((get) => {
+    const rect = get(rectAtom);
+    return { x: rect.x + rect.width, y: rect.y + rect.height / 2 };
+  });
+  return outAtoms.map((outAtom, i) => {
+    const position = atom((get) => ({
+      ...get(anchor),
+      y: get(anchor).y + 25 * i,
+    }));
+    return createOutputSocket(position, outAtom);
+  });
 };

@@ -9,7 +9,7 @@ export const SliderNode: NodeComponent = ({ node }) => {
   // TODO: input socket should be readable only
   const [, setInput] = useAtom(inputAtom as WritableAtom<null, number>);
 
-  const [num] = useAtom(node.output.atom);
+  const [num] = useAtom(node.outputs[0].atom);
 
   const [rect] = useAtom(node.rect);
   const [connection] = useAtom(isocket.connection);

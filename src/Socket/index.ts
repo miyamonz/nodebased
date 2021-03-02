@@ -10,6 +10,7 @@ export {
   createInputSocket,
   createInputSockets,
   createOutputSocket,
+  createOutputSockets,
 } from "./func";
 export { InputCircle, OutputCircle } from "./IOCircle";
 export { hoveredInputSocketAtom, hoveredOutputSocketAtom } from "./IOCircle";

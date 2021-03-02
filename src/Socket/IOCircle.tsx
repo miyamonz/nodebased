@@ -10,7 +10,7 @@ type IOCircleProps = {
 } & JSX.IntrinsicElements["circle"];
 const IOCircle: React.FC<IOCircleProps> = ({ positionAtom, ...props }) => {
   const [position] = useAtom(positionAtom);
-  const [r] = useAtom(socketRadiusVariable.outputAtom);
+  const [r] = useAtom(socketRadiusVariable.outputAtoms[0]);
   return (
     <circle
       cx={position.x}

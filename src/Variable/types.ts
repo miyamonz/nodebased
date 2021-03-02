@@ -9,7 +9,7 @@ export type OutputAtom<T> = Atom<T>;
 
 export type Variable<IN extends unknown[], OUT> = {
   inputsAtom: InputAtom<IN>;
-  outputAtom: OutputAtom<OUT>;
+  outputAtoms: OutputAtom<OUT>[];
 };
 
 export function createVariable<IN extends unknown[], OUT>(
@@ -20,6 +20,6 @@ export function createVariable<IN extends unknown[], OUT>(
   const outputAtom: OutputAtom<OUT> = createOutput(input);
   return {
     inputsAtom,
-    outputAtom,
+    outputAtoms: [outputAtom],
   };
 }

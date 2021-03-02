@@ -12,7 +12,8 @@ type AppendProps = Omit<Parameters<typeof createNodeAtom>[0], "rect"> & {
 export function createNodeAtomFromPosition(args: AppendProps) {
   const { position, ...rest } = args;
   const rectPos = atom(position);
-  const rect = createRectAtom(rectPos, defaultNodeSizeVariable.outputAtom);
+  const [outputAtom] = defaultNodeSizeVariable.outputAtoms;
+  const rect = createRectAtom(rectPos, outputAtom);
 
   const nodeAtom = createNodeAtom({
     ...rest,
