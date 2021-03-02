@@ -86,12 +86,32 @@ const _nodeOptions = [
   {
     name: "button",
     init: () => {
+      const input = atom(atom(false));
       const buttonAtom = atom(false);
-      const variable = createVariable(atom([]), () => buttonAtom);
+      const variable = createVariable(atom([input]) as any, (input_) => {
+        return atom((get) => {
+          const [in_] = get(input_);
+          return in_ || get(buttonAtom);
+        });
+      });
       return {
         component: RenderButtonNode,
         variable,
-        state: buttonAtom,
+        state: atom(
+          (get) => get(variable.outputAtom),
+          (_get, set, arg: boolean) => set(buttonAtom, arg)
+        ),
+      };
+    },
+  },
+  {
+    name: "if",
+    init: () => {
+      const variable = createVariableFromFn((cond, a, b) =>
+        cond ? a : b
+      ) as Variable<unknown[], unknown>;
+      return {
+        variable,
       };
     },
   },
