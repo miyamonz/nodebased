@@ -3,7 +3,11 @@ import { SVGProvider } from "../SVGContext";
 import { NodeMenu } from "../NodeMenu";
 import { useAtom } from "jotai";
 import { currentScopeAtom, RenderScopeNode } from "../Scope";
-import { RenderSelectRect, RenderBoundingRect } from "../Select";
+import {
+  RenderSelectRect,
+  RenderBoundingRect,
+  SelectCollisionArea,
+} from "../Select";
 import { RenderConnectionLines } from "../Connect";
 
 import { TmpConnectLine } from "../Connect";
@@ -17,6 +21,7 @@ function SVGContent() {
       <text x={0} y={20}>
         nodebased
       </text>
+      <SelectCollisionArea />
       <RenderBoundingRect />
       <RenderSelectRect />
       <RenderConnectionLines />

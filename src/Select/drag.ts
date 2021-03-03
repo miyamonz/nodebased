@@ -8,6 +8,8 @@ import { intersect, rectFromPos } from "../Rect";
 import type { Rect } from "../Rect";
 import { useMouseStream } from "../SVGContext";
 
+import { hovered } from "./SelectCollisionArea";
+
 const selectRectAtom = atom<Rect | null>(null);
 export function useSelectRectAtom() {
   const [rect] = useAtom(selectRectAtom);
@@ -34,9 +36,10 @@ const startConditionAtom = atom((get) => {
     get(hoveredInputSocketAtom),
     get(hoveredOutputSocketAtom),
   ].reduce((acc, next) => acc && next === null, true);
+  const h = get(hovered);
   const isSelected = get(selectedNodesAtom).length > 0;
 
-  return cond && !isSelected;
+  return h && cond && !isSelected;
 });
 
 function useClickThenUnselect() {
