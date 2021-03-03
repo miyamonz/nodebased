@@ -22,6 +22,13 @@ export const removeNodeAtom = atom(
   (get, set, args: NodeAtom | NodeAtom[]) => {
     const nodeAtoms = Array.isArray(args) ? args : [args];
 
+    nodeAtoms
+      .map(get)
+      .flatMap((node) => node.inputs)
+      .forEach((isocket) => {
+        set(isocket.ref, atom(get(isocket.atom)));
+      });
+
     const currentScope = get(currentScopeAtom);
     set(currentScope.nodes, (prev) =>
       prev.filter((na) => !nodeAtoms.includes(na))
