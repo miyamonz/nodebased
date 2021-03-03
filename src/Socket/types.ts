@@ -3,6 +3,7 @@ import type { OutputAtom } from "../Variable";
 import type { PositionAtom } from "../Position";
 import type { AtomRef } from "../AtomRef";
 import type { Connection } from "../Connect";
+import type { NodeAtom } from "../Node";
 
 type Socket = {
   type: string;

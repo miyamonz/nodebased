@@ -4,7 +4,7 @@ import type { WritableAtom } from "jotai";
 import type { NodeComponent } from "../../Node";
 
 export const SliderNode: NodeComponent = ({ node }) => {
-  const [[isocket]] = useAtom(node.inputs);
+  const [isocket] = node.inputs;
   const [inputAtom] = useAtom(isocket.ref);
   // TODO: input socket should be readable only
   const [, setInput] = useAtom(inputAtom as WritableAtom<null, number>);

@@ -26,10 +26,7 @@ function getConnections(scope: Scope): Atom<Connection<unknown>[]> {
   return atom((get) => {
     const nodeAtoms = get(scope.nodes);
     const nodes = nodeAtoms.map(get);
-    const isockets = nodes
-      .map((node) => node.inputs)
-      .map(get)
-      .flatMap((a) => a);
+    const isockets = nodes.map((node) => node.inputs).flatMap((a) => a);
     const osockets = nodes.map((node) => node.outputs).flatMap((a) => a);
     const connections = isockets
       .map((isocket) => {

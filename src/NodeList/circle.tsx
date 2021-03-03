@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import type { Atom } from "jotai";
 import { transformAtom } from "../SVGContext";
 
 const option = {
@@ -7,7 +8,7 @@ const option = {
     const x = atom(atom(0));
     const y = atom(atom(0));
     const r = atom(atom(0));
-    const inputsAtom = atom([x, y, r]);
+    const inputAtoms = [x, y, r];
     const isDownAtom = atom(false);
     let setter: any;
     isDownAtom.onMount = (set) => {
@@ -52,7 +53,7 @@ const option = {
       eventAtom,
       mouseAtom,
     ];
-    const variable = { inputsAtom, outputAtoms } as any;
+    const variable = { inputAtoms, outputAtoms };
     return { variable };
   },
 };

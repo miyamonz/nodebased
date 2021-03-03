@@ -1,4 +1,3 @@
-import { atom } from "jotai";
 import { SliderNode, RenderElementNode } from "./components";
 import { NodeComponent } from "../Node";
 import type { CreateNodeProps } from "../actions";
@@ -56,7 +55,7 @@ const converted = fnNodes.map((option) => {
   return {
     name,
     init: () => {
-      const variable = createVariableFromFn(fn) as Variable<unknown[], unknown>;
+      const variable = createVariableFromFn(fn);
       return {
         variable,
         ...rest,
@@ -65,7 +64,7 @@ const converted = fnNodes.map((option) => {
   };
 });
 
-const optionFromVariable = (name: string, variable: Variable<any, any>) => ({
+const optionFromVariable = (name: string, variable: Variable) => ({
   name,
   init: () => ({ variable }),
 });

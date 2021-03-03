@@ -2,14 +2,10 @@ import { atom } from "jotai";
 import { createAtomRef } from "../AtomRef";
 import { createVariable, InputAtom } from "../Variable";
 
-type Size = {
-  width: number;
-  height: number;
-};
-const inputAtoms: InputAtom<[number, number]> = atom([
+const inputAtoms: InputAtom<unknown>[] = [
   createAtomRef(atom(100)),
   createAtomRef(atom(50)),
-]);
+];
 export const defaultNodeSizeVariable = createVariable(
   inputAtoms,
   (inputsAtom) =>

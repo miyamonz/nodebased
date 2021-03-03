@@ -57,7 +57,7 @@ const RenderNode: NodeAtomComponent = ({ nodeAtom }) => {
   const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
   const [outValue] = useAtom(node.outputs[0].atom);
 
-  const [isockets] = useAtom(node.inputs);
+  const isockets = node.inputs;
   return (
     <>
       <ShowSelect nodeAtom={nodeAtom} />

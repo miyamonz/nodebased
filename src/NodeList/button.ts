@@ -7,7 +7,7 @@ const option = {
   init: () => {
     const input = atom(atom(false));
     const buttonAtom = atom(false);
-    const variable = createVariable(atom([input]) as any, (input_) => {
+    const variable = createVariable([input] as any, (input_) => {
       return atom((get) => {
         const [in_] = get(input_);
         return Boolean(in_ || get(buttonAtom));
