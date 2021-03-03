@@ -3,6 +3,7 @@ import type { Atom } from "jotai";
 import { SliderNode, RenderElementNode, RenderButtonNode } from "./components";
 import { NodeComponent } from "../Node";
 import type { CreateNodeProps } from "../actions";
+import { transformAtom } from "../SVGContext";
 
 // variables
 import { defaultNodeSizeVariable } from "../Node";
@@ -19,6 +20,8 @@ type OptionFn = OptionBase & {
   fn: (...args: any[]) => unknown;
 };
 
+type Position = { x: number; y: number };
+
 const fnNodes: OptionFn[] = [
   { name: "slider", fn: (x) => x, component: SliderNode },
   { name: "add", fn: (a, b) => a + b },
@@ -34,6 +37,12 @@ const fnNodes: OptionFn[] = [
     fn: (x, y, r) => <rect x={x} y={y} width={r} height={r} fill="blue" />,
   },
   { name: "render", fn: (_) => {}, component: RenderElementNode },
+  {
+    name: "console.log",
+    fn: (_) => {
+      console.log(_);
+    },
+  },
 ];
 
 type Option = {
@@ -128,6 +137,18 @@ const _nodeOptions = [
       isDownAtom.onMount = (set) => {
         setter = set;
       };
+      const eventAtom = atom<React.MouseEvent<SVGElement>>(null!);
+      let eventSetter: any;
+      eventAtom.onMount = (set) => {
+        eventSetter = set;
+      };
+      const mouseAtom = atom((get) => {
+        const transform = get(transformAtom);
+        const e = get(eventAtom);
+        if (e !== null) return transform(e);
+        return { x: 0, y: 0 };
+      });
+
       const outputAtoms = [
         atom((get) => {
           const get_ = <T,>(a: Atom<Atom<T>>) => get(get(a));
@@ -136,13 +157,37 @@ const _nodeOptions = [
               cx={get_(x)}
               cy={get_(y)}
               r={get_(r)}
-              onMouseDown={() => setter(true)}
-              onMouseUp={() => setter(false)}
+              onMouseDown={(e) => {
+                eventSetter(e);
+                setter(true);
+              }}
+              onMouseUp={(e) => {
+                eventSetter(e);
+                setter(false);
+              }}
+              onMouseMove={(e) => {
+                eventSetter(e);
+              }}
               fill="blue"
             />
           );
         }),
         isDownAtom,
+        eventAtom,
+        mouseAtom,
+      ];
+      const variable = { inputsAtom, outputAtoms } as any;
+      return { variable };
+    },
+  },
+  {
+    name: "unpack",
+    init: () => {
+      const pos = atom(atom({ x: 0, y: 0 }));
+      const inputsAtom = atom([pos]);
+      const outputAtoms = [
+        atom((get) => get(get(pos)).x),
+        atom((get) => get(get(pos)).y),
       ];
       const variable = { inputsAtom, outputAtoms } as any;
       return { variable };

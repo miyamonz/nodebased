@@ -1,4 +1,9 @@
-export { SVGProvider, useMouseEvent, useTransform } from "./SVGContext";
+export {
+  SVGProvider,
+  useMouseEvent,
+  transformAtom,
+  useTransform,
+} from "./SVGContext";
 export { useMousePosition } from "./atoms";
 
 export { useEvent } from "./useEvent";
