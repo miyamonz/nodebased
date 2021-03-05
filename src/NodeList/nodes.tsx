@@ -13,6 +13,7 @@ import elapsed from "./elapsed";
 import button from "./button";
 import _if from "./if";
 import circle from "./circle";
+import rect from "./rect";
 import unpack from "./unpack";
 import onMouse from "./onMouse";
 
@@ -34,12 +35,6 @@ const fnNodes: OptionFn[] = [
   { name: "sin", fn: (a) => Math.sin(a) },
   { name: "cos", fn: (a) => Math.cos(a) },
   { name: "clamp", fn: (a, min, max) => Math.max(min, Math.min(max, a)) },
-  {
-    name: "square",
-    fn: (x, y, r) => () => (
-      <rect x={x} y={y} width={r} height={r} fill="blue" />
-    ),
-  },
   { name: "render", fn: (_) => {}, component: RenderComponentNode },
   {
     name: "console.log",
@@ -80,6 +75,7 @@ const _nodeOptions = [
   button,
   _if,
   circle,
+  rect,
   onMouse,
   unpack,
 ];

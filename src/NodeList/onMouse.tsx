@@ -24,7 +24,8 @@ const option = {
         return (props) => {
           const Component = useUseAtom(componentAtom);
           const [, set] = useAtom(eventAtom);
-          if (Component === null) return null;
+          if (Component === null || typeof Component !== "function")
+            return null;
           return (
             <Component
               onMouseDown={set}
