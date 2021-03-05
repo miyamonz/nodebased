@@ -5,7 +5,6 @@ import type { NodeComponent } from "../../Node";
 export const RenderComponentNode: NodeComponent = ({ node }) => {
   const [inputs] = useAtom(node.inputValues);
 
-  console.log(inputs);
   return (
     <>
       {inputs
