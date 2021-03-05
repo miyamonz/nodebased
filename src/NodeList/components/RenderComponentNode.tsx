@@ -1,0 +1,20 @@
+import React from "react";
+import { useAtom } from "jotai";
+import type { NodeComponent } from "../../Node";
+
+export const RenderComponentNode: NodeComponent = ({ node }) => {
+  const [inputs] = useAtom(node.inputValues);
+
+  console.log(inputs);
+  return (
+    <>
+      {inputs
+        .filter((i) => typeof i === "function")
+        .map((Input) => (
+          <Input />
+        ))}
+    </>
+  );
+};
+
+export default React.memo(RenderComponentNode);

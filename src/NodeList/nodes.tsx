@@ -1,4 +1,4 @@
-import { SliderNode, RenderElementNode } from "./components";
+import { SliderNode, RenderComponentNode } from "./components";
 import { NodeComponent } from "../Node";
 import type { CreateNodeProps } from "../actions";
 
@@ -14,6 +14,7 @@ import button from "./button";
 import _if from "./if";
 import circle from "./circle";
 import unpack from "./unpack";
+import onMouse from "./onMouse";
 
 type OptionBase = {
   name: string;
@@ -35,9 +36,11 @@ const fnNodes: OptionFn[] = [
   { name: "clamp", fn: (a, min, max) => Math.max(min, Math.min(max, a)) },
   {
     name: "square",
-    fn: (x, y, r) => <rect x={x} y={y} width={r} height={r} fill="blue" />,
+    fn: (x, y, r) => () => (
+      <rect x={x} y={y} width={r} height={r} fill="blue" />
+    ),
   },
-  { name: "render", fn: (_) => {}, component: RenderElementNode },
+  { name: "render", fn: (_) => {}, component: RenderComponentNode },
   {
     name: "console.log",
     fn: (_) => {
@@ -77,6 +80,7 @@ const _nodeOptions = [
   button,
   _if,
   circle,
+  onMouse,
   unpack,
 ];
 export const nodeOptions: Option[] = _nodeOptions.map((option) => ({
