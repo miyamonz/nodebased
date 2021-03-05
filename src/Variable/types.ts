@@ -10,12 +10,12 @@ export type Variable = {
   outputAtoms: OutputAtom<unknown>[];
 };
 
-export function createVariable(
-  inputAtoms: InputAtom<unknown>[],
-  createOutput: (inputValuesAtom: Atom<unknown>) => OutputAtom<unknown>
-): Variable {
+export function createVariable<IN, OUT>(
+  inputAtoms: InputAtom<IN>[],
+  createOutput: (inputValuesAtom: Atom<IN[]>) => OutputAtom<OUT>
+) {
   const input = atom((get) => inputAtoms.map(get).map(get));
-  const outputAtom: OutputAtom<unknown> = createOutput(input);
+  const outputAtom = createOutput(input);
   return {
     inputAtoms,
     outputAtoms: [outputAtom],

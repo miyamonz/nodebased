@@ -1,12 +1,5 @@
 import { atom, useAtom } from "jotai";
-import type { Atom } from "jotai";
-import { transformAtom } from "../SVGContext";
 
-function useUseAtom<T>(a: Atom<Atom<T>>) {
-  const [_a] = useAtom(a);
-  const [_] = useAtom(_a);
-  return _;
-}
 const option = {
   name: "circle",
   init: () => {
@@ -22,25 +15,32 @@ const option = {
 
     const outputAtoms = [
       atom(() => {
-        return ({ onMouseDown, onMouseUp, onMouseMove }) => {
-          const cx = useUseAtom(x);
-          const cy = useUseAtom(y);
-          const _r = useUseAtom(r);
+        return ({
+          onMouseDown,
+          onMouseUp,
+          onMouseMove,
+        }: JSX.IntrinsicElements["circle"]) => {
+          const [_x] = useAtom(x);
+          const [cx] = useAtom(_x);
+          const [_y] = useAtom(y);
+          const [cy] = useAtom(_y);
+          const [r_] = useAtom(r);
+          const [_r] = useAtom(r_);
           return (
             <circle
               cx={cx}
               cy={cy}
               r={_r}
               onMouseDown={(e) => {
-                onMouseDown(e);
+                onMouseDown?.(e);
                 setter(true);
               }}
               onMouseUp={(e) => {
-                onMouseUp(e);
+                onMouseUp?.(e);
                 setter(false);
               }}
               onMouseMove={(e) => {
-                onMouseMove(e);
+                onMouseMove?.(e);
               }}
               fill="blue"
             />

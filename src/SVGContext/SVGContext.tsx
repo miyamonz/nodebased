@@ -9,13 +9,14 @@ export function useMouseEvent() {
   return useContext(eventContext);
 }
 
-const transformContext = React.createContext<ReturnType<typeof useSVGMouse>>(
-  null!
-);
+type PointFn = ReturnType<typeof useSVGMouse>;
+const transformContext = React.createContext<PointFn>(null!);
 export function useTransform() {
   return useContext(transformContext);
 }
-export const transformAtom = atom<ReturnType<typeof useSVGMouse>>({} as any);
+export const transformAtom = atom({
+  fn: (() => ({ x: 0, y: 0 })) as PointFn,
+});
 
 type Props = {} & JSX.IntrinsicElements["svg"];
 export const SVGProvider: React.FC<Props> = ({ children, ...props }) => {
@@ -25,7 +26,7 @@ export const SVGProvider: React.FC<Props> = ({ children, ...props }) => {
   const [, setTransform] = useAtom(transformAtom);
   React.useEffect(() => {
     if (transform !== null) {
-      setTransform(() => transform);
+      setTransform({ fn: transform });
     }
   }, [transform]);
 

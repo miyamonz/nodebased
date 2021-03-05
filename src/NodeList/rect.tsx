@@ -1,5 +1,6 @@
 import { atom, useAtom } from "jotai";
 import type { Atom } from "jotai";
+import { createAtomRef } from "../AtomRef";
 
 function useUseAtom<T>(a: Atom<Atom<T>>) {
   const [_a] = useAtom(a);
@@ -9,10 +10,10 @@ function useUseAtom<T>(a: Atom<Atom<T>>) {
 const option = {
   name: "rect",
   init: () => {
-    const x = atom(atom(0));
-    const y = atom(atom(0));
-    const width = atom(atom(10));
-    const height = atom(atom(10));
+    const x = createAtomRef(atom(0));
+    const y = createAtomRef(atom(0));
+    const width = createAtomRef(atom(10));
+    const height = createAtomRef(atom(10));
     const inputAtoms = [x, y, width, height];
     const isDownAtom = atom(false);
     let setter: any;
@@ -22,7 +23,11 @@ const option = {
 
     const outputAtoms = [
       atom(() => {
-        return ({ onMouseDown, onMouseUp, onMouseMove }) => {
+        return ({
+          onMouseDown,
+          onMouseUp,
+          onMouseMove,
+        }: JSX.IntrinsicElements["rect"]) => {
           const cx = useUseAtom(x);
           const cy = useUseAtom(y);
           const _width = useUseAtom(width);
@@ -34,15 +39,15 @@ const option = {
               width={_width}
               height={_height}
               onMouseDown={(e) => {
-                onMouseDown(e);
+                onMouseDown?.(e);
                 setter(true);
               }}
               onMouseUp={(e) => {
-                onMouseUp(e);
+                onMouseUp?.(e);
                 setter(false);
               }}
               onMouseMove={(e) => {
-                onMouseMove(e);
+                onMouseMove?.(e);
               }}
               fill="blue"
             />

@@ -69,8 +69,8 @@ const optionFromVariable = (name: string, variable: Variable) => ({
 
 const _nodeOptions = [
   ...converted,
-  optionFromVariable("nodeSize", defaultNodeSizeVariable),
-  optionFromVariable("socketRadius", socketRadiusVariable),
+  optionFromVariable("nodeSize", defaultNodeSizeVariable as any),
+  optionFromVariable("socketRadius", socketRadiusVariable as any),
   elapsed,
   button,
   _if,
@@ -82,4 +82,4 @@ const _nodeOptions = [
 export const nodeOptions: Option[] = _nodeOptions.map((option) => ({
   name: option.name,
   init: () => ({ component: () => null, ...option.init() }),
-}));
+})) as any;

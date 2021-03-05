@@ -8,7 +8,7 @@ export const RenderComponentNode: NodeComponent = ({ node }) => {
   return (
     <>
       {inputs
-        .filter((i) => typeof i === "function")
+        .filter((i): i is React.FC => typeof i === "function")
         .map((Input) => (
           <Input />
         ))}
