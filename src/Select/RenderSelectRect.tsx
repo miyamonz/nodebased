@@ -1,5 +1,6 @@
 import React from "react";
-import { useMouseToSelect, useSelectRectAtom } from "./drag";
+import { useMouseToSelect } from "./drag";
+import { useSelectRectAtom } from "./atoms";
 
 const RenderSelectRect = () => {
   const rectProp = useSelectRectAtom();

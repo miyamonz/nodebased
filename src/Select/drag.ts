@@ -1,6 +1,7 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
 
+import { selectRectAtom } from "./atoms";
 import { selectedNodesAtom, useSetSelected } from "./atoms";
 import { hovered } from "./SelectCollisionArea";
 
@@ -8,14 +9,7 @@ import { currentNodesAtom } from "../actions";
 import { hoveredNodeAtom } from "../Node";
 import { hoveredInputSocketAtom, hoveredOutputSocketAtom } from "../Socket";
 import { intersect, rectFromPos } from "../Rect";
-import type { Rect } from "../Rect";
 import { useMouseStream } from "../SVGContext";
-
-const selectRectAtom = atom<Rect | null>(null);
-export function useSelectRectAtom() {
-  const [rect] = useAtom(selectRectAtom);
-  return rect;
-}
 
 const filteredRectAtomListAtom = atom((get) => {
   const currentNodes = get(currentNodesAtom);
