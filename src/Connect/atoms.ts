@@ -1,4 +1,4 @@
-import { atom, useAtom } from "jotai";
+import { atom } from "jotai";
 import type { Atom } from "jotai";
 import type { Connection } from "./types";
 import type { OutputSocket } from "../Socket";
@@ -7,14 +7,6 @@ import { currentScopeAtom } from "../Scope";
 
 // output
 export const connectTargetAtom = atom<OutputSocket<unknown> | null>(null);
-export function useConnectTarget() {
-  const [connectTarget] = useAtom(connectTargetAtom);
-  return connectTarget;
-}
-export function useSetConnectFrom() {
-  const [, setConnectTarget] = useAtom(connectTargetAtom);
-  return setConnectTarget;
-}
 
 export const connectionAtom = atom<Connection<unknown>[]>((get) => {
   const scope = get(currentScopeAtom);

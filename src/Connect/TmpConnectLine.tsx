@@ -1,12 +1,12 @@
 import React from "react";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai/utils";
 import { useMouseToConnect } from "./drag";
-import { useConnectTarget } from "./atoms";
+import { connectTargetAtom } from "./atoms";
 import { useMousePosition } from "../SVGContext";
 import type { OutputSocket } from "../Socket";
 
 const TmpConnectLineImpl = <T,>({ socket }: { socket: OutputSocket<T> }) => {
-  const [socketPos] = useAtom(socket.position);
+  const socketPos = useAtomValue(socket.position);
   const mousePos = useMousePosition();
   return (
     <line
@@ -20,7 +20,8 @@ const TmpConnectLineImpl = <T,>({ socket }: { socket: OutputSocket<T> }) => {
 };
 const TmpConnectLine = () => {
   useMouseToConnect();
-  const connectTarget = useConnectTarget();
+  const connectTarget = useAtomValue(connectTargetAtom);
+
   if (connectTarget) {
     return <TmpConnectLineImpl socket={connectTarget} />;
   }
