@@ -1,4 +1,4 @@
-import { SliderNode, RenderComponentNode } from "./components";
+import { SliderNode } from "./components";
 import { NodeComponent } from "../Node";
 import type { CreateNodeProps } from "../actions";
 
@@ -9,6 +9,7 @@ import { Variable } from "../Variable";
 
 import { createVariableFromFn } from "./funcs";
 
+import render from "./render";
 import elapsed from "./elapsed";
 import button from "./button";
 import _if from "./if";
@@ -35,7 +36,6 @@ const fnNodes: OptionFn[] = [
   { name: "sin", fn: (a) => Math.sin(a) },
   { name: "cos", fn: (a) => Math.cos(a) },
   { name: "clamp", fn: (a, min, max) => Math.max(min, Math.min(max, a)) },
-  { name: "render", fn: (_) => {}, component: RenderComponentNode },
   {
     name: "console.log",
     fn: (_) => {
@@ -74,6 +74,7 @@ const _nodeOptions = [
   elapsed,
   button,
   _if,
+  render,
   circle,
   rect,
   onMouse,

@@ -81,7 +81,7 @@ const RenderNode: NodeAtomComponent = ({ nodeAtom }) => {
 };
 
 function RenderOutSocket({ socket }: { socket: OutputSocket<unknown> }) {
-  const outValue = useAtom(socket.atom);
+  const [outValue] = useAtom(socket.atom);
   return <>{outValue !== undefined && <OutputCircle output={socket} />}</>;
 }
 
