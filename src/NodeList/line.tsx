@@ -9,11 +9,6 @@ const option = {
     const x2 = createAtomRef(atom(0));
     const y2 = createAtomRef(atom(0));
     const inputAtoms = [x1, y1, x2, y2];
-    const isDownAtom = atom(false);
-    let setter: any;
-    isDownAtom.onMount = (set) => {
-      setter = set;
-    };
 
     const outputAtoms = [
       atom((get) => {
@@ -21,11 +16,7 @@ const option = {
         const y1Atom = get(y1);
         const x2Atom = get(x2);
         const y2Atom = get(y2);
-        return ({
-          onMouseDown,
-          onMouseUp,
-          onMouseMove,
-        }: JSX.IntrinsicElements["line"]) => {
+        return (props: JSX.IntrinsicElements["line"]) => {
           const [x1] = useAtom(x1Atom);
           const [y1] = useAtom(y1Atom);
           const [x2] = useAtom(x2Atom);
@@ -33,24 +24,13 @@ const option = {
           return (
             <line
               {...{ x1, y1, x2, y2 }}
-              onMouseDown={(e) => {
-                onMouseDown?.(e);
-                setter(true);
-              }}
-              onMouseUp={(e) => {
-                onMouseUp?.(e);
-                setter(false);
-              }}
-              onMouseMove={(e) => {
-                onMouseMove?.(e);
-              }}
               fill="blue"
               stroke="blue"
+              {...props}
             />
           );
         };
       }),
-      isDownAtom,
     ];
     const variable = { inputAtoms, outputAtoms };
     return { variable };
