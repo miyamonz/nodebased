@@ -1,5 +1,5 @@
 import React from "react";
-import { atom, useAtom } from "jotai";
+import { atom } from "jotai";
 import { useAtomValue } from "jotai/utils";
 import { createAtomRef } from "../AtomRef";
 
