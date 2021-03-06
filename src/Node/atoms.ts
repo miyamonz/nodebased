@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { createNodeAtom } from "./funcs";
+import { createNodeAtom } from "./createNodeAtom";
 
 import { createRectAtom } from "../Rect";
 import { defaultNodeSizeVariable } from "./variables";
