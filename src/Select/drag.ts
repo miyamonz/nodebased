@@ -1,14 +1,15 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
+
+import { selectedNodesAtom, useSetSelected } from "./atoms";
+import { hovered } from "./SelectCollisionArea";
+
 import { currentNodesAtom } from "../actions";
 import { hoveredNodeAtom } from "../Node";
-import type { NodeAtom } from "../Node";
 import { hoveredInputSocketAtom, hoveredOutputSocketAtom } from "../Socket";
 import { intersect, rectFromPos } from "../Rect";
 import type { Rect } from "../Rect";
 import { useMouseStream } from "../SVGContext";
-
-import { hovered } from "./SelectCollisionArea";
 
 const selectRectAtom = atom<Rect | null>(null);
 export function useSelectRectAtom() {
@@ -24,11 +25,6 @@ const filteredRectAtomListAtom = atom((get) => {
     intersect(selectRect)(get(get(node).rect))
   );
 });
-export const selectedNodesAtom = atom<NodeAtom[]>([]);
-export function useSelectedNodes() {
-  const [nodes] = useAtom(selectedNodesAtom);
-  return nodes;
-}
 
 const startConditionAtom = atom((get) => {
   const cond = [
@@ -43,7 +39,7 @@ const startConditionAtom = atom((get) => {
 });
 
 function useClickThenUnselect() {
-  const [, setSelectedRectAtomList] = useAtom(selectedNodesAtom);
+  const setSelected = useSetSelected();
   const { start, drag, end } = useMouseStream();
   // on click
   const isClick = React.useMemo(() => {
@@ -51,7 +47,7 @@ function useClickThenUnselect() {
   }, [start, drag, end]);
   React.useEffect(() => {
     if (isClick) {
-      setSelectedRectAtomList([]);
+      setSelected([]);
     }
   }, [isClick]);
 }
@@ -62,13 +58,13 @@ export function useMouseToSelect() {
   const [startCond] = useAtom(startConditionAtom);
   const { start, drag, end } = useMouseStream(startCond);
 
-  const [, setSelectedNodes] = useAtom(selectedNodesAtom);
+  const setSelected = useSetSelected();
   const [, setSelectRect] = useAtom(selectRectAtom);
 
   //start
   React.useEffect(() => {
     if (start === null) return;
-    setSelectedNodes([]);
+    setSelected([]);
   }, [start]);
 
   //drag
@@ -81,7 +77,7 @@ export function useMouseToSelect() {
   //end
   React.useEffect(() => {
     if (end === null) return;
-    setSelectedNodes(filteredRectAtomList);
+    setSelected(filteredRectAtomList);
     setSelectRect(null);
   }, [end]);
 }

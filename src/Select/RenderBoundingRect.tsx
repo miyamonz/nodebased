@@ -1,6 +1,6 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
-import { selectedNodesAtom } from "./drag";
+import { selectedNodesAtom } from "./atoms";
 import { boundingRect, offsetRect } from "../Rect";
 
 import { removeNodeAtom } from "../actions";
