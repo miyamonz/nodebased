@@ -2,7 +2,7 @@ import React from "react";
 import { atom, useAtom } from "jotai";
 import { useAppendNode } from "../actions";
 import { useMousePosition } from "../SVGContext";
-import { nodeOptions } from "../NodeList/nodes";
+import { nodeNames } from "../NodeList/nodes";
 
 const useKeyDown = (code: string, handler: (e: KeyboardEvent) => void) => {
   const listener = React.useCallback(
@@ -22,13 +22,11 @@ const useKeyDown = (code: string, handler: (e: KeyboardEvent) => void) => {
 const width = 200;
 const optionHeight = 20;
 
-type Option = typeof nodeOptions extends Array<infer T> ? T : never;
-
 function NodeMenuList({
-  option,
+  name,
   onClick,
 }: {
-  option: Option;
+  name: string;
   onClick: () => void;
 }) {
   const appendNode = useAppendNode();
@@ -36,18 +34,13 @@ function NodeMenuList({
   const _onClick = () => {
     onClick();
 
-    const props = {
-      name: option.name,
-      position,
-      ...option.init(),
-    };
-    appendNode(props);
+    appendNode({ name, position });
   };
 
   return (
     <>
       <rect width={width} height={optionHeight} fill="white"></rect>
-      <text y={optionHeight - 3}>{option.name}</text>
+      <text y={optionHeight - 3}>{name}</text>
       <rect
         width={width}
         height={optionHeight}
@@ -70,7 +63,7 @@ function NodeMenu() {
   const [text] = useAtom(textAtom);
 
   if (!open) return null;
-  const filtered = nodeOptions.filter((option) => option.name.includes(text));
+  const filtered = nodeNames.filter((name) => name.includes(text));
   const height = filtered.length * optionHeight;
   const rect = {
     ...posWhenOpen,
@@ -80,13 +73,13 @@ function NodeMenu() {
   return (
     <>
       <rect {...rect} fill="white" stroke="black"></rect>
-      {filtered.map((option, i) => {
+      {filtered.map((name, i) => {
         return (
           <g
             transform={`translate(${rect.x} ${rect.y + optionHeight * i})`}
-            key={option.name}
+            key={name}
           >
-            <NodeMenuList option={option} onClick={() => setOpen(false)} />
+            <NodeMenuList name={name} onClick={() => setOpen(false)} />
           </g>
         );
       })}

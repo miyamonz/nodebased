@@ -1,5 +1,5 @@
-import { NodeComponent } from "../Node";
-import type { CreateNodeProps } from "../actions";
+import type { CreateNodeProps } from "./types";
+import type { NodeComponent } from "../Node";
 
 // variables
 import { defaultNodeSizeVariable } from "../Node";
@@ -92,3 +92,4 @@ export const nodeOptions: Option[] = _nodeOptions.map((option) => ({
   name: option.name,
   init: () => ({ component: () => null, ...option.init() }),
 })) as any;
+export const nodeNames: string[] = nodeOptions.map((o) => o.name);

@@ -1,17 +1,20 @@
 import { atom, useAtom } from "jotai";
 import { createNodeAtomFromPosition } from "./Node";
-import type { NodeAtom } from "./Node";
 import { currentScopeAtom } from "./Scope";
+import type { NodeAtom } from "./Node";
+import type { Position } from "./Position";
 
 export const currentNodesAtom = atom((get) => get(get(currentScopeAtom).nodes));
 
-export type CreateNodeProps = Parameters<typeof createNodeAtomFromPosition>[0];
-export const appendNodeAtom = atom(null, (get, set, args: CreateNodeProps) => {
-  const nodeAtom = createNodeAtomFromPosition(args);
+export const appendNodeAtom = atom(
+  null,
+  (get, set, { name, position }: { name: string; position: Position }) => {
+    const nodeAtom = createNodeAtomFromPosition(name, position);
 
-  const currentScope = get(currentScopeAtom);
-  set(currentScope.nodes, (prev) => [...prev, nodeAtom]);
-});
+    const currentScope = get(currentScopeAtom);
+    set(currentScope.nodes, (prev) => [...prev, nodeAtom]);
+  }
+);
 export function useAppendNode() {
   const [, set] = useAtom(appendNodeAtom);
   return set;
