@@ -15,6 +15,7 @@ import button from "./button";
 import _if from "./if";
 import circle from "./circle";
 import rect from "./rect";
+import line from "./line";
 import unpack from "./unpack";
 import onMouse from "./onMouse";
 
@@ -78,6 +79,7 @@ const _nodeOptions = [
   render,
   circle,
   rect,
+  line,
   onMouse,
   unpack,
 ];
