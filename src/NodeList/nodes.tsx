@@ -35,6 +35,7 @@ const fnNodes: OptionFn[] = [
   { name: "sin", fn: (a) => Math.sin(a) },
   { name: "cos", fn: (a) => Math.cos(a) },
   { name: "clamp", fn: (a, min, max) => Math.max(min, Math.min(max, a)) },
+  { name: "floor", fn: (a: number) => Math.floor(a) },
   {
     name: "console.log",
     fn: (_) => {
