@@ -5,11 +5,11 @@ import { createAtomRef } from "../AtomRef";
 import { createVariable } from "../Variable";
 import type { NodeComponent } from "../Node";
 
-function getComponent(stateAtom: WritableAtom<boolean, boolean>) {
+function getComponent(downAtom: WritableAtom<boolean, boolean>) {
   const RenderButtonNode: NodeComponent = ({ node }) => {
     const [rect] = useAtom(node.rect);
     const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
-    const [isDown, setDown] = useAtom(stateAtom);
+    const [isDown, setDown] = useAtom(downAtom);
 
     const r = useMemo(() => (Math.min(rect.width, rect.height) / 2) * 0.8, [
       rect.width,
@@ -44,12 +44,12 @@ const option = {
         return Boolean(in_ || get(buttonAtom));
       });
     });
-    const stateAtom = atom(
+    const downAtom = atom(
       (get) => get(variable.outputAtoms[0]),
       (_get, set, arg: boolean) => set(buttonAtom, arg)
     );
     return {
-      component: getComponent(stateAtom),
+      component: getComponent(downAtom),
       variable,
     };
   },
