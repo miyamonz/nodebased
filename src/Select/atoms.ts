@@ -1,6 +1,8 @@
 import { atom, useAtom } from "jotai";
+import { nodeToJson } from "../Node";
 import type { NodeAtom } from "../Node";
 import type { Rect } from "../Rect";
+import { copyToClipboard } from "../util";
 
 //drag rect
 export const selectRectAtom = atom<Rect | null>(null);
@@ -18,4 +20,23 @@ export function useSelectedNodes() {
 
 export function useSetSelected() {
   return useAtom(selectedNodesAtom)[1];
+}
+
+const selectedAtomJSON = atom(
+  (get) => {
+    const nodeAtoms = get(selectedNodesAtom);
+    const nodes = nodeAtoms.map(get);
+    return nodes.map((node) => {
+      return nodeToJson(get, node);
+    });
+  },
+  (get, _set) => {
+    const json = get(selectedAtomJSON);
+    copyToClipboard(JSON.stringify(json, null, 2));
+  }
+);
+
+export function useCopyToClipboard() {
+  const [, set] = useAtom(selectedAtomJSON);
+  return () => set();
 }
