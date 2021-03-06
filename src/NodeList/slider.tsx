@@ -1,3 +1,4 @@
+import React from "react";
 import { atom, useAtom } from "jotai";
 import type { Atom, PrimitiveAtom } from "jotai";
 import { createAtomRef } from "../AtomRef";
@@ -40,7 +41,7 @@ function getComponent(
       </>
     );
   };
-  return SliderNode;
+  return React.memo(SliderNode);
 }
 
 const option = {
