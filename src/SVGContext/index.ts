@@ -4,7 +4,7 @@ export {
   transformAtom,
   useTransform,
 } from "./SVGContext";
-export { useMousePosition } from "./atoms";
+export { mouseAtom, useMousePosition } from "./atoms";
 
 export { useEvent } from "./useEvent";
 export type { Event } from "./useEvent";

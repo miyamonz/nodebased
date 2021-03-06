@@ -18,6 +18,7 @@ import rect from "./rect";
 import line from "./line";
 import unpack from "./unpack";
 import onMouse from "./onMouse";
+import mouse from "./mouse";
 
 type OptionBase = {
   name: string;
@@ -82,6 +83,7 @@ const _nodeOptions = [
   line,
   onMouse,
   unpack,
+  mouse,
 ];
 export const nodeOptions: Option[] = _nodeOptions.map((option) => ({
   name: option.name,
