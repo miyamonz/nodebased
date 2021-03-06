@@ -1,9 +1,13 @@
+import React from "react";
 import { atom, useAtom } from "jotai";
+import { createAtomRef } from "../AtomRef";
 
 const option = {
   name: "render",
   init: () => {
-    const componentAtomRef = atom(atom(null));
+    const componentAtomRef = createAtomRef(
+      atom<React.ComponentType | null>(null)
+    );
     const inputAtoms = [componentAtomRef];
 
     const Render = () => {

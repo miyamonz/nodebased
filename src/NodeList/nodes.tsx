@@ -1,4 +1,3 @@
-import { SliderNode } from "./components";
 import { NodeComponent } from "../Node";
 import type { CreateNodeProps } from "../actions";
 
@@ -9,6 +8,7 @@ import { Variable } from "../Variable";
 
 import { createVariableFromFn } from "./funcs";
 
+import slider from "./slider";
 import render from "./render";
 import elapsed from "./elapsed";
 import button from "./button";
@@ -27,7 +27,6 @@ type OptionFn = OptionBase & {
 };
 
 const fnNodes: OptionFn[] = [
-  { name: "slider", fn: (x) => x, component: SliderNode },
   { name: "add", fn: (a, b) => a + b },
   { name: "sub", fn: (a, b) => a - b },
   { name: "mul", fn: (a, b) => a * b },
@@ -68,6 +67,7 @@ const optionFromVariable = (name: string, variable: Variable) => ({
 });
 
 const _nodeOptions = [
+  slider,
   ...converted,
   optionFromVariable("nodeSize", defaultNodeSizeVariable as any),
   optionFromVariable("socketRadius", socketRadiusVariable as any),
