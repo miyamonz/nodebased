@@ -11,14 +11,16 @@ const Paste = () => {
 
   const appendNode = useAppendNode();
   useShortcutPaste(
-    React.useCallback(() => {
-      const text = getClipboard();
+    React.useCallback(async () => {
+      const text = await getClipboard();
       try {
         const json = JSON.parse(text);
         const nodeAtoms = json.map(jsonToNodeAtom);
         nodeAtoms.map(appendNode);
         setSelected(nodeAtoms);
-      } catch (e: unknown) {}
+      } catch (e: unknown) {
+        console.error(e);
+      }
     }, [])
   );
 

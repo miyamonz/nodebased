@@ -21,19 +21,7 @@ export function copyToClipboard(text: string) {
 
   document.body.removeChild(inputEl);
 }
-export function getClipboard() {
-  document.body.appendChild(inputEl);
-
-  /* Select the text field */
-  inputEl.select();
-  inputEl.setSelectionRange(0, 99999); /* For mobile devices */
-
-  try {
-    document.execCommand("paste");
-  } catch (err) {
-    console.log("Oops, unable to paste");
-  }
-
-  document.body.removeChild(inputEl);
-  return inputEl.value;
+export async function getClipboard() {
+  const text = await navigator.clipboard.readText();
+  return text;
 }
