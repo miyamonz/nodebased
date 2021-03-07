@@ -18,6 +18,7 @@ import rect from "./rect";
 import line from "./line";
 import unpack from "./unpack";
 import onMouse from "./onMouse";
+import press from "./press";
 import mouse from "./mouse";
 
 type OptionBase = {
@@ -85,6 +86,7 @@ const _nodeOptions = [
   rect,
   line,
   onMouse,
+  press,
   unpack,
   mouse,
 ];

@@ -1,4 +1,5 @@
-import { atom, useAtom } from "jotai";
+import { atom } from "jotai";
+import { useAtomValue } from "jotai/utils";
 
 const option = {
   name: "circle",
@@ -7,47 +8,19 @@ const option = {
     const y = atom(atom(0));
     const r = atom(atom(0));
     const inputAtoms = [x, y, r];
-    const isDownAtom = atom(false);
-    let setter: any;
-    isDownAtom.onMount = (set) => {
-      setter = set;
-    };
 
     const outputAtoms = [
-      atom(() => {
-        return ({
-          onMouseDown,
-          onMouseUp,
-          onMouseMove,
-        }: JSX.IntrinsicElements["circle"]) => {
-          const [_x] = useAtom(x);
-          const [cx] = useAtom(_x);
-          const [_y] = useAtom(y);
-          const [cy] = useAtom(_y);
-          const [r_] = useAtom(r);
-          const [_r] = useAtom(r_);
-          return (
-            <circle
-              cx={cx}
-              cy={cy}
-              r={_r}
-              onMouseDown={(e) => {
-                onMouseDown?.(e);
-                setter(true);
-              }}
-              onMouseUp={(e) => {
-                onMouseUp?.(e);
-                setter(false);
-              }}
-              onMouseMove={(e) => {
-                onMouseMove?.(e);
-              }}
-              fill="blue"
-            />
-          );
+      atom((get) => {
+        const xAtom = get(x);
+        const yAtom = get(y);
+        const rAtom = get(r);
+        return (props: JSX.IntrinsicElements["circle"]) => {
+          const cx = useAtomValue(xAtom);
+          const cy = useAtomValue(yAtom);
+          const r = useAtomValue(rAtom);
+          return <circle cx={cx} cy={cy} r={r} fill="blue" {...props} />;
         };
       }),
-      isDownAtom,
     ];
     const variable = { inputAtoms, outputAtoms };
     return { variable };
