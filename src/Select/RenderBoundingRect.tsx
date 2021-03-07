@@ -21,34 +21,42 @@ function useRemoveSelected() {
 
   return removeCallback;
 }
+
 const RenderBoundingRect = () => {
   const [nodeAtoms] = useAtom(selectedNodesAtom);
+  if (nodeAtoms.length === 0) return null;
+  return <RenderBoundingRectImpl />;
+};
+
+const RenderBoundingRectImpl = () => {
   const removeSelected = useRemoveSelected();
   const copyToClipboard = useCopyToClipboard();
+  const buttons = [
+    {
+      onMouseUp: removeSelected,
+      fill: "lightblue",
+    },
+    {
+      onMouseUp: copyToClipboard,
+      fill: "orange",
+    },
+  ];
 
   const [boundingRect] = useAtom(boundingRectAtom);
   const r = offsetRect(boundingRect)(15);
-
   const u = 20;
-  if (nodeAtoms.length === 0) return null;
+
   return (
     <>
-      <rect
-        x={r.x + r.width - u}
-        y={r.y - u}
-        width={u}
-        height={u}
-        fill="lightblue"
-        onMouseUp={removeSelected}
-      />
-      <rect
-        x={r.x + r.width - u * 2}
-        y={r.y - u}
-        width={u}
-        height={u}
-        fill="orange"
-        onMouseUp={copyToClipboard}
-      />
+      {buttons.map((b, i) => (
+        <rect
+          x={r.x + r.width - u * i}
+          y={r.y - u}
+          width={u}
+          height={u}
+          {...b}
+        />
+      ))}
       <rect {...r} fill="lightblue" stroke="blue" />
     </>
   );
