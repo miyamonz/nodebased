@@ -6,8 +6,11 @@ import { jsonToNode } from "../Node/json";
 import { useAppendNode } from "../actions";
 import { useSetSelected } from "../Select";
 
+import { connectByJson, useConnectSocket } from "../Connect/json";
+
 const Paste = () => {
   const setSelected = useSetSelected();
+  const setConnect = useConnectSocket();
 
   const appendNode = useAppendNode();
   useShortcutPaste(
@@ -18,6 +21,10 @@ const Paste = () => {
         const nodes = json.nodes.map(jsonToNode);
         nodes.map(appendNode);
         setSelected(nodes);
+
+        json.connections
+          .map(connectByJson(nodes))
+          .forEach((arg) => setConnect(arg));
       } catch (e: unknown) {
         console.error(e);
       }

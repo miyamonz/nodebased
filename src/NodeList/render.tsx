@@ -2,6 +2,7 @@ import React from "react";
 import { atom } from "jotai";
 import { useAtomValue } from "jotai/utils";
 import { createAtomRef } from "../AtomRef";
+import type { OutputAtom } from "../Variable";
 
 const range = (n: number) => [...Array(n).keys()];
 const option = {
@@ -27,7 +28,7 @@ const option = {
         </>
       );
     };
-    const outputAtoms = [atom(() => undefined)];
+    const outputAtoms: OutputAtom<unknown>[] = [];
     const variable = { inputAtoms, outputAtoms };
     return { variable, component: Render };
   },

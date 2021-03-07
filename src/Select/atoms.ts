@@ -2,6 +2,8 @@ import { atom, useAtom } from "jotai";
 import { nodeToJson } from "../Node";
 import type { Node } from "../Node";
 import type { Rect } from "../Rect";
+import { connectionAtom, filterConnection, Connection } from "../Connect";
+import { connectionToJson } from "../Connect/json";
 import { copyToClipboard } from "../util";
 
 //drag rect
@@ -25,10 +27,12 @@ export function useSetSelected() {
 const selectedAtomJSON = atom(
   (get) => {
     const nodes = get(selectedNodesAtom);
+    const connections = get(selectedConnectionsAtom);
     return {
       nodes: nodes.map((node) => {
         return nodeToJson(get, node);
       }),
+      connections: connections.map(connectionToJson),
     };
   },
   (get) => {
@@ -41,3 +45,11 @@ export function useCopyToClipboard() {
   const [, set] = useAtom(selectedAtomJSON);
   return () => set();
 }
+
+// connection
+export const selectedConnectionsAtom = atom<Connection<unknown>[]>((get) => {
+  const selectedNodes = get(selectedNodesAtom);
+  const connections = get(connectionAtom);
+
+  return filterConnection(selectedNodes, connections);
+});

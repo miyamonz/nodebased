@@ -21,5 +21,5 @@ export function nodeToJson(get: Getter, node: Node): NodeJSON {
 }
 
 export function jsonToNode(json: NodeJSON) {
-  return createNodeFromPosition(json.name, json.position);
+  return createNodeFromPosition(json.name, json.position, json.id);
 }

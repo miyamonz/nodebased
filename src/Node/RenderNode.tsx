@@ -4,6 +4,7 @@ import type { Node } from "./types";
 import { useSelectedNodes } from "../Select";
 import { InputCircle, OutputCircle } from "../Socket";
 import type { OutputSocket } from "../Socket";
+import type { Position } from "../Position";
 
 type NodeComponent = React.FC<{ node: Node }>;
 
@@ -49,20 +50,34 @@ const ShowHovered: NodeComponent = ({ node }) => {
   );
 };
 
+const RenderText = ({
+  outputAtom,
+  center,
+}: {
+  outputAtom: Atom<unknown>;
+  center: Position;
+}) => {
+  const [outValue] = useAtom(outputAtom);
+  return (
+    <text {...center}>
+      {(typeof outValue === "number" || typeof outValue === "string") &&
+        outValue}
+    </text>
+  );
+};
+
 const RenderNode: NodeComponent = ({ node }) => {
   const [rect] = useAtom(node.rect);
 
   const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
-  const [outValue] = useAtom(node.outputs[0].atom);
 
   const isockets = node.inputs;
   return (
     <>
       <ShowSelect node={node} />
-      <text {...center}>
-        {(typeof outValue === "number" || typeof outValue === "string") &&
-          outValue}
-      </text>
+      {node.outputs.length > 0 && (
+        <RenderText outputAtom={node.outputs[0].atom} center={center} />
+      )}
       <g transform={`translate(${rect.x} ${rect.y - 5} )`}>
         <text>{node.name}</text>
       </g>
@@ -79,8 +94,7 @@ const RenderNode: NodeComponent = ({ node }) => {
 };
 
 function RenderOutSocket({ socket }: { socket: OutputSocket<unknown> }) {
-  const [outValue] = useAtom(socket.atom);
-  return <>{outValue !== undefined && <OutputCircle output={socket} />}</>;
+  return <OutputCircle output={socket} />;
 }
 
 export default React.memo(RenderNode);
