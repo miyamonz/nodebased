@@ -18,6 +18,32 @@ function getConnections(scope: Scope): Atom<Connection<unknown>[]> {
   return atom((get) => {
     const nodeAtoms = get(scope.nodes);
     const nodes = nodeAtoms.map(get);
+
+    const connections = nodes.flatMap((node, inNodeIdx) => {
+      return node.inputs.flatMap((isocket, isocketIdx) => {
+        const found = nodes
+          .map((node, outNodeIdx) => {
+            const idx = node.outputs.findIndex(
+              (osocket) => osocket.atom === get(isocket.ref)
+            );
+            if (idx === -1) return undefined;
+            return [outNodeIdx, idx, node.outputs[idx]];
+          })
+          .filter(
+            (a): a is [number, number, OutputSocket<unknown>] => a !== undefined
+          )
+          .map(([outNodeId, osocketIdx, osocket]) => {
+            return {
+              from_: [outNodeId, osocketIdx] as const,
+              to_: [inNodeIdx, isocketIdx] as const,
+              from: osocket,
+              to: isocket,
+            };
+          });
+        return found;
+      });
+    });
+    /*
     const isockets = nodes.map((node) => node.inputs).flatMap((a) => a);
     const osockets = nodes.map((node) => node.outputs).flatMap((a) => a);
     const connections = isockets
@@ -26,9 +52,15 @@ function getConnections(scope: Scope): Atom<Connection<unknown>[]> {
           (osocket) => osocket.atom === get(isocket.ref)
         );
         if (found === undefined) return undefined;
-        return { from: found, to: isocket };
+        return {
+          from_: [found, 0],
+          to_: [0, 0],
+          from: found,
+          to: isocket,
+        };
       })
       .filter((a): a is Connection<unknown> => a !== undefined);
+     * */
 
     return connections;
   });
