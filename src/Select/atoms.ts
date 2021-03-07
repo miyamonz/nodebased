@@ -26,11 +26,13 @@ const selectedAtomJSON = atom(
   (get) => {
     const nodeAtoms = get(selectedNodesAtom);
     const nodes = nodeAtoms.map(get);
-    return nodes.map((node) => {
-      return nodeToJson(get, node);
-    });
+    return {
+      nodes: nodes.map((node) => {
+        return nodeToJson(get, node);
+      }),
+    };
   },
-  (get, _set) => {
+  (get) => {
     const json = get(selectedAtomJSON);
     copyToClipboard(JSON.stringify(json, null, 2));
   }

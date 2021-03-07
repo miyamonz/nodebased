@@ -15,7 +15,7 @@ const Paste = () => {
       const text = await getClipboard();
       try {
         const json = JSON.parse(text);
-        const nodeAtoms = json.map(jsonToNodeAtom);
+        const nodeAtoms = json.nodes.map(jsonToNodeAtom);
         nodeAtoms.map(appendNode);
         setSelected(nodeAtoms);
       } catch (e: unknown) {
