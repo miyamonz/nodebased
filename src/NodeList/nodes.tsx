@@ -13,6 +13,7 @@ import render from "./render";
 import elapsed from "./elapsed";
 import button from "./button";
 import _if from "./if";
+import hold from "./hold";
 import circle from "./circle";
 import rect from "./rect";
 import line from "./line";
@@ -81,6 +82,7 @@ const _nodeOptions = [
   elapsed,
   button,
   _if,
+  hold,
   render,
   circle,
   rect,
