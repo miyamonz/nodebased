@@ -1,5 +1,6 @@
 import React from "react";
-import { atom, useAtom } from "jotai";
+import { atom } from "jotai";
+import { useAtomValue, useUpdateAtom } from "jotai/utils";
 
 const option = {
   name: "press",
@@ -11,22 +12,26 @@ const option = {
     const outputAtoms = [
       atom((get) => {
         const componentAtom_ = get(componentAtom);
-        return (props: React.ReactNode) => {
-          const [Component] = useAtom(componentAtom_);
-          const [, set] = useAtom(pressAtom);
+        return (props: any) => {
+          const Component = useAtomValue(componentAtom_);
+          const set = useUpdateAtom(pressAtom);
 
           React.useEffect(() => {
             const handle = () => set(false);
             window.addEventListener("mouseup", handle);
             return () => window.removeEventListener("mouseup", handle);
           }, []);
-          if (Component === null || typeof Component !== "function")
-            return null;
+
+          const isComponent = (c: unknown): c is React.ComponentType =>
+            Component !== null || typeof c !== "function";
+          if (!isComponent(Component)) return null;
           return (
             <Component
-              onMouseDown={() => set(true)}
-              onMouseUp={() => set(false)}
               {...props}
+              onMouseDown={(e: React.MouseEvent<SVGElement>) => {
+                set(true);
+                props?.onMouseDown?.(e);
+              }}
             />
           );
         };

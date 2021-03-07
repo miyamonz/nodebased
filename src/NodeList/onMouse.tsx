@@ -1,5 +1,7 @@
 import React from "react";
-import { atom, useAtom } from "jotai";
+import { atom } from "jotai";
+import { useAtomValue, useUpdateAtom } from "jotai/utils";
+import type { WritableAtom } from "jotai";
 import { transformAtom } from "../SVGContext";
 
 const option = {
@@ -7,7 +9,8 @@ const option = {
   init: () => {
     const componentAtom = atom(atom<React.ReactNode | null>(null));
     const inputAtoms = [componentAtom];
-    const eventAtom = atom<React.MouseEvent<SVGElement>>(null!);
+    type Event = React.MouseEvent<SVGElement> | null;
+    const eventAtom: WritableAtom<Event, Event> = atom<Event>(null);
     const mouseAtom = atom((get) => {
       const { fn: transform } = get(transformAtom);
       const e = get(eventAtom);
@@ -16,19 +19,30 @@ const option = {
     });
 
     const outputAtoms = [
-      atom(() => {
-        return (props: React.ReactNode) => {
-          const [ca] = useAtom(componentAtom);
-          const [Component] = useAtom(ca);
-          const [, set] = useAtom(eventAtom);
-          if (Component === null || typeof Component !== "function")
-            return null;
+      atom((get) => {
+        const componentAtom_ = get(componentAtom);
+        return (props: any) => {
+          const Component = useAtomValue(componentAtom_);
+          const set = useUpdateAtom(eventAtom);
+
+          const isComponent = (c: unknown): c is React.ComponentType =>
+            Component !== null || typeof c !== "function";
+          if (!isComponent(Component)) return null;
           return (
             <Component
-              onMouseDown={set}
-              onMouseMove={set}
-              onMouseUp={set}
               {...props}
+              onMouseDown={(e: React.MouseEvent<SVGElement>) => {
+                props?.onMouseDown?.(e);
+                set(e);
+              }}
+              onMouseMove={(e: React.MouseEvent<SVGElement>) => {
+                props?.onMouseMove?.(e);
+                set(e);
+              }}
+              onMouseUp={(e: React.MouseEvent<SVGElement>) => {
+                props?.onMouseUp?.(e);
+                set(e);
+              }}
             />
           );
         };
