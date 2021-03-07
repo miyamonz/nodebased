@@ -6,6 +6,8 @@ import { boundingRect, offsetRect } from "../Rect";
 
 import { removeNodeAtom } from "../actions";
 
+import { useShortcutCopy } from "./shortcutHooks";
+
 const boundingRectAtom = atom((get) => {
   const selectedRectAtoms = get(selectedNodesAtom);
   return boundingRect(selectedRectAtoms.map(get).map((node) => get(node.rect)));
@@ -31,6 +33,11 @@ const RenderBoundingRect = () => {
 const RenderBoundingRectImpl = () => {
   const removeSelected = useRemoveSelected();
   const copyToClipboard = useCopyToClipboard();
+  useShortcutCopy(
+    React.useCallback(() => {
+      copyToClipboard();
+    }, [])
+  );
   const buttons = [
     {
       onMouseUp: removeSelected,
@@ -50,7 +57,7 @@ const RenderBoundingRectImpl = () => {
     <>
       {buttons.map((b, i) => (
         <rect
-          x={r.x + r.width - u * i}
+          x={r.x + r.width - u * (i + 1)}
           y={r.y - u}
           width={u}
           height={u}
