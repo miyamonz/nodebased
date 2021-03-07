@@ -6,15 +6,18 @@ import type { Position } from "./Position";
 
 export const currentNodesAtom = atom((get) => get(get(currentScopeAtom).nodes));
 
-export const appendNodeAtom = atom(
-  null,
-  (get, set, { name, position }: { name: string; position: Position }) => {
+export const appendNodeAtom = atom(null, (get, set, nodeAtom: NodeAtom) => {
+  const currentScope = get(currentScopeAtom);
+  set(currentScope.nodes, (prev) => [...prev, nodeAtom]);
+});
+export function useAppendNodeByName() {
+  const [, append] = useAtom(appendNodeAtom);
+  const set = ({ name, position }: { name: string; position: Position }) => {
     const nodeAtom = createNodeAtomFromPosition(name, position);
-
-    const currentScope = get(currentScopeAtom);
-    set(currentScope.nodes, (prev) => [...prev, nodeAtom]);
-  }
-);
+    append(nodeAtom);
+  };
+  return set;
+}
 export function useAppendNode() {
   const [, set] = useAtom(appendNodeAtom);
   return set;

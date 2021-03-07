@@ -1,6 +1,6 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
-import { useAppendNode } from "../actions";
+import { useAppendNodeByName } from "../actions";
 import { useMousePosition } from "../SVGContext";
 import { nodeNames } from "../NodeList/nodes";
 
@@ -16,12 +16,12 @@ function NodeMenuList({
   name: string;
   onClick: () => void;
 }) {
-  const appendNode = useAppendNode();
+  const appendNodeByName = useAppendNodeByName();
   const position = useMousePosition();
   const _onClick = () => {
     onClick();
 
-    appendNode({ name, position });
+    appendNodeByName({ name, position });
   };
 
   return (

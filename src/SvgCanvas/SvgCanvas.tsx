@@ -12,12 +12,14 @@ import { RenderConnectionLines } from "../Connect";
 
 import { TmpConnectLine } from "../Connect";
 import { useDragMoveNode } from "../MoveNode";
+import { Paste } from "../Paste";
 
 function SVGContent() {
   useDragMoveNode();
   const [scope] = useAtom(currentScopeAtom);
   return (
     <>
+      <Paste />
       <text x={0} y={20}>
         nodebased
       </text>
