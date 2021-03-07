@@ -7,6 +7,8 @@ import { useAppendNode } from "../actions";
 import { useSetSelected } from "../Select";
 
 import { connectByJson, useConnectSocket } from "../Connect/json";
+import type { ConnectionJSON } from "../Connect/json";
+import type { Node } from "../Node";
 
 const Paste = () => {
   const setSelected = useSetSelected();
@@ -18,13 +20,17 @@ const Paste = () => {
       const text = await getClipboard();
       try {
         const json = JSON.parse(text);
-        const nodes = json.nodes.map(jsonToNode);
-        nodes.map(appendNode);
-        setSelected(nodes);
+        const nodes: Node[] = json.nodes.map(jsonToNode);
 
-        json.connections
-          .map(connectByJson(nodes))
-          .forEach((arg) => setConnect(arg));
+        const cjsons: ConnectionJSON[] = json.connections;
+        cjsons.map(connectByJson(nodes)).forEach((arg) => setConnect(arg));
+
+        const modifyId = nodes.map((n) => ({
+          ...n,
+          id: Math.floor(Math.random() * 10 ** 12).toString(),
+        }));
+        modifyId.forEach(appendNode);
+        setSelected(modifyId);
       } catch (e: unknown) {
         console.error(e);
       }
