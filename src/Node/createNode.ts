@@ -9,14 +9,18 @@ export const createNode = ({
   variable,
   name,
   component,
+  id,
 }: {
   rect: RectAtom;
   variable: Variable;
   name: string;
   component: NodeComponent;
+  id?: string;
 }): Node => {
   const inputSockets = createInputSockets(rect, variable.inputAtoms);
   const outputSockets = createOutputSockets(rect, variable.outputAtoms);
+
+  id = id ?? Math.floor(Math.random() * 10 ** 12).toString();
 
   return {
     rect,
@@ -24,6 +28,6 @@ export const createNode = ({
     outputs: outputSockets,
     name,
     component,
-    id: Math.floor(Math.random() * 10 ** 12).toString(),
+    id,
   };
 };

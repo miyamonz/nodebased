@@ -6,10 +6,12 @@ import { currentNodesAtom } from "../actions";
 function useSocket<T>(connection: Connection<T>) {
   const [nodes] = useAtom(currentNodesAtom);
 
-  const fromNode = nodes[connection.from_[0]];
+  const fromNode = nodes.find((n) => n.id === connection.from_[0]);
+  if (fromNode === undefined) throw new Error("not found");
   const osocket = fromNode.outputs[connection.from_[1]];
 
-  const toNode = nodes[connection.to_[0]];
+  const toNode = nodes.find((n) => n.id === connection.to_[0]);
+  if (toNode === undefined) throw new Error("not found");
   const isocket = toNode.inputs[connection.to_[1]];
   return [osocket, isocket];
 }

@@ -18,23 +18,23 @@ function getConnections(scope: Scope): Atom<Connection<unknown>[]> {
   return atom((get) => {
     const nodes = get(scope.nodes);
 
-    const connections = nodes.flatMap((node, inNodeIdx) => {
+    const connections = nodes.flatMap((node) => {
       return node.inputs.flatMap((isocket, isocketIdx) => {
         const found = nodes
-          .map((node, outNodeIdx) => {
+          .map((node) => {
             const idx = node.outputs.findIndex(
               (osocket) => osocket.atom === get(isocket.ref)
             );
             if (idx === -1) return undefined;
-            return [outNodeIdx, idx, node.outputs[idx]];
+            return [node.id, idx, node.outputs[idx]];
           })
           .filter(
-            (a): a is [number, number, OutputSocket<unknown>] => a !== undefined
+            (a): a is [string, number, OutputSocket<unknown>] => a !== undefined
           )
           .map(([outNodeId, osocketIdx, osocket]) => {
             return {
               from_: [outNodeId, osocketIdx] as const,
-              to_: [inNodeIdx, isocketIdx] as const,
+              to_: [node.id, isocketIdx] as const,
               from: osocket,
               to: isocket,
             };
