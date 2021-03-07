@@ -1,5 +1,5 @@
 import { Getter } from "jotai/core/types";
-import { createNodeAtomFromPosition } from "./funcs";
+import { createNodeFromPosition } from "./funcs";
 import type { Node } from "./types";
 
 export type NodeJSON = {
@@ -18,6 +18,6 @@ export function nodeToJson(get: Getter, node: Node): NodeJSON {
   };
 }
 
-export function jsonToNodeAtom(json: NodeJSON) {
-  return createNodeAtomFromPosition(json.name, json.position);
+export function jsonToNode(json: NodeJSON) {
+  return createNodeFromPosition(json.name, json.position);
 }

@@ -16,8 +16,7 @@ export const connectionAtom = atom<Connection<unknown>[]>((get) => {
 
 function getConnections(scope: Scope): Atom<Connection<unknown>[]> {
   return atom((get) => {
-    const nodeAtoms = get(scope.nodes);
-    const nodes = nodeAtoms.map(get);
+    const nodes = get(scope.nodes);
 
     const connections = nodes.flatMap((node, inNodeIdx) => {
       return node.inputs.flatMap((isocket, isocketIdx) => {

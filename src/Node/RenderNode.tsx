@@ -1,22 +1,21 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
-import type { NodeAtom } from "./types";
+import type { Node } from "./types";
 import { useSelectedNodes } from "../Select";
 import { InputCircle, OutputCircle } from "../Socket";
 import type { OutputSocket } from "../Socket";
 
-type NodeAtomComponent = React.FC<{ nodeAtom: NodeAtom }>;
+type NodeComponent = React.FC<{ node: Node }>;
 
-function useRectAtom(nodeAtom: NodeAtom) {
-  const [node] = useAtom(nodeAtom);
+function useRectAtom(node: Node) {
   const [rect] = useAtom(node.rect);
   return rect;
 }
 
-const ShowSelect: NodeAtomComponent = ({ nodeAtom }) => {
-  const rect = useRectAtom(nodeAtom);
+const ShowSelect: NodeComponent = ({ node }) => {
+  const rect = useRectAtom(node);
   const selectedNodes = useSelectedNodes();
-  const isSelected = selectedNodes.includes(nodeAtom);
+  const isSelected = selectedNodes.includes(node);
 
   if (isSelected) {
     return <rect {...rect} fill="lightpink" stroke="red" />;
@@ -24,16 +23,16 @@ const ShowSelect: NodeAtomComponent = ({ nodeAtom }) => {
   return null;
 };
 
-export const hoveredNodeAtom = atom<NodeAtom | null>(null);
+export const hoveredNode = atom<Node | null>(null);
 export function useHoveredNode() {
-  const [node] = useAtom(hoveredNodeAtom);
+  const [node] = useAtom(hoveredNode);
   return node;
 }
 
-const ShowHovered: NodeAtomComponent = ({ nodeAtom }) => {
-  const rect = useRectAtom(nodeAtom);
-  const [hovered, setHovered] = useAtom(hoveredNodeAtom);
-  const isHovered = nodeAtom === hovered;
+const ShowHovered: NodeComponent = ({ node }) => {
+  const rect = useRectAtom(node);
+  const [hovered, setHovered] = useAtom(hoveredNode);
+  const isHovered = node === hovered;
 
   return (
     <>
@@ -42,16 +41,15 @@ const ShowHovered: NodeAtomComponent = ({ nodeAtom }) => {
         {...rect}
         fill="transparent"
         stroke={isHovered ? "none" : "black"}
-        onMouseEnter={() => setHovered(nodeAtom)}
-        onMouseMove={() => setHovered(nodeAtom)}
+        onMouseEnter={() => setHovered(node)}
+        onMouseMove={() => setHovered(node)}
         onMouseLeave={() => setHovered(null)}
       />
     </>
   );
 };
 
-const RenderNode: NodeAtomComponent = ({ nodeAtom }) => {
-  const [node] = useAtom(nodeAtom);
+const RenderNode: NodeComponent = ({ node }) => {
   const [rect] = useAtom(node.rect);
 
   const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
@@ -60,7 +58,7 @@ const RenderNode: NodeAtomComponent = ({ nodeAtom }) => {
   const isockets = node.inputs;
   return (
     <>
-      <ShowSelect nodeAtom={nodeAtom} />
+      <ShowSelect node={node} />
       <text {...center}>
         {(typeof outValue === "number" || typeof outValue === "string") &&
           outValue}
@@ -68,7 +66,7 @@ const RenderNode: NodeAtomComponent = ({ nodeAtom }) => {
       <g transform={`translate(${rect.x} ${rect.y - 5} )`}>
         <text>{node.name}</text>
       </g>
-      <ShowHovered nodeAtom={nodeAtom} />
+      <ShowHovered node={node} />
       {node.component !== undefined && <node.component node={node} />}
       {isockets.map((input) => {
         return <InputCircle key={input.atom.toString()} input={input} />;

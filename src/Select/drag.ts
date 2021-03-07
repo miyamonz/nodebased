@@ -6,7 +6,7 @@ import { selectedNodesAtom, useSetSelected } from "./atoms";
 import { hovered } from "./SelectCollisionArea";
 
 import { currentNodesAtom } from "../actions";
-import { hoveredNodeAtom } from "../Node";
+import { hoveredNode } from "../Node";
 import { hoveredInputSocketAtom, hoveredOutputSocketAtom } from "../Socket";
 import { intersect, rectFromPos } from "../Rect";
 import { useMouseStream } from "../SVGContext";
@@ -15,14 +15,12 @@ const filteredRectAtomListAtom = atom((get) => {
   const currentNodes = get(currentNodesAtom);
   const selectRect = get(selectRectAtom);
   if (selectRect === null) return [];
-  return currentNodes.filter((node) =>
-    intersect(selectRect)(get(get(node).rect))
-  );
+  return currentNodes.filter((node) => intersect(selectRect)(get(node.rect)));
 });
 
 const startConditionAtom = atom((get) => {
   const cond = [
-    get(hoveredNodeAtom),
+    get(hoveredNode),
     get(hoveredInputSocketAtom),
     get(hoveredOutputSocketAtom),
   ].reduce((acc, next) => acc && next === null, true);

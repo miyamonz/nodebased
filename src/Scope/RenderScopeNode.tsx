@@ -7,8 +7,8 @@ const RenderScopeNode: React.FC<{ scope: Scope }> = ({ scope }) => {
   const [nodes] = useAtom(scope.nodes);
   return (
     <>
-      {nodes.map((nodeAtom) => {
-        return <RenderNode key={nodeAtom.toString()} nodeAtom={nodeAtom} />;
+      {nodes.map((node) => {
+        return <RenderNode key={node.id} node={node} />;
       })}
     </>
   );

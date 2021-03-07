@@ -4,29 +4,29 @@ import { selectedNodesAtom } from "./atoms";
 import { useCopyToClipboard } from "./atoms";
 import { boundingRect, offsetRect } from "../Rect";
 
-import { removeNodeAtom } from "../actions";
+import { removeNode } from "../actions";
 
 import { useShortcutCopy } from "./shortcutHooks";
 
 const boundingRectAtom = atom((get) => {
   const selectedRectAtoms = get(selectedNodesAtom);
-  return boundingRect(selectedRectAtoms.map(get).map((node) => get(node.rect)));
+  return boundingRect(selectedRectAtoms.map((node) => get(node.rect)));
 });
 
 function useRemoveSelected() {
-  const [nodeAtoms, setNodeAtoms] = useAtom(selectedNodesAtom);
-  const [, removeNode] = useAtom(removeNodeAtom);
+  const [nodes, setNodes] = useAtom(selectedNodesAtom);
+  const [, remove] = useAtom(removeNode);
   const removeCallback = React.useCallback(() => {
-    removeNode(nodeAtoms);
-    setNodeAtoms([]);
-  }, [nodeAtoms]);
+    remove(nodes);
+    setNodes([]);
+  }, [nodes]);
 
   return removeCallback;
 }
 
 const RenderBoundingRect = () => {
-  const [nodeAtoms] = useAtom(selectedNodesAtom);
-  if (nodeAtoms.length === 0) return null;
+  const [nodes] = useAtom(selectedNodesAtom);
+  if (nodes.length === 0) return null;
   return <RenderBoundingRectImpl />;
 };
 

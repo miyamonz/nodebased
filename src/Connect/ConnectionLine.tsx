@@ -6,10 +6,10 @@ import { currentNodesAtom } from "../actions";
 function useSocket<T>(connection: Connection<T>) {
   const [nodes] = useAtom(currentNodesAtom);
 
-  const [fromNode] = useAtom(nodes[connection.from_[0]]);
+  const fromNode = nodes[connection.from_[0]];
   const osocket = fromNode.outputs[connection.from_[1]];
 
-  const [toNode] = useAtom(nodes[connection.to_[0]]);
+  const toNode = nodes[connection.to_[0]];
   const isocket = toNode.inputs[connection.to_[1]];
   return [osocket, isocket];
 }

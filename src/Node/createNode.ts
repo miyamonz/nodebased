@@ -1,11 +1,10 @@
-import { atom } from "jotai";
-import type { NodeAtom, NodeComponent } from "./types";
+import type { Node, NodeComponent } from "./types";
 
 import { createInputSockets, createOutputSockets } from "../Socket";
 import { RectAtom } from "../Rect";
 import type { Variable } from "../Variable";
 
-export const createNodeAtom = ({
+export const createNode = ({
   rect,
   variable,
   name,
@@ -15,15 +14,16 @@ export const createNodeAtom = ({
   variable: Variable;
   name: string;
   component: NodeComponent;
-}): NodeAtom => {
+}): Node => {
   const inputSockets = createInputSockets(rect, variable.inputAtoms);
   const outputSockets = createOutputSockets(rect, variable.outputAtoms);
 
-  return atom({
+  return {
     rect,
     inputs: inputSockets,
     outputs: outputSockets,
     name,
     component,
-  });
+    id: Math.floor(Math.random() * 10 ** 12).toString(),
+  };
 };

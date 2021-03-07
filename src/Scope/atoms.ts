@@ -1,10 +1,10 @@
 import { atom } from "jotai";
 import type { Scope } from "./types";
-import type { NodeAtom } from "../Node";
+import type { Node } from "../Node";
 
 const defaultScope: Scope = {
   name: "default",
-  nodes: atom<NodeAtom[]>([]),
+  nodes: atom<Node[]>([]),
 };
 export const scopeMapAtom = atom(
   new Map<string, Scope>([[defaultScope.name, defaultScope]])

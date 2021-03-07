@@ -1,7 +1,7 @@
 import { PrimitiveAtom } from "jotai";
-import type { NodeAtom } from "../Node";
+import type { Node } from "../Node";
 
 export type Scope = {
   name: string;
-  nodes: PrimitiveAtom<NodeAtom[]>;
+  nodes: PrimitiveAtom<Node[]>;
 };

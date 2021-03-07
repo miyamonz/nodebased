@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { createNodeAtom } from "./createNodeAtom";
+import { createNode } from "./createNode";
 
 import { createRectAtom } from "../Rect";
 import { defaultNodeSizeVariable } from "./variables";
@@ -13,16 +13,16 @@ function createRect(position: Position) {
   return rect;
 }
 
-export function createNodeAtomFromPosition(name: string, position: Position) {
+export function createNodeFromPosition(name: string, position: Position) {
   const option = nodeOptions.find((option) => option.name === name);
   if (option === undefined) throw new Error(`${name} not found`);
   const args = option.init();
   const rect = createRect(position);
 
-  const nodeAtom = createNodeAtom({
+  const node = createNode({
     name,
     rect,
     ...args,
   });
-  return nodeAtom;
+  return node;
 }
