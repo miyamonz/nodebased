@@ -34,7 +34,7 @@ const selectedAtomJSON = atom(
   },
   (get) => {
     const json = get(selectedAtomJSON);
-    copyToClipboard(JSON.stringify(json, null, 2));
+    copyToClipboard(JSON.stringify(json));
   }
 );
 
