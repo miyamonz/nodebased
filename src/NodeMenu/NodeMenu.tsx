@@ -4,20 +4,7 @@ import { useAppendNode } from "../actions";
 import { useMousePosition } from "../SVGContext";
 import { nodeNames } from "../NodeList/nodes";
 
-const useKeyDown = (code: string, handler: (e: KeyboardEvent) => void) => {
-  const listener = React.useCallback(
-    (e) => {
-      if (e.code === code) handler(e);
-    },
-    [code, handler]
-  );
-  React.useEffect(() => {
-    window.addEventListener("keydown", listener);
-    return () => window.removeEventListener("keydown", listener);
-  }, [listener]);
-
-  return;
-};
+import { useKeyDown } from "./useKeyDown";
 
 const width = 200;
 const optionHeight = 20;
