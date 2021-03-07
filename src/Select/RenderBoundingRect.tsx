@@ -40,10 +40,12 @@ const RenderBoundingRectImpl = () => {
   );
   const buttons = [
     {
+      name: "remove",
       onMouseUp: removeSelected,
       fill: "lightblue",
     },
     {
+      name: "copy",
       onMouseUp: copyToClipboard,
       fill: "orange",
     },
@@ -57,11 +59,13 @@ const RenderBoundingRectImpl = () => {
     <>
       {buttons.map((b, i) => (
         <rect
+          key={b.name}
           x={r.x + r.width - u * (i + 1)}
           y={r.y - u}
           width={u}
           height={u}
-          {...b}
+          fill={b.fill}
+          onMouseUp={b.onMouseUp}
         />
       ))}
       <rect {...r} fill="lightblue" stroke="blue" />
