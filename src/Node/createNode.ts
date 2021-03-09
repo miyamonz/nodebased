@@ -1,22 +1,30 @@
-import type { Node, NodeComponent } from "./types";
+import type { Node, NodeJSON } from "./types";
 
 import { createInputSockets, createOutputSockets } from "../Socket";
-import { RectAtom } from "../Rect";
-import type { Variable } from "../Variable";
 
-export const createNode = ({
-  rect,
-  variable,
-  name,
-  component,
-  id,
-}: {
-  rect: RectAtom;
-  variable: Variable;
-  name: string;
-  component: NodeComponent;
-  id?: string;
-}): Node => {
+import { atom } from "jotai";
+
+import { createRectAtom } from "../Rect";
+import { defaultNodeSizeVariable } from "./variables";
+import { nodeOptions } from "../NodeList";
+import type { Position } from "../Position";
+
+function createRect(position: Position) {
+  const rectPos = atom(position);
+  const outputAtom = defaultNodeSizeVariable.outputAtoms[0];
+  const rect = createRectAtom(rectPos, outputAtom);
+  return rect;
+}
+
+type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+type Props = PartialBy<NodeJSON, "id">;
+export function createNode({ name, position, id }: Props): Node {
+  const option = nodeOptions.find((option) => option.name === name);
+  if (option === undefined) throw new Error(`${name} not found`);
+
+  const { variable, component } = option.init();
+
+  const rect = createRect(position);
   const inputSockets = createInputSockets(rect, variable.inputAtoms);
   const outputSockets = createOutputSockets(rect, variable.outputAtoms);
 
@@ -30,4 +38,4 @@ export const createNode = ({
     component,
     id,
   };
-};
+}

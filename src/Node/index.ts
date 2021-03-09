@@ -1,7 +1,7 @@
 export { hoveredNode, useHoveredNode } from "./RenderNode";
 export { default as RenderNode } from "./RenderNode";
 
-export { createNodeFromPosition } from "./funcs";
+export { createNode } from "./createNode";
 export type { Node, NodeComponent } from "./types";
 export { defaultNodeSizeVariable } from "./variables";
 

@@ -2,7 +2,7 @@ import React from "react";
 
 import { useShortcutPaste } from "./shortcutHooks";
 import { getClipboard } from "../util";
-import { jsonToNode } from "../Node/json";
+import { createNode } from "../Node";
 import { useAppendNode } from "../actions";
 import { useSetSelected } from "../Select";
 
@@ -20,7 +20,7 @@ const Paste = () => {
       const text = await getClipboard();
       try {
         const json = JSON.parse(text);
-        const nodes: Node[] = json.nodes.map(jsonToNode);
+        const nodes: Node[] = json.nodes.map(createNode);
 
         const cjsons: ConnectionJSON[] = json.connections;
         cjsons.map(connectByJson(nodes)).forEach((arg) => setConnect(arg));
