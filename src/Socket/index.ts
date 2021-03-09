@@ -1,10 +1,5 @@
 export { useConnected } from "./utils";
-export type {
-  InputSocket,
-  InputSocketConnected,
-  InputSocketNotConnected,
-  OutputSocket,
-} from "./types";
+export type { InputSocket, OutputSocket } from "./types";
 
 export {
   createInputSocket,
