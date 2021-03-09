@@ -1,5 +1,5 @@
 export { default as TmpConnectLine } from "./TmpConnectLine";
-export type { Connection } from "./types";
+export type { Connection, ConnectionJSON } from "./types";
 
 export { default as RenderConnectionLines } from "./RenderConnectionLines";
 

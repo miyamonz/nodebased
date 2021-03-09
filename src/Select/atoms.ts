@@ -24,7 +24,7 @@ const selectedAtomJSON = atom(
       nodes: nodes.map((node) => {
         return nodeToJson(get, node);
       }),
-      connections: connections.map(connectionToJson),
+      connections: connections.map(connectionToJson(get, nodes)),
     };
   },
   (get) => {

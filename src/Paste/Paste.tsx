@@ -6,8 +6,8 @@ import { createNode } from "../Node";
 import { useAppendNode } from "../actions";
 import { useSetSelected } from "../Select";
 
-import { connectByJson, useConnectSocket } from "../Connect/json";
-import type { ConnectionJSON } from "../Connect/json";
+import { getSocketByJson, useConnectSocket } from "../Connect/json";
+import type { ConnectionJSON } from "../Connect";
 import type { Node } from "../Node";
 
 const Paste = () => {
@@ -23,7 +23,7 @@ const Paste = () => {
         const nodes: Node[] = json.nodes.map(createNode);
 
         const cjsons: ConnectionJSON[] = json.connections;
-        cjsons.map(connectByJson(nodes)).forEach((arg) => setConnect(arg));
+        cjsons.map(getSocketByJson(nodes)).forEach((arg) => setConnect(arg));
 
         const modifyId = nodes.map((n) => ({
           ...n,
