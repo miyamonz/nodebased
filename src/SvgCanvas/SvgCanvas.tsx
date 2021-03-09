@@ -1,8 +1,8 @@
 import React from "react";
 import { SVGProvider } from "../SVGContext";
 import { NodeMenu } from "../NodeMenu";
-import { useAtom } from "jotai";
-import { currentScopeAtom, RenderScopeNode } from "../Scope";
+import { useAtomValue } from "jotai/utils";
+import { currentGraph, RenderGraph } from "../Graph";
 import {
   RenderSelectRect,
   RenderBoundingRect,
@@ -16,7 +16,7 @@ import { Paste } from "../Paste";
 
 function SVGContent() {
   useDragMoveNode();
-  const [scope] = useAtom(currentScopeAtom);
+  const graph = useAtomValue(currentGraph);
   return (
     <>
       <Paste />
@@ -28,7 +28,7 @@ function SVGContent() {
       <RenderSelectRect />
       <RenderConnectionLines />
       <TmpConnectLine />
-      {scope && <RenderScopeNode scope={scope} />}
+      {graph && <RenderGraph graph={graph} />}
       <NodeMenu />
     </>
   );

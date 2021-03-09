@@ -1,13 +1,13 @@
 import { atom, useAtom } from "jotai";
 import { createNode } from "./Node";
-import { currentScopeAtom } from "./Scope";
+import { currentGraph } from "./Graph";
 import type { Node } from "./Node";
 
-export const currentNodesAtom = atom((get) => get(get(currentScopeAtom).nodes));
+export const currentNodesAtom = atom((get) => get(get(currentGraph).nodes));
 
 export const appendNode = atom(null, (get, set, node: Node) => {
-  const currentScope = get(currentScopeAtom);
-  set(currentScope.nodes, (prev) => [...prev, node]);
+  const graph = get(currentGraph);
+  set(graph.nodes, (prev) => [...prev, node]);
 });
 
 type NodeProp = Parameters<typeof createNode>[0];
@@ -33,6 +33,6 @@ export const removeNode = atom(null, (get, set, args: Node | Node[]) => {
       set(isocket.ref, atom(get(isocket.atom)));
     });
 
-  const currentScope = get(currentScopeAtom);
-  set(currentScope.nodes, (prev) => prev.filter((na) => !nodes.includes(na)));
+  const graph = get(currentGraph);
+  set(graph.nodes, (prev) => prev.filter((na) => !nodes.includes(na)));
 });
