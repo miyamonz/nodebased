@@ -1,10 +1,11 @@
 import React from "react";
-import { useMouseToSelect } from "./drag";
-import { useSelectRectAtom } from "./atoms";
+import { useSelectRectAtom, useMouseToSelect } from "./drag";
+import { useClickThenUnselect } from "./useClickThenUnselect";
 
 const RenderSelectRect = () => {
-  const rectProp = useSelectRectAtom();
+  useClickThenUnselect();
   useMouseToSelect();
+  const rectProp = useSelectRectAtom();
 
   return <rect {...rectProp} fill="none" stroke={"red"} />;
 };

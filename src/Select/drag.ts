@@ -1,7 +1,7 @@
 import React from "react";
-import { atom, useAtom } from "jotai";
+import { atom } from "jotai";
+import { useAtomValue, useUpdateAtom } from "jotai/utils";
 
-import { selectRectAtom } from "./atoms";
 import { selectedNodesAtom, useSetSelected } from "./atoms";
 import { hovered } from "./SelectCollisionArea";
 
@@ -10,6 +10,14 @@ import { hoveredNode } from "../Node";
 import { hoveredInputSocketAtom, hoveredOutputSocketAtom } from "../Socket";
 import { intersect, rectFromPos } from "../Rect";
 import { useMouseStream } from "../SVGContext";
+
+import type { Rect } from "../Rect";
+
+//drag rect
+const selectRectAtom = atom<Rect | null>(null);
+export function useSelectRectAtom() {
+  return useAtomValue(selectRectAtom);
+}
 
 const filteredRectAtomListAtom = atom((get) => {
   const currentNodes = get(currentNodesAtom);
@@ -30,28 +38,12 @@ const startConditionAtom = atom((get) => {
   return h && cond && !isSelected;
 });
 
-function useClickThenUnselect() {
-  const setSelected = useSetSelected();
-  const { start, drag, end } = useMouseStream();
-  // on click
-  const isClick = React.useMemo(() => {
-    return start !== null && drag == null && end !== null;
-  }, [start, drag, end]);
-  React.useEffect(() => {
-    if (isClick) {
-      setSelected([]);
-    }
-  }, [isClick]);
-}
-
 export function useMouseToSelect() {
-  useClickThenUnselect();
-
-  const [startCond] = useAtom(startConditionAtom);
+  const startCond = useAtomValue(startConditionAtom);
   const { start, drag, end } = useMouseStream(startCond);
 
   const setSelected = useSetSelected();
-  const [, setSelectRect] = useAtom(selectRectAtom);
+  const setSelectRect = useUpdateAtom(selectRectAtom);
 
   //start
   React.useEffect(() => {
@@ -65,7 +57,7 @@ export function useMouseToSelect() {
     setSelectRect(rectFromPos(start)(drag));
   }, [drag]);
 
-  const [filteredRectAtomList] = useAtom(filteredRectAtomListAtom);
+  const filteredRectAtomList = useAtomValue(filteredRectAtomListAtom);
   //end
   React.useEffect(() => {
     if (end === null) return;

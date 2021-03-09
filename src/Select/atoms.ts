@@ -1,27 +1,19 @@
-import { atom, useAtom } from "jotai";
+import { atom } from "jotai";
+import { useAtomValue, useUpdateAtom } from "jotai/utils";
 import { nodeToJson } from "../Node";
 import type { Node } from "../Node";
-import type { Rect } from "../Rect";
 import { connectionAtom, filterConnection, Connection } from "../Connect";
 import { connectionToJson } from "../Connect/json";
 import { copyToClipboard } from "../util";
 
-//drag rect
-export const selectRectAtom = atom<Rect | null>(null);
-export function useSelectRectAtom() {
-  const [rect] = useAtom(selectRectAtom);
-  return rect;
-}
-
 // selected nodes
 export const selectedNodesAtom = atom<Node[]>([]);
 export function useSelectedNodes() {
-  const [nodes] = useAtom(selectedNodesAtom);
-  return nodes;
+  return useAtomValue(selectedNodesAtom);
 }
 
 export function useSetSelected() {
-  return useAtom(selectedNodesAtom)[1];
+  return useUpdateAtom(selectedNodesAtom);
 }
 
 const selectedAtomJSON = atom(
@@ -42,7 +34,7 @@ const selectedAtomJSON = atom(
 );
 
 export function useCopyToClipboard() {
-  const [, set] = useAtom(selectedAtomJSON);
+  const set = useUpdateAtom(selectedAtomJSON);
   return () => set();
 }
 
