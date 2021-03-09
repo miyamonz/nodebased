@@ -19,7 +19,3 @@ export const currentScopeAtom = atom((get) => {
   if (scope === undefined) throw new Error("scope is not found");
   return scope;
 });
-
-export const appendScope = atom(null, (get, set, scope: Scope) => {
-  set(scopeMapAtom, (prev) => new Map(prev));
-});
