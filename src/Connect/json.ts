@@ -21,7 +21,7 @@ export const connectionToJson = (get: Getter, nodes: Node[]) => (
     (osocket) => osocket.atom === get(isocket.ref)
   );
   const toIdx = toNode.inputs.findIndex(
-    (osocket) => osocket.atom === get(isocket.ref)
+    (isocket) => osocket.atom === get(isocket.ref)
   );
   if (fromIdx === -1) throw new Error("not found");
   if (toIdx === -1) throw new Error("not found");
