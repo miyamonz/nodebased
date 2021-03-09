@@ -11,3 +11,7 @@ export type Graph = {
   nodes: PrimitiveAtom<Node[]>;
   connections: Atom<Connection<unknown>[]>;
 };
+export type GraphView = {
+  nodes: Atom<Node[]>;
+  connections: Atom<Connection<unknown>[]>;
+};

@@ -4,9 +4,9 @@ import { createGraph } from "./funcs";
 import { nodeToJson, createNode } from "../Node";
 import { connectionToJson, useSetConnectionJson } from "../Connect";
 import type { Getter } from "jotai/core/types";
-import type { Graph, GraphJSON } from "./types";
+import type { GraphView, GraphJSON } from "./types";
 
-export const graphToJson = (get: Getter) => (graph: Graph): GraphJSON => {
+export const graphToJson = (get: Getter) => (graph: GraphView): GraphJSON => {
   const { nodes, connections } = graph;
   return {
     nodes: get(nodes).map(nodeToJson(get)),

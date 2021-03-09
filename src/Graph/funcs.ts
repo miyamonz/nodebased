@@ -1,6 +1,7 @@
 import { atom } from "jotai";
+import type { Atom } from "jotai";
 import { getConnections } from "../Connect/atoms";
-import type { Graph } from "./types";
+import type { Graph, GraphView } from "./types";
 import type { Node } from "../Node";
 
 export function createGraph(nodes: Node[]): Graph {
@@ -8,5 +9,12 @@ export function createGraph(nodes: Node[]): Graph {
   return {
     nodes: nodesAtom,
     connections: atom((get) => get(getConnections(nodes))),
+  };
+}
+
+export function getGraphViewByNodes(nodesAtom: Atom<Node[]>): GraphView {
+  return {
+    nodes: nodesAtom,
+    connections: atom((get) => get(getConnections(get(nodesAtom)))),
   };
 }
