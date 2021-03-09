@@ -45,7 +45,10 @@ function NodeMenu() {
   const posWhenOpen = React.useMemo(() => {
     return position;
   }, [open]);
-  useKeyDown("Space", () => setOpen((prev) => !prev));
+  useKeyDown(
+    "Space",
+    React.useCallback(() => setOpen((prev) => !prev), [])
+  );
 
   const [text] = useAtom(textAtom);
 

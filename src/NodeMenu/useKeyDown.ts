@@ -8,7 +8,7 @@ export const useKeyDown = (
     (e) => {
       if (e.code === code) handler(e);
     },
-    [code, handler]
+    [code]
   );
   React.useEffect(() => {
     window.addEventListener("keydown", listener);
