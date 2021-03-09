@@ -4,7 +4,6 @@ import type { Connection } from "./types";
 import type { OutputSocket } from "../Socket";
 import type { Scope } from "../Scope/types";
 import { currentScopeAtom } from "../Scope";
-import type { Node } from "../Node";
 
 // output
 export const connectTargetAtom = atom<OutputSocket<unknown> | null>(null);
@@ -35,17 +34,5 @@ function getConnections(scope: Scope): Atom<Connection<unknown>[]> {
       .filter((a): a is Connection<unknown> => a !== undefined);
 
     return connections;
-  });
-}
-
-export function filterConnection(
-  nodes: Node[],
-  connections: Connection<unknown>[]
-) {
-  return connections.filter((c) => {
-    return (
-      nodes.flatMap((n) => n.outputs).includes(c.from) &&
-      nodes.flatMap((n) => n.inputs).includes(c.to)
-    );
   });
 }
