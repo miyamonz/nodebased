@@ -2,9 +2,9 @@ import type { CreateNodeProps } from "./types";
 import type { NodeComponent } from "../Node";
 
 // variables
-import { defaultNodeSizeVariable } from "../Node";
+import { defaultNodeSizeVariable } from "../Node/variables"; //bug
 import { socketRadiusVariable } from "../Socket";
-import { Variable } from "../Variable";
+import type { Variable } from "../Variable";
 
 import { createVariableFromFn } from "./funcs";
 
