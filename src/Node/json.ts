@@ -1,7 +1,7 @@
-import { Getter } from "jotai/core/types";
+import type { Getter } from "jotai/core/types";
 import type { Node, NodeJSON } from "./types";
 
-export function nodeToJson(get: Getter, node: Node): NodeJSON {
+export const nodeToJson = (get: Getter) => (node: Node): NodeJSON => {
   const rect = get(node.rect);
   return {
     name: node.name,
@@ -11,4 +11,4 @@ export function nodeToJson(get: Getter, node: Node): NodeJSON {
       y: rect.y,
     },
   };
-}
+};

@@ -5,4 +5,4 @@ export { createNode } from "./createNode";
 export { defaultNodeSizeVariable } from "./variables";
 
 export { nodeToJson } from "./json";
-export type { Node, NodeComponent } from "./types";
+export type { Node, NodeJSON, NodeComponent } from "./types";
