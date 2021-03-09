@@ -6,13 +6,13 @@ import { createNode } from "../Node";
 import { useAppendNode } from "../actions";
 import { useSetSelected } from "../Select";
 
-import { getSocketByJson, useConnectSocket } from "../Connect/json";
+import { useSetConnectionJson } from "../Connect/json";
 import type { ConnectionJSON } from "../Connect";
 import type { Node } from "../Node";
 
 const Paste = () => {
   const setSelected = useSetSelected();
-  const setConnect = useConnectSocket();
+  const setConnection = useSetConnectionJson();
 
   const appendNode = useAppendNode();
   useShortcutPaste(
@@ -23,7 +23,7 @@ const Paste = () => {
         const nodes: Node[] = json.nodes.map(createNode);
 
         const cjsons: ConnectionJSON[] = json.connections;
-        cjsons.map(getSocketByJson(nodes)).forEach((arg) => setConnect(arg));
+        cjsons.forEach((c) => setConnection({ nodes, c }));
 
         const modifyId = nodes.map((n) => ({
           ...n,

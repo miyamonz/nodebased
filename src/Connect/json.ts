@@ -1,8 +1,7 @@
 import { atom } from "jotai";
+import { useUpdateAtom } from "jotai/utils";
 import type { Connection, ConnectionJSON } from "./types";
 import type { Node } from "../Node";
-import { useUpdateAtom } from "jotai/utils";
-import type { InputSocket, OutputSocket } from "../Socket";
 
 export const connectionToJson = (nodes: Node[]) => (
   c: Connection<unknown>
@@ -33,27 +32,19 @@ export const connectionToJson = (nodes: Node[]) => (
   };
 };
 
-const connectSocketAtom = atom(
+const setConnectionJsonAtom = atom(
   null,
-  (
-    _get,
-    set,
-    [from, to]: readonly [OutputSocket<unknown>, InputSocket<unknown>]
-  ) => {
-    set(to.ref, from.atom);
+  (_get, set, { nodes, c }: { nodes: Node[]; c: ConnectionJSON }) => {
+    const fromNode = nodes.find((n) => n.id === c.from.node);
+    const toNode = nodes.find((n) => n.id === c.to.node);
+    if (fromNode === undefined || toNode === undefined) {
+      throw new Error("node not found");
+    }
+    const outSocket = fromNode.outputs[c.from.socket];
+    const inSocket = toNode.inputs[c.to.socket];
+    set(inSocket.ref, outSocket.atom);
   }
 );
-export function useConnectSocket() {
-  return useUpdateAtom(connectSocketAtom);
+export function useSetConnectionJson() {
+  return useUpdateAtom(setConnectionJsonAtom);
 }
-
-export const getSocketByJson = (nodes: Node[]) => (c: ConnectionJSON) => {
-  const fromNode = nodes.find((n) => n.id === c.from.node);
-  const toNode = nodes.find((n) => n.id === c.to.node);
-  if (fromNode === undefined || toNode === undefined) {
-    throw new Error("node not found");
-  }
-  const outSocket = fromNode.outputs[c.from.socket];
-  const inSocket = toNode.inputs[c.to.socket];
-  return [outSocket, inSocket] as const;
-};
