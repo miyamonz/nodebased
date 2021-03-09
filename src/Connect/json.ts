@@ -1,11 +1,10 @@
 import { atom } from "jotai";
-import type { Getter } from "jotai/core/types";
 import type { Connection, ConnectionJSON } from "./types";
 import type { Node } from "../Node";
 import { useUpdateAtom } from "jotai/utils";
 import type { InputSocket, OutputSocket } from "../Socket";
 
-export const connectionToJson = (get: Getter, nodes: Node[]) => (
+export const connectionToJson = (nodes: Node[]) => (
   c: Connection<unknown>
 ): ConnectionJSON => {
   const isocket = c.to;
@@ -17,12 +16,8 @@ export const connectionToJson = (get: Getter, nodes: Node[]) => (
   if (fromNode === undefined || toNode === undefined)
     throw new Error("socket not found");
 
-  const fromIdx = fromNode.outputs.findIndex(
-    (osocket) => osocket.atom === get(isocket.ref)
-  );
-  const toIdx = toNode.inputs.findIndex(
-    (isocket) => osocket.atom === get(isocket.ref)
-  );
+  const fromIdx = fromNode.outputs.findIndex((output) => output === osocket);
+  const toIdx = toNode.inputs.findIndex((input) => input === isocket);
   if (fromIdx === -1) throw new Error("not found");
   if (toIdx === -1) throw new Error("not found");
 
