@@ -5,8 +5,8 @@ import type { AtomRef } from "../AtomRef";
 import type { RectAtom } from "../Rect";
 import type { PositionAtom } from "../Position";
 
-import { connectionAtom } from "../Connect/atoms";
-import { Connection } from "../Connect/types";
+import { connectionAtom } from "../Connect";
+import type { Connection } from "../Connect";
 
 export const createInputSocket = <IN>(
   defaultAtom: AtomRef<IN>,
