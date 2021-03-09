@@ -1,5 +1,6 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
+import type { Atom } from "jotai";
 import type { Node } from "./types";
 import { useSelectedNodes } from "../Select";
 import { InputCircle, OutputCircle } from "../Socket";
