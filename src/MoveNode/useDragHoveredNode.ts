@@ -1,18 +1,20 @@
-import { useState } from "react";
 import { useEffect } from "react";
-import { useAtom } from "jotai";
+import { atom, useAtom } from "jotai";
 import { useHoveredNode } from "../Node";
+import type { Node } from "../Node";
 import { useSelectedNodes } from "../Select";
 import { useMouseStream } from "../SVGContext";
 
 import { setGrabAtom, setDragDiffAtom } from "./drag";
 
+export const grabbedNodeAtom = atom<Node | null>(null);
+
 export function useDragHoveredNode() {
   const hoveredNode = useHoveredNode();
   const selectedNodes = useSelectedNodes();
-  const startCond = hoveredNode !== null && selectedNodes.length <= 1;
-  const { start, drag } = useMouseStream(startCond);
-  const [grabbed, setGrabbed] = useState<typeof hoveredNode | null>(null);
+  const startCond = hoveredNode !== null && selectedNodes.length < 1;
+  const { start, drag, end } = useMouseStream(startCond);
+  const [grabbed, setGrabbed] = useAtom(grabbedNodeAtom);
 
   const [, setGrab] = useAtom(setGrabAtom);
   useEffect(() => {
@@ -29,4 +31,8 @@ export function useDragHoveredNode() {
     const mouseDiff = { x: drag.x - start.x, y: drag.y - start.y };
     setDragDiff([mouseDiff, [grabbed]]);
   }, [drag]);
+  useEffect(() => {
+    if (end === null) return;
+    setGrabbed(null);
+  }, [end]);
 }

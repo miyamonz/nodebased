@@ -21,6 +21,7 @@ import unpack from "./unpack";
 import onMouse from "./onMouse";
 import press from "./press";
 import mouse from "./mouse";
+import asFn from "./asFn";
 
 type OptionBase = {
   name: string;
@@ -91,6 +92,7 @@ const _nodeOptions = [
   press,
   unpack,
   mouse,
+  asFn,
 ];
 export const nodeOptions: Option[] = _nodeOptions.map((option) => ({
   name: option.name,

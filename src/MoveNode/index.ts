@@ -5,3 +5,5 @@ export function useDragMoveNode() {
   useDragSelected();
   useDragHoveredNode();
 }
+
+export { grabbedNodeAtom } from "./useDragHoveredNode";
