@@ -63,5 +63,5 @@ export function useMouseToSelect() {
     if (end === null) return;
     setSelected(filteredRectAtomList);
     setSelectRect(null);
-  }, [end]);
+  }, [end?.x, end?.y]);
 }
