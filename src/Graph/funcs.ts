@@ -4,7 +4,7 @@ import { getConnections } from "../Connect/atoms";
 import type { Graph, GraphView } from "./types";
 import type { Node } from "../Node";
 
-export function createGraph(nodes: Node[]): Graph {
+export function createGraphByNode(nodes: Node[]): Graph {
   const nodesAtom = atom<Node[]>(nodes);
   return {
     nodes: nodesAtom,

@@ -1,4 +1,5 @@
 import React from "react";
+import { useAtomCallback } from "jotai/utils";
 
 import { useShortcutPaste } from "./shortcutHooks";
 import { getClipboard } from "../util";
@@ -13,12 +14,13 @@ const Paste = () => {
   const appendNode = useAppendNode();
   const setSelected = useSetSelected();
 
-  useShortcutPaste(
-    React.useCallback(async () => {
+  const callback = useAtomCallback(
+    React.useCallback(async (get) => {
       const text = await getClipboard();
       try {
         const json = JSON.parse(text);
-        const { nodes } = createGraph(json);
+        const graph = createGraph(json);
+        const nodes = get(graph.nodes);
 
         nodes.forEach(appendNode);
         setSelected(nodes);
@@ -27,6 +29,7 @@ const Paste = () => {
       }
     }, [])
   );
+  useShortcutPaste(callback);
 
   return <></>;
 };

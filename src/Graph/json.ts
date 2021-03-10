@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { createGraph } from "./funcs";
+import { createGraphByNode } from "./funcs";
 
 import { nodeToJson, createNode } from "../Node";
 import { connectionToJson, useSetConnectionJson } from "../Connect";
@@ -23,7 +23,7 @@ export function useCreateGraph() {
       ...n,
       id: Math.floor(Math.random() * 10 ** 12).toString(),
     }));
-    return { graph: createGraph(_nodes), nodes: _nodes };
+    return createGraphByNode(_nodes);
   }, []);
   return callback;
 }
