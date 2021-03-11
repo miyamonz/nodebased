@@ -46,9 +46,10 @@ function getComponent(
 
 const option = {
   name: "slider",
-  init: () => {
-    const inputRef = createAtomRef(atom(0));
-    const internalAtom = atom(0);
+  init: (args?: { data?: JSON }) => {
+    const initialValue = typeof args?.data === "number" ? args.data : 0;
+    const inputRef = createAtomRef(atom(initialValue));
+    const internalAtom = atom(initialValue);
 
     const outputAtom = atom((get) => {
       const inputAtom = get(inputRef);
@@ -61,7 +62,7 @@ const option = {
     const outputAtoms = [outputAtom];
     const variable = { inputAtoms, outputAtoms };
     const component = getComponent(inputRef, internalAtom, outputAtom);
-    return { variable, component };
+    return { variable, component, saveData: true };
   },
 };
 

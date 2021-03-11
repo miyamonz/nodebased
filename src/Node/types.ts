@@ -5,6 +5,7 @@ export type NodeJSON = {
   name: string;
   position: { x: number; y: number };
   id: string;
+  data?: JSON;
 };
 
 export type Node = {
@@ -14,5 +15,6 @@ export type Node = {
   name: string;
   component: NodeComponent;
   id: string;
+  saveData: boolean;
 };
 export type NodeComponent = React.FC<{ node: Node }>;

@@ -24,7 +24,7 @@ import asFn from "./asFn";
 
 type Option = {
   name: string;
-  init: () => Omit<CreateNodeProps, "position" | "name">;
+  init: (arg?: { data?: JSON }) => Omit<CreateNodeProps, "position" | "name">;
 };
 
 const optionFromVariable = (name: string, variable: Variable) => ({
@@ -53,6 +53,9 @@ const _nodeOptions = [
 ];
 export const nodeOptions: Option[] = _nodeOptions.map((option) => ({
   name: option.name,
-  init: () => ({ component: () => null, ...option.init() }),
+  init: (...args: any[]) => ({
+    component: () => null,
+    ...option.init(...args),
+  }),
 })) as any;
 export const nodeNames: string[] = nodeOptions.map((o) => o.name);

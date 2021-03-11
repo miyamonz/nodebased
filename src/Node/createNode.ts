@@ -18,11 +18,11 @@ function createRect(position: Position) {
 
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type Props = PartialBy<NodeJSON, "id">;
-export function createNode({ name, position, id }: Props): Node {
+export function createNode({ name, position, id, data }: Props): Node {
   const option = nodeOptions.find((option) => option.name === name);
   if (option === undefined) throw new Error(`${name} not found`);
 
-  const { variable, component } = option.init();
+  const { variable, component, saveData } = option.init({ data });
 
   const rect = createRect(position);
   const inputSockets = createInputSockets(rect, variable.inputAtoms);
@@ -37,5 +37,6 @@ export function createNode({ name, position, id }: Props): Node {
     name,
     component,
     id,
+    saveData,
   };
 }
