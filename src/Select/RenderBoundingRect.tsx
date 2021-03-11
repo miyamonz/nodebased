@@ -1,10 +1,12 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
-import { selectedNodesAtom } from "./atoms";
+import { selectedNodesAtom, selectedGraphAtom } from "./atoms";
 import { useCopyToClipboard } from "./atoms";
 import { boundingRect, offsetRect } from "../Rect";
 
-import { removeNode } from "../actions";
+import { removeNode, useAppendNode } from "../actions";
+
+import { useCreateGraphNode } from "../GraphNode";
 
 import { useShortcutCopy } from "./shortcutHooks";
 
@@ -31,8 +33,11 @@ const RenderBoundingRect = () => {
 };
 
 const RenderBoundingRectImpl = () => {
+  const [graph] = useAtom(selectedGraphAtom);
+  const append = useAppendNode();
   const removeSelected = useRemoveSelected();
   const copyToClipboard = useCopyToClipboard();
+  const createGraphNode = useCreateGraphNode();
   useShortcutCopy(
     React.useCallback(() => {
       copyToClipboard();
@@ -48,6 +53,13 @@ const RenderBoundingRectImpl = () => {
       name: "copy",
       onMouseUp: copyToClipboard,
       fill: "orange",
+    },
+    {
+      name: "sub node",
+      onMouseUp: () => {
+        createGraphNode(graph).then(append);
+      },
+      fill: "green",
     },
   ];
 

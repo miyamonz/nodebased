@@ -14,7 +14,7 @@ export function useSetSelected() {
   return useUpdateAtom(selectedNodesAtom);
 }
 
-const selectedGraphAtom = atom(() => {
+export const selectedGraphAtom = atom(() => {
   return getGraphViewByNodes(selectedNodesAtom);
 });
 
