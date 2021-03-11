@@ -21,6 +21,7 @@ import onMouse from "./onMouse";
 import press from "./press";
 import mouse from "./mouse";
 import asFn from "./asFn";
+import jsonNode from "./jsonNode";
 
 type Option = {
   name: string;
@@ -50,6 +51,7 @@ const _nodeOptions = [
   unpack,
   mouse,
   asFn,
+  jsonNode,
 ];
 export const nodeOptions: Option[] = _nodeOptions.map((option) => ({
   name: option.name,
