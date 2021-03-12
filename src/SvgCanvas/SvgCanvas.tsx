@@ -2,7 +2,7 @@ import React from "react";
 import { SVGProvider } from "../SVGContext";
 import { NodeMenu } from "../NodeMenu";
 import { useAtomValue } from "jotai/utils";
-import { currentGraphAtom, RenderGraph, RenderCurrentKey } from "../Graph";
+import { currentGraphAtom, RenderGraph } from "../Graph";
 import {
   RenderSelectRect,
   RenderBoundingRect,
@@ -24,7 +24,6 @@ function SVGContent() {
         nodebased
       </text>
       <SelectCollisionArea />
-      <RenderCurrentKey transform="translate(100 20)" />
       <RenderBoundingRect />
       <RenderSelectRect />
       <RenderConnectionLines />
