@@ -13,7 +13,7 @@ export const currentNodesAtom = atom<Node[], SetStateAction<Node[]>>(
   }
 );
 
-export const appendNode = atom(null, (_get, set, node: Node) => {
+const appendNode = atom(null, (_get, set, node: Node) => {
   set(currentNodesAtom, (prev) => [...prev, node]);
 });
 

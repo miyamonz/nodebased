@@ -26,7 +26,7 @@ export function useCreateGraphNode() {
         outputAtoms: [atom((_get) => json)],
       };
       const prop = {
-        name: "json",
+        name: "graph",
         position,
         variable,
         component: createComponent(json),
