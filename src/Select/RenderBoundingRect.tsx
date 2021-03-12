@@ -85,4 +85,4 @@ const RenderBoundingRectImpl = () => {
   );
 };
 
-export default React.memo(RenderBoundingRect);
+export default RenderBoundingRect;

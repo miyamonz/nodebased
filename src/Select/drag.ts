@@ -49,13 +49,13 @@ export function useMouseToSelect() {
   React.useEffect(() => {
     if (start === null) return;
     setSelected([]);
-  }, [start]);
+  }, [start?.x, start?.y]);
 
   //drag
   React.useEffect(() => {
     if (start === null || drag === null) return;
     setSelectRect(rectFromPos(start)(drag));
-  }, [drag]);
+  }, [drag?.x, drag?.y]);
 
   const filteredRectAtomList = useAtomValue(filteredRectAtomListAtom);
   //end

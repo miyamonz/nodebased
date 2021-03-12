@@ -15,12 +15,12 @@ export function useDragSelected() {
   useEffect(() => {
     if (start === null) return;
     setGrab(dragTarget);
-  }, [start]);
+  }, [start?.x, start?.y]);
   const [, setDragDiff] = useAtom(setDragDiffAtom);
 
   useEffect(() => {
     if (start === null || drag === null) return;
     const mouseDiff = { x: drag.x - start.x, y: drag.y - start.y };
     setDragDiff([mouseDiff, dragTarget]);
-  }, [drag]);
+  }, [drag?.x, drag?.y]);
 }
