@@ -7,6 +7,7 @@ import { createNode } from "../Node";
 import type { Node } from "../Node";
 import { graphToJson } from "../Graph";
 import type { GraphView } from "../Graph";
+import { getCenter } from "../Position";
 
 export function useCreateGraphNode() {
   const [, remove] = useAtom(removeNode);
@@ -15,16 +16,7 @@ export function useCreateGraphNode() {
     useCallback((get, _set, graph) => {
       const nodes = get(graph.nodes);
       remove(nodes);
-      const sum = nodes
-        .map((node) => get(node.rect))
-        .reduce((acc, rect) => ({ x: acc.x + rect.x, y: acc.y + rect.y }), {
-          x: 0,
-          y: 0,
-        });
-      const position = {
-        x: sum.x / nodes.length,
-        y: sum.y / nodes.length,
-      };
+      const position = getCenter(nodes.map((n) => get(n.rect)));
 
       const json = graphToJson(get)(graph);
 
