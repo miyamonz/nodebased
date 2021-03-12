@@ -4,7 +4,7 @@ import { selectedNodesAtom, selectedGraphAtom } from "./atoms";
 import { useCopyToClipboard } from "./atoms";
 import { boundingRect, offsetRect } from "../Rect";
 
-import { removeNode, useAppendNode } from "../actions";
+import { useRemoveNode, useAppendNode } from "../actions";
 
 import { useCreateGraphNode } from "../GraphNode";
 
@@ -17,7 +17,7 @@ const boundingRectAtom = atom((get) => {
 
 function useRemoveSelected() {
   const [nodes, setNodes] = useAtom(selectedNodesAtom);
-  const [, remove] = useAtom(removeNode);
+  const remove = useRemoveNode();
   const removeCallback = React.useCallback(() => {
     remove(nodes);
     setNodes([]);

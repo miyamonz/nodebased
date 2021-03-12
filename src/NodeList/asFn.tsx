@@ -8,7 +8,7 @@ import { useMouseStream } from "../SVGContext";
 
 import { grabbedNodeAtom } from "../MoveNode";
 import { intersect } from "../Rect";
-import { removeNode } from "../actions";
+import { useRemoveNode } from "../actions";
 
 const grabbedRectAtom = atom((get) => {
   const node = get(grabbedNodeAtom);
@@ -28,7 +28,7 @@ function getComponent(dropNodeAtom: PrimitiveAtom<Node | null>) {
       return intersect(rect)(grabbedRect);
     }, [grabbedRect?.x, grabbedRect?.y]);
 
-    const [, remove] = useAtom(removeNode);
+    const remove = useRemoveNode();
     const { end } = useMouseStream(grabbedRect === null);
     useEffect(() => {
       if (end && isIntersect && grabbed) {

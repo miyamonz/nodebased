@@ -1,4 +1,5 @@
-import { atom, useAtom } from "jotai";
+import { atom } from "jotai";
+import { useUpdateAtom } from "jotai/utils";
 import type { SetStateAction } from "jotai/core/types";
 import { createNodeByName } from "./Node";
 import { currentGraphAtom } from "./Graph";
@@ -18,7 +19,7 @@ export const appendNode = atom(null, (_get, set, node: Node) => {
 
 type NodeProp = Parameters<typeof createNodeByName>[0];
 export function useAppendNodeByName() {
-  const [, append] = useAtom(appendNode);
+  const append = useUpdateAtom(appendNode);
   const set = (prop: NodeProp) => {
     const node = createNodeByName(prop);
     append(node);
@@ -26,11 +27,10 @@ export function useAppendNodeByName() {
   return set;
 }
 export function useAppendNode() {
-  const [, set] = useAtom(appendNode);
-  return set;
+  return useUpdateAtom(appendNode);
 }
 
-export const removeNode = atom(null, (get, set, args: Node | Node[]) => {
+const removeNode = atom(null, (get, set, args: Node | Node[]) => {
   const nodes = Array.isArray(args) ? args : [args];
 
   nodes
@@ -41,3 +41,7 @@ export const removeNode = atom(null, (get, set, args: Node | Node[]) => {
 
   set(currentNodesAtom, (prev) => prev.filter((na) => !nodes.includes(na)));
 });
+
+export function useRemoveNode() {
+  return useUpdateAtom(removeNode);
+}
