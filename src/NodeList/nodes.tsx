@@ -22,6 +22,7 @@ import press from "./press";
 import mouse from "./mouse";
 import asFn from "./asFn";
 import jsonNode from "./jsonNode";
+import { option as graph } from "../GraphNode";
 
 type Option = {
   name: string;
@@ -52,6 +53,7 @@ const _nodeOptions = [
   mouse,
   asFn,
   jsonNode,
+  graph,
 ];
 export const nodeOptions: Option[] = _nodeOptions.map((option) => ({
   name: option.name,
