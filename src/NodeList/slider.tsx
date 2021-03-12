@@ -46,7 +46,7 @@ function getComponent(
 
 const option = {
   name: "slider",
-  init: (args?: { data?: JSON }) => {
+  init: (args?: { data?: number }) => {
     const initialValue = typeof args?.data === "number" ? args.data : 0;
     const inputRef = createAtomRef(atom(initialValue));
     const internalAtom = atom(initialValue);

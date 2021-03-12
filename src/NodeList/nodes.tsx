@@ -25,7 +25,7 @@ import jsonNode from "./jsonNode";
 
 type Option = {
   name: string;
-  init: (arg?: { data?: JSON }) => Omit<CreateNodeProps, "position" | "name">;
+  init: (arg?: { data?: {} }) => Omit<CreateNodeProps, "position" | "name">;
 };
 
 const optionFromVariable = (name: string, variable: Variable) => ({

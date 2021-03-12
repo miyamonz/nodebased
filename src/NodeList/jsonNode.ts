@@ -3,7 +3,7 @@ import type { InputAtom, OutputAtom } from "../Variable";
 
 const option = {
   name: "json",
-  init: (args?: { data?: JSON }) => {
+  init: (args?: { data?: {} }) => {
     const dataAtomRef = atom(atom(args?.data ?? {}));
     const inputAtoms: InputAtom<unknown>[] = [];
     const outputAtoms: OutputAtom<unknown>[] = [

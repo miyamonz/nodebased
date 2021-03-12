@@ -5,7 +5,7 @@ export type NodeJSON = {
   name: string;
   position: { x: number; y: number };
   id: string;
-  data?: JSON;
+  data?: {};
 };
 
 export type Node = {
