@@ -21,15 +21,16 @@ export function useCreateGraphNode() {
 
       const json = graphToJson(get)(graph);
 
+      const jsonAtom = atom(json);
       const variable: Variable = {
         inputAtoms: [],
-        outputAtoms: [atom((_get) => json)],
+        outputAtoms: [jsonAtom],
       };
       const prop = {
         name: "graph",
         position,
         variable,
-        component: createComponent(json),
+        component: createComponent(jsonAtom),
         saveData: true,
       };
       const node = createNode(prop);

@@ -1,13 +1,23 @@
-import { useAtom } from "jotai";
+import { atom, useAtom } from "jotai";
+import type { PrimitiveAtom } from "jotai";
 import type { NodeComponent } from "../Node";
-import { useSetGraphJSON } from "../Graph";
-import type { GraphJSON } from "../Graph";
+import { usePushGraphJSON } from "../Graph";
+import { graphToJson } from "../Graph";
+import type { GraphJSON, Graph } from "../Graph";
 
-export function createComponent(json: GraphJSON) {
+export function createComponent(jsonAtom: PrimitiveAtom<GraphJSON>) {
+  const setGraphAtom = atom(null, (get, set, graph: Graph) => {
+    const json = graphToJson(get)(graph);
+    set(jsonAtom, json);
+  });
+
   const GraphNode: NodeComponent = ({ node }) => {
-    const setGraphJSON = useSetGraphJSON();
+    const pushGraphJSON = usePushGraphJSON();
     const [rect] = useAtom(node.rect);
     const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+
+    const [json] = useAtom(jsonAtom);
+    const [, setGraph] = useAtom(setGraphAtom);
 
     return (
       <>
@@ -28,7 +38,7 @@ export function createComponent(json: GraphJSON) {
           width={rect.width}
           height={rect.height / 2}
           fill="transparent"
-          onClick={() => setGraphJSON(json)}
+          onClick={() => pushGraphJSON(json, setGraph)}
         />
       </>
     );
