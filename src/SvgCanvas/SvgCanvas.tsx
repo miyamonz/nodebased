@@ -2,7 +2,7 @@ import React from "react";
 import { SVGProvider } from "../SVGContext";
 import { NodeMenu } from "../NodeMenu";
 import { useAtomValue } from "jotai/utils";
-import { currentGraph, RenderGraph, RenderCurrentKey } from "../Graph";
+import { currentGraphAtom, RenderGraph, RenderCurrentKey } from "../Graph";
 import {
   RenderSelectRect,
   RenderBoundingRect,
@@ -16,7 +16,7 @@ import { Paste } from "../Paste";
 
 function SVGContent() {
   useDragMoveNode();
-  const graph = useAtomValue(currentGraph);
+  const graph = useAtomValue(currentGraphAtom);
   return (
     <>
       <Paste />

@@ -1,5 +1,6 @@
 import { useAtom } from "jotai";
 import type { NodeComponent } from "../Node";
+import { currentKeyAtom } from "../Graph";
 import type { GraphJSON } from "../Graph";
 
 export function createComponent(json: GraphJSON) {

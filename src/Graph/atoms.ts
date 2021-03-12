@@ -1,11 +1,16 @@
+import { useUpdateAtom } from "jotai/utils";
 import { atom } from "jotai";
-import { atomFamily } from "jotai/utils";
 import { createGraphByNode } from "./funcs";
 import type { Graph } from "./types";
 
-export const currentKeyAtom = atom("");
-export const currentGraph = atom<Graph>((get) =>
-  get(graphAtomFamily(get(currentKeyAtom)))
-);
+const rootGraph = createGraphByNode([]);
+export const currentGraphAtom = atom<Graph>(rootGraph);
 
-export const graphAtomFamily = atomFamily((_name) => createGraphByNode([]));
+const rootGraphAtom = atom<Graph>((_get) => rootGraph);
+const setRootGraphAtom = atom(null, (get, set) => {
+  set(currentGraphAtom, get(rootGraphAtom));
+});
+
+export function useSetRootGraph() {
+  return useUpdateAtom(setRootGraphAtom);
+}

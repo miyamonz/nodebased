@@ -1,13 +1,13 @@
 import { atom, useAtom } from "jotai";
 import type { SetStateAction } from "jotai/core/types";
 import { createNodeByName } from "./Node";
-import { currentGraph } from "./Graph";
+import { currentGraphAtom } from "./Graph";
 import type { Node } from "./Node";
 
 export const currentNodesAtom = atom<Node[], SetStateAction<Node[]>>(
-  (get) => get(get(currentGraph).nodes),
+  (get) => get(get(currentGraphAtom).nodes),
   (get, set, action: SetStateAction<Node[]>) => {
-    const graph = get(currentGraph);
+    const graph = get(currentGraphAtom);
     set(graph.nodes, action);
   }
 );
