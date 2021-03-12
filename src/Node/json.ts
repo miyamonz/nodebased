@@ -1,5 +1,6 @@
 import type { Getter } from "jotai/core/types";
 import type { Node, NodeJSON } from "./types";
+import { createNodeByName } from "./createNode";
 
 export const nodeToJson = (get: Getter) => (node: Node): NodeJSON => {
   const rect = get(node.rect);
@@ -13,3 +14,5 @@ export const nodeToJson = (get: Getter) => (node: Node): NodeJSON => {
     data: node.saveData ? (get(node.outputs[0].atom) as JSON) : undefined,
   };
 };
+
+export const jsonToNode = createNodeByName;

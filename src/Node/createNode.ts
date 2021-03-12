@@ -18,7 +18,7 @@ function createRect(position: Position) {
 
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type Props = PartialBy<NodeJSON, "id">;
-export function createNode({ name, position, id, data }: Props): Node {
+export function createNodeByName({ name, position, id, data }: Props): Node {
   const option = nodeOptions.find((option) => option.name === name);
   if (option === undefined) throw new Error(`${name} not found`);
 

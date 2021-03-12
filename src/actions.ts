@@ -1,6 +1,6 @@
 import { atom, useAtom } from "jotai";
 import type { SetStateAction } from "jotai/core/types";
-import { createNode } from "./Node";
+import { createNodeByName } from "./Node";
 import { currentGraph } from "./Graph";
 import type { Node } from "./Node";
 
@@ -16,11 +16,11 @@ export const appendNode = atom(null, (_get, set, node: Node) => {
   set(currentNodesAtom, (prev) => [...prev, node]);
 });
 
-type NodeProp = Parameters<typeof createNode>[0];
+type NodeProp = Parameters<typeof createNodeByName>[0];
 export function useAppendNodeByName() {
   const [, append] = useAtom(appendNode);
   const set = (prop: NodeProp) => {
-    const node = createNode(prop);
+    const node = createNodeByName(prop);
     append(node);
   };
   return set;

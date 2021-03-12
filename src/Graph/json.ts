@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { createGraphByNode } from "./funcs";
 
-import { nodeToJson, createNode } from "../Node";
+import { nodeToJson, jsonToNode } from "../Node";
 import { connectionToJson, useSetConnectionJson } from "../Connect";
 import type { Getter } from "jotai/core/types";
 import type { GraphView, GraphJSON } from "./types";
@@ -17,7 +17,7 @@ export const graphToJson = (get: Getter) => (graph: GraphView): GraphJSON => {
 export function useCreateGraph() {
   const setConnect = useSetConnectionJson();
   const callback = useCallback((graphJson: GraphJSON) => {
-    const nodes = graphJson.nodes.map(createNode);
+    const nodes = graphJson.nodes.map(jsonToNode);
     graphJson.connections.forEach((c) => setConnect({ nodes, c }));
     const _nodes = nodes.map((n) => ({
       ...n,
