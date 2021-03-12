@@ -5,6 +5,7 @@ import { createComponent } from "./GraphNode";
 import { removeNode } from "../actions";
 import { createNode } from "../Node";
 import type { Node } from "../Node";
+import type { Variable } from "../Variable";
 import { graphToJson } from "../Graph";
 import type { GraphView } from "../Graph";
 import { getCenter } from "../Position";
@@ -20,15 +21,18 @@ export function useCreateGraphNode() {
 
       const json = graphToJson(get)(graph);
 
-      const variable = { inputAtoms: [], outputAtoms: [atom(() => json)] };
-
+      const variable: Variable = {
+        inputAtoms: [],
+        outputAtoms: [atom((_get) => json)],
+      };
       const prop = {
         name: "json",
         position,
-        data: json,
+        variable,
+        component: createComponent(json),
+        saveData: true,
       };
       const node = createNode(prop);
-      node.component = createComponent(json);
 
       return node;
     }, [])

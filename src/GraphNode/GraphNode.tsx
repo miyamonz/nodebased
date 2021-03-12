@@ -11,6 +11,24 @@ export function createComponent(json: GraphJSON) {
     return (
       <>
         <text {...center}>graph</text>
+        <rect
+          x={rect.x}
+          y={rect.y + rect.height / 2}
+          width={rect.width}
+          height={rect.height / 2}
+          fill="lightgreen"
+        />
+        <text x={rect.x} y={rect.y + rect.height / 2 + 20}>
+          edit
+        </text>
+        <rect
+          x={rect.x}
+          y={rect.y + rect.height / 2}
+          width={rect.width}
+          height={rect.height / 2}
+          fill="transparent"
+          onClick={() => alert(json)}
+        />
       </>
     );
   };

@@ -1,4 +1,5 @@
-import type { Node, NodeJSON } from "./types";
+import type { Node, NodeJSON, NodeComponent } from "./types";
+import type { Variable } from "../Variable";
 
 import { createInputSockets, createOutputSockets } from "../Socket";
 
