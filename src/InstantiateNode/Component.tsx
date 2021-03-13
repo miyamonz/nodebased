@@ -18,14 +18,12 @@ export function createComponent(graphJsonAtom: Atom<GraphJSON>) {
   const GraphNode: NodeComponent = ({ node }) => {
     const pushGraphJSON = usePushGraphJSON();
     const [rect] = useAtom(node.rect);
-    const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
 
     const graph = useGraph(graphJsonAtom);
     const instancedRect = { ...rect, y: rect.y + rect.height };
 
     return (
       <>
-        <text {...center}>graph</text>
         <g>
           <rect {...instancedRect} fill="lightblue" />
           <RenderGraph graph={graph} />

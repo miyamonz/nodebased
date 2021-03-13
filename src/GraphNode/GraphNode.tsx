@@ -14,14 +14,12 @@ export function createComponent(jsonAtom: PrimitiveAtom<GraphJSON>) {
   const GraphNode: NodeComponent = ({ node }) => {
     const pushGraphJSON = usePushGraphJSON();
     const [rect] = useAtom(node.rect);
-    const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
 
     const [json] = useAtom(jsonAtom);
     const [, setGraph] = useAtom(setGraphAtom);
 
     return (
       <>
-        <text {...center}>graph</text>
         <rect
           x={rect.x}
           y={rect.y + rect.height / 2}
