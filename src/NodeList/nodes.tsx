@@ -23,6 +23,7 @@ import mouse from "./mouse";
 import asFn from "./asFn";
 import jsonNode from "./jsonNode";
 import { option as graph } from "../GraphNode";
+import { option as instantiate } from "../InstantiateNode";
 
 type Option = {
   name: string;
@@ -54,6 +55,7 @@ const _nodeOptions = [
   asFn,
   jsonNode,
   graph,
+  instantiate,
 ];
 export const nodeOptions: Option[] = _nodeOptions.map((option) => ({
   name: option.name,
