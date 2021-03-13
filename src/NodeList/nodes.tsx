@@ -16,6 +16,7 @@ import hold from "./hold";
 import circle from "./circle";
 import rect from "./rect";
 import line from "./line";
+import pack from "./pack";
 import unpack from "./unpack";
 import onMouse from "./onMouse";
 import press from "./press";
@@ -50,6 +51,7 @@ const _nodeOptions = [
   line,
   onMouse,
   press,
+  pack,
   unpack,
   mouse,
   asFn,
