@@ -6,7 +6,7 @@ const option = {
   init: () => {
     const x = atom(atom(0));
     const y = atom(atom(0));
-    const r = atom(atom(0));
+    const r = atom(atom(10));
     const inputAtoms = [x, y, r];
 
     const outputAtoms = [
@@ -18,7 +18,16 @@ const option = {
           const cx = useAtomValue(xAtom);
           const cy = useAtomValue(yAtom);
           const r = useAtomValue(rAtom);
-          return <circle cx={cx} cy={cy} r={r} fill="blue" {...props} />;
+          return (
+            <circle
+              cx={cx}
+              cy={cy}
+              r={r}
+              fill="transparent"
+              stroke="blue"
+              {...props}
+            />
+          );
         };
       }),
     ];
