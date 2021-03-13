@@ -2,6 +2,10 @@ import { atom } from "jotai";
 import { createAtomRef } from "../AtomRef";
 import type { Variable } from "../Variable";
 
+const isPosition = (a: any): a is { x: number; y: number } => {
+  return typeof a?.x === "number" && typeof a?.y === "number";
+};
+
 const option = {
   name: "hold",
   init: () => {
@@ -17,18 +21,12 @@ const option = {
     const outAtom = atom((get) => {
       const cond = get(get(condAtom));
 
+      const a = get(get(inputAtom));
       if (cond) {
-        const a = get(get(inputAtom));
         setter(a);
       } else {
-        const a = get(get(inputAtom));
-        if (
-          typeof a?.x === "number" &&
-          typeof a?.y === "number" &&
-          get(tmpAtom) === null &&
-          setter !== undefined
-        ) {
-          setter({ x: 0, y: 0 });
+        if (get(tmpAtom) === null && setter !== undefined) {
+          if (isPosition(a)) setter({ x: 0, y: 0 });
         }
       }
       return get(tmpAtom);

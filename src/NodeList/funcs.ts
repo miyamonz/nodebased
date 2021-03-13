@@ -25,6 +25,7 @@ const nodes: OptionFn[] = [
   { name: "mul", fn: (a, b) => a * b },
   { name: "div", fn: (a, b) => a / b },
   { name: "minus", fn: (a) => -a },
+  { name: "not", fn: (a) => !a },
   { name: "sin", fn: (a) => Math.sin(a) },
   { name: "cos", fn: (a) => Math.cos(a) },
   { name: "floor", fn: (a: number) => Math.floor(a) },
