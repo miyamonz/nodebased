@@ -2,6 +2,7 @@ import { atom } from "jotai";
 import type { NodeComponent } from "../Node";
 import { createVariable } from "../Variable";
 import { createAtomRef } from "../AtomRef";
+import type { Position } from "../Position";
 
 const range = (num: number) => [...Array(num).keys()];
 
@@ -30,6 +31,15 @@ const nodes: OptionFn[] = [
   { name: "abs", fn: (a: number) => Math.abs(a) },
   { name: "min", fn: (a: number, b: number) => Math.min(a, b) },
   { name: "max", fn: (a: number, b: number) => Math.max(a, b) },
+  {
+    name: "add vec2",
+    fn: (a: Position, b: Position) => ({ x: a?.x + b?.x, y: a?.y + b?.y }),
+  },
+  {
+    name: "sub vec2",
+    fn: (a: Position, b: Position) => ({ x: a?.x - b?.x, y: a?.y - b?.y }),
+  },
+  { name: "magnitude", fn: (a: Position) => Math.sqrt(a.x ** 2 + a.y ** 2) },
   {
     name: "console.log",
     fn: (_) => {
