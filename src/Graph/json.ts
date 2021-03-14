@@ -16,7 +16,7 @@ export const graphToJson = (get: Getter) => (graph: GraphView): GraphJSON => {
         try {
           return cToJson(c);
         } catch (e: unknown) {
-          console.error(e);
+          console.error(e, c);
           return undefined;
         }
       })

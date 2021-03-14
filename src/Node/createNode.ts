@@ -1,9 +1,10 @@
+import { atom } from "jotai";
+import type { Atom } from "jotai";
+
 import type { Node, NodeJSON, NodeComponent } from "./types";
 import type { Variable } from "../Variable";
 
 import { createInputSockets, createOutputSockets } from "../Socket";
-
-import { atom } from "jotai";
 
 import { createRectAtom } from "../Rect";
 import { defaultNodeSizeVariable } from "./variables";
@@ -49,6 +50,7 @@ export function createNode({
   toSave,
   id,
 }: createNodeProp) {
+  console.log("createNode", name);
   const rect = createRect(position);
   const isockets = createInputSockets(rect, variable.inputAtoms);
   const osockets = createOutputSockets(rect, variable.outputAtoms);

@@ -47,7 +47,10 @@ export const appendConnectionAtom = atom(
   null,
   (get, set, c: Connection<unknown>) => {
     const connectionsAtom = get(currentGraphAtom).connections;
-    set(connectionsAtom, (prev) => [...prev, c]);
+    set(connectionsAtom, (prev) => [
+      ...prev.filter((conn) => conn.to !== c.to),
+      c,
+    ]);
   }
 );
 

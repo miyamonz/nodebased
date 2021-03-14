@@ -23,6 +23,7 @@ export function useCreateInstanceNode({ position }: { position: Position }) {
         position,
         variable,
         component: () => null,
+        toSave: undefined,
       });
     }, [])
   );

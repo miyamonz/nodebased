@@ -48,7 +48,7 @@ const option = {
       pressAtom,
     ];
     const variable: Variable = {
-      inputAtoms: atom(() => [componentAtom]),
+      inputAtoms: atom(() => [componentAtom as any]),
       outputAtoms: atom(() => outputAtoms),
     };
     return { variable };

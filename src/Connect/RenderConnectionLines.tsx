@@ -7,7 +7,12 @@ const RenderConnectionLines: React.FC<{
   return (
     <>
       {connections.map((c) => {
-        return <ConnectionLine key={c.to.atom.toString()} connection={c} />;
+        return (
+          <ConnectionLine
+            key={c.from.atom.toString() + c.to.atom.toString()}
+            connection={c}
+          />
+        );
       })}
     </>
   );

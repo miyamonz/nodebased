@@ -1,6 +1,8 @@
 import React from "react";
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import type { Connection } from "./types";
+
+import { useConnect, useDisconnect } from "./atoms";
 
 function useSocket<T>(connection: Connection<T>) {
   const osocket = connection.from;
@@ -8,22 +10,21 @@ function useSocket<T>(connection: Connection<T>) {
   return [osocket, isocket] as const;
 }
 
-const setConnectionAtom = atom(null, (_get, set, c: Connection<unknown>) => {
-  set(c.to.ref, c.from.atom);
-});
-
 const ConnectionLine = <T,>({ connection }: { connection: Connection<T> }) => {
   const [osocket, isocket] = useSocket(connection);
-
-  const [, setConnect] = useAtom(setConnectionAtom);
-  React.useEffect(() => {
-    console.log(connection);
-    setConnect(connection as any);
-  }, [connection]);
 
   const [pos] = useAtom(isocket.position);
   const [fromPos] = useAtom(osocket.position);
   const arm = Math.abs(fromPos.x - pos.x) / 3;
+
+  const setConnect = useConnect();
+  const setDisconnect = useDisconnect();
+  React.useEffect(() => {
+    setConnect(connection as Connection<unknown>);
+    return () => {
+      setDisconnect(connection as Connection<unknown>);
+    };
+  }, []);
 
   return (
     <>

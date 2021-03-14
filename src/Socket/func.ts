@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { atomFamily } from "jotai/utils";
 import type { Atom } from "jotai";
 import type { InputSocket, OutputSocket } from "./types";
 import type { InputAtom } from "../Variable";
@@ -6,7 +7,6 @@ import type { AtomRef } from "../AtomRef";
 import type { RectAtom } from "../Rect";
 import type { PositionAtom } from "../Position";
 
-import { connectionAtom } from "../Connect";
 import type { Connection } from "../Connect";
 
 export const createInputSocket = <IN>(
@@ -21,12 +21,14 @@ export const createInputSocket = <IN>(
     }),
     ref: defaultAtom,
     atom: atom((get) => get(get(defaultAtom))),
+    /*
     connection: atom((get) => {
       const connections = get(connectionAtom);
       const ref = get(defaultAtom);
       const found = connections.find(({ from }) => from.atom === ref);
       return (found as Connection<IN>) || null;
     }),
+     * */
   };
 };
 
@@ -39,14 +41,19 @@ export function createInputSockets(
     const r = get(rect);
     return { x: r.x, y: r.y + r.height / 2 };
   });
+  const socketFamily = atomFamily((key: number) => (get) => {
+    const inputs = get(inputsAtom);
+    const inputAtom = inputs[key];
+    const position = atom((get) => {
+      const p = get(inputPositionAnchor);
+      return { x: p.x, y: p.y + 25 * key };
+    });
+    return createInputSocket(inputAtom, position);
+  });
   const inputSockets = atom((get) => {
     const inputs = get(inputsAtom);
-    return inputs.map((inputAtom, i) => {
-      const position = atom((get) => {
-        const p = get(inputPositionAnchor);
-        return { x: p.x, y: p.y + 25 * i };
-      });
-      return createInputSocket(inputAtom, position);
+    return inputs.map((_, i) => {
+      return get(socketFamily(i));
     });
   });
   return inputSockets;
@@ -71,13 +78,15 @@ export const createOutputSockets = (
     const rect = get(rectAtom);
     return { x: rect.x + rect.width, y: rect.y + rect.height / 2 };
   });
+  const socketFamily = atomFamily((key: number) => (get) => {
+    const position = atom((get) => ({
+      ...get(anchor),
+      y: get(anchor).y + 25 * key,
+    }));
+    const outAtom = get(outsAtom)[key];
+    return createOutputSocket(position, outAtom);
+  });
   return atom((get) => {
-    return get(outsAtom).map((outAtom, i) => {
-      const position = atom((get) => ({
-        ...get(anchor),
-        y: get(anchor).y + 25 * i,
-      }));
-      return createOutputSocket(position, outAtom);
-    });
+    return get(outsAtom).map((_, i) => get(socketFamily(i)));
   });
 };

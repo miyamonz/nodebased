@@ -32,8 +32,7 @@ export const InputCircle = <T,>({ input }: { input: InputSocket<T> }) => {
   const [hovered, setHovered] = useAtom(hoveredInputSocketAtom);
   const isHovered = hovered === input;
 
-  const [connection] = useAtom(input.connection);
-  const isConnected = connection !== null;
+  const isConnected = false;
   return (
     <>
       <IOCircle

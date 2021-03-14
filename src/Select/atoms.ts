@@ -3,6 +3,7 @@ import { useAtomValue, useUpdateAtom } from "jotai/utils";
 import type { Node } from "../Node";
 import { copyToClipboard } from "../util";
 
+import { currentGraphAtom } from "../Graph";
 import { getGraphViewByNodes, graphToJson } from "../Graph";
 
 // selected nodes
@@ -14,8 +15,9 @@ export function useSetSelected() {
   return useUpdateAtom(selectedNodesAtom);
 }
 
-export const selectedGraphAtom = atom(() => {
-  return getGraphViewByNodes(selectedNodesAtom);
+export const selectedGraphAtom = atom((get) => {
+  const graph = get(currentGraphAtom);
+  return getGraphViewByNodes(selectedNodesAtom, graph);
 });
 
 const selectedAtomJSON = atom(

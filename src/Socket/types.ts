@@ -12,7 +12,7 @@ export type InputSocket<T> = Socket & {
   type: "input";
   ref: AtomRef<T>;
   atom: Atom<T>;
-  connection: Atom<Connection<T> | null>;
+  //connection: Atom<Connection<T> | null>;
 };
 export type InputSocketAtom<T> = Atom<InputSocket<T>>;
 

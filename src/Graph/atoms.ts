@@ -88,8 +88,8 @@ export const removeNodeFromGraphAtom = atom(
     const osockets = nodes.flatMap((n) => get(n.osockets));
     const isockets = nodes.flatMap((n) => get(n.isockets));
     const shouldDisConnect = (c: Connection<unknown>) => {
-      const from = osockets.includes(c.from);
-      const to = isockets.includes(c.to);
+      const from = osockets.map((s) => s.atom).includes(c.from.atom);
+      const to = isockets.map((s) => s.ref).includes(c.to.ref);
       return from || to;
     };
     set(graph.connections, (prev) => [

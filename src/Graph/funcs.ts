@@ -16,9 +16,12 @@ export function createGraph(
   };
 }
 
-export function getGraphViewByNodes(nodesAtom: Atom<Node[]>): GraphView {
+export function getGraphViewByNodes(
+  nodesAtom: Atom<Node[]>,
+  graph: Graph
+): GraphView {
   return {
     nodes: nodesAtom,
-    connections: atom((get) => get(getConnections(get(nodesAtom)))),
+    connections: atom((get) => get(getConnections(get(nodesAtom), graph))),
   };
 }

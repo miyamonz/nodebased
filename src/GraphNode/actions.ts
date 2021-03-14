@@ -13,10 +13,10 @@ export function useCreateGraphNode() {
   const callback = useAtomCallback<Node, GraphView>(
     useCallback((get, _set, graph) => {
       const nodes = get(graph.nodes);
-      remove(nodes);
       const position = getCenter(nodes.map((n) => get(n.rect)));
 
       const json = graphToJson(get)(graph);
+      remove(nodes);
       return createNodeByName({ name: "graph", position, data: json });
     }, [])
   );
