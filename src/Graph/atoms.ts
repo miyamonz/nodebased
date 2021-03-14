@@ -10,7 +10,7 @@ import type { Connection } from "../Connect";
 
 type GraphStack = {
   graph: Graph;
-  onPop: (graph: Graph) => void;
+  onPop: (json: GraphJSON) => void;
 };
 
 const rootGraph = createGraph([]); //empty graph
@@ -60,11 +60,11 @@ export function usePushGraphJSON() {
   };
 }
 
-export const popGraphAtom = atom(null, (_get, set) => {
+export const popGraphAtom = atom(null, (get, set) => {
   set(graphStackAtom, (prev) => {
     const popped = prev[prev.length - 1];
     if ("onPop" in popped) {
-      popped.onPop(popped.graph);
+      popped.onPop(graphToJson(get)(popped.graph));
     }
     prev.pop();
     return [...prev];
