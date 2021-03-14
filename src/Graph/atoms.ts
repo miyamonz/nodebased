@@ -1,7 +1,7 @@
 import { useAtomValue, useUpdateAtom } from "jotai/utils";
 import { atom } from "jotai";
-import { createGraphByNode } from "./funcs";
 import { createGraph } from "./funcs";
+import { jsonToGraph, graphToJson } from "./json";
 import type { Graph, GraphJSON } from "./types";
 
 type GraphStack = {
@@ -38,7 +38,6 @@ const pushGraphAtom = atom(null, (_get, set, graphStack: GraphStack) => {
 });
 export function usePushGraphJSON() {
   const callback = useUpdateAtom(pushGraphAtom);
-  const jsonToGraph = useCreateGraph();
   return (json: GraphJSON, onPop: GraphStack["onPop"]) => {
     const graph = jsonToGraph(json);
     callback({ graph, onPop });

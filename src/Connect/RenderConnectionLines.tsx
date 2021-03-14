@@ -1,5 +1,3 @@
-import { useAtom } from "jotai";
-import { connectionAtom } from "./atoms";
 import ConnectionLine from "./ConnectionLine";
 import type { Connection } from "./types";
 

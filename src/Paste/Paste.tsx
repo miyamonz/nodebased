@@ -3,15 +3,13 @@ import { useAtomCallback } from "jotai/utils";
 
 import { useShortcutPaste } from "./shortcutHooks";
 import { getClipboard } from "../util";
-import { useAppendNode } from "../actions";
+import { useMergeGraph } from "../actions";
 import { useSetSelected } from "../Select";
 
-import { useCreateGraph } from "../Graph";
+import { jsonToGraph } from "../Graph";
 
 const Paste = () => {
-  const createGraph = useCreateGraph();
-
-  const appendNode = useAppendNode();
+  const mergeGraph = useMergeGraph();
   const setSelected = useSetSelected();
 
   const callback = useAtomCallback(
@@ -19,11 +17,10 @@ const Paste = () => {
       const text = await getClipboard();
       try {
         const json = JSON.parse(text);
-        const graph = createGraph(json);
-        const nodes = get(graph.nodes);
+        const graph = jsonToGraph(json);
+        mergeGraph(graph);
 
-        nodes.forEach(appendNode);
-        setSelected(nodes);
+        setSelected(get(graph.nodes));
       } catch (e: unknown) {
         console.error(e);
       }

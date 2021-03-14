@@ -4,6 +4,8 @@ import type { SetStateAction } from "jotai/core/types";
 import { createNodeByName } from "./Node";
 import { currentGraphAtom } from "./Graph";
 import type { Node } from "./Node";
+import type { Connection } from "./Connect";
+import type { Graph } from "./Graph";
 
 export const currentNodesAtom = atom<Node[], SetStateAction<Node[]>>(
   (get) => get(get(currentGraphAtom).nodes),
@@ -13,6 +15,7 @@ export const currentNodesAtom = atom<Node[], SetStateAction<Node[]>>(
   }
 );
 
+// node
 const appendNode = atom(null, (_get, set, node: Node) => {
   set(currentNodesAtom, (prev) => [...prev, node]);
 });
@@ -44,4 +47,25 @@ const removeNode = atom(null, (get, set, args: Node | Node[]) => {
 
 export function useRemoveNode() {
   return useUpdateAtom(removeNode);
+}
+//
+export const appendConnectionAtom = atom(
+  null,
+  (get, set, c: Connection<unknown>) => {
+    const connectionsAtom = get(currentGraphAtom).connections;
+    set(connectionsAtom, (prev) => [...prev, c]);
+  }
+);
+
+// graph
+const mergeGraphAtom = atom(null, (get, set, graph: Graph) => {
+  get(graph.nodes).map((n) => set(appendNode, n));
+
+  get(graph.connections).map((c) => {
+    const connectionsAtom = get(currentGraphAtom).connections;
+    set(connectionsAtom, (prev) => [...prev, c]);
+  });
+});
+export function useMergeGraph() {
+  return useUpdateAtom(mergeGraphAtom);
 }

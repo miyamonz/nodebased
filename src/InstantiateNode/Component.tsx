@@ -4,14 +4,13 @@ import type { Atom } from "jotai";
 import { useCreateInstanceNode } from "./funcs";
 import type { Node, NodeComponent } from "../Node";
 //import { usePushGraphJSON } from "../Graph";
-import type { GraphJSON, Graph } from "../Graph";
-import { useCreateGraph } from "../Graph";
+import type { GraphJSON } from "../Graph";
+import { jsonToGraph } from "../Graph";
 import { RenderNode } from "../Node";
 
 function useGraph(graphJsonAtom: Atom<GraphJSON>) {
-  const createGraph = useCreateGraph();
   const [json] = useAtom(graphJsonAtom);
-  const graph = React.useMemo(() => createGraph(json), [json]);
+  const graph = React.useMemo(() => jsonToGraph(json), [json]);
   return graph;
 }
 

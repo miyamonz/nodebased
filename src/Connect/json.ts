@@ -1,5 +1,3 @@
-import React from "react";
-import { useAtomCallback } from "jotai/utils";
 import type { Connection, ConnectionJSON } from "./types";
 import type { Node } from "../Node";
 
@@ -32,21 +30,13 @@ export const connectionToJson = (nodes: Node[]) => (
   };
 };
 
-export function useSetConnectionJson() {
-  return useAtomCallback<
-    Connection<unknown>,
-    { nodes: Node[]; c: ConnectionJSON }
-  >(
-    React.useCallback((_get, set, { nodes, c }) => {
-      const fromNode = nodes.find((n) => n.id === c.from.node);
-      const toNode = nodes.find((n) => n.id === c.to.node);
-      if (fromNode === undefined || toNode === undefined) {
-        throw new Error("node not found");
-      }
-      const outSocket = fromNode.outputs[c.from.socket];
-      const inSocket = toNode.inputs[c.to.socket];
-      set(inSocket.ref, outSocket.atom);
-      return { from: outSocket, to: inSocket };
-    }, [])
-  );
-}
+export const jsonToConnection = (nodes: Node[]) => (c: ConnectionJSON) => {
+  const fromNode = nodes.find((n) => n.id === c.from.node);
+  const toNode = nodes.find((n) => n.id === c.to.node);
+  if (fromNode === undefined || toNode === undefined) {
+    throw new Error("node not found");
+  }
+  const outSocket = fromNode.outputs[c.from.socket];
+  const inSocket = toNode.inputs[c.to.socket];
+  return { from: outSocket, to: inSocket };
+};

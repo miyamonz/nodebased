@@ -9,7 +9,7 @@ export type GraphJSON = {
 
 export type Graph = {
   nodes: PrimitiveAtom<Node[]>;
-  connections: Atom<Connection<unknown>[]>;
+  connections: PrimitiveAtom<Connection<unknown>[]>;
 };
 export type GraphView = {
   nodes: Atom<Node[]>;

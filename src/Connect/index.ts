@@ -6,4 +6,4 @@ export { default as RenderConnectionLines } from "./RenderConnectionLines";
 export { connectionAtom } from "./atoms";
 export { filterConnection } from "./funcs";
 
-export { connectionToJson, useSetConnectionJson } from "./json";
+export { connectionToJson, jsonToConnection } from "./json";
