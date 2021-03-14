@@ -29,8 +29,8 @@ export function createNodeByName({ name, position, id, data }: Props): Node {
   const option = nodeOptions.find((option) => option.name === name);
   if (option === undefined) throw new Error(`${name} not found`);
 
-  const { variable, component, saveData } = option.init({ data });
-  return createNode({ name, position, id, variable, component, saveData });
+  const { variable, component, toSave } = option.init({ data });
+  return createNode({ name, position, id, variable, component, toSave });
 }
 
 type createNodeProp = {
@@ -38,7 +38,7 @@ type createNodeProp = {
   position: Position;
   variable: Variable;
   component: NodeComponent;
-  saveData: boolean;
+  toSave: Atom<unknown> | undefined;
   id?: string;
 };
 export function createNode({
@@ -46,7 +46,7 @@ export function createNode({
   position,
   variable,
   component,
-  saveData,
+  toSave,
   id,
 }: createNodeProp) {
   const rect = createRect(position);
@@ -61,6 +61,6 @@ export function createNode({
     name,
     component,
     id,
-    saveData,
+    toSave,
   };
 }

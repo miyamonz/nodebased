@@ -1,16 +1,12 @@
 import { atom } from "jotai";
-import type { InputAtom, OutputAtom } from "../Variable";
+import { createOneOutputVariable } from "../Variable";
 
 const option = {
   name: "json",
   init: (args?: { data?: {} }) => {
-    const dataAtomRef = atom(atom(args?.data ?? {}));
-    const inputAtoms: InputAtom<unknown>[] = [];
-    const outputAtoms: OutputAtom<unknown>[] = [
-      atom((get) => get(get(dataAtomRef))),
-    ];
-    const variable = { inputAtoms, outputAtoms };
-    return { variable, saveData: true };
+    const jsonAtom = atom(args?.data ?? {});
+    const variable = createOneOutputVariable(jsonAtom);
+    return { variable, toSave: jsonAtom };
   },
 };
 

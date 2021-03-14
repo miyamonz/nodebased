@@ -12,7 +12,7 @@ const option = {
     );
     const variable = createOneOutputVariable(jsonAtom);
     const component = createComponent(jsonAtom);
-    return { variable, component, saveData: true };
+    return { variable, component, toSave: jsonAtom };
   },
 };
 

@@ -14,7 +14,7 @@ const option = {
     );
     const variable = createOneInputVariable(graphJsonAtom);
     const component = createComponent(atom((get) => get(get(graphJsonAtom))));
-    return { variable, component, saveData: false };
+    return { variable, component };
   },
 };
 

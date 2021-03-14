@@ -64,7 +64,7 @@ const option = {
       outputAtoms: atom(() => [outputAtom]),
     };
     const component = getComponent(inputRef, internalAtom, outputAtom);
-    return { variable, component, saveData: true };
+    return { variable, component, toSave: internalAtom };
   },
 };
 

@@ -7,6 +7,7 @@ import { boundingRect, offsetRect } from "../Rect";
 import { useRemoveNode, useAppendNode } from "../actions";
 
 import { useCreateGraphNode } from "../GraphNode";
+import { useCreateSubGraphNode } from "../SubGraphNode";
 
 import { useShortcutCopy } from "./shortcutHooks";
 
@@ -38,6 +39,7 @@ const RenderBoundingRectImpl = () => {
   const removeSelected = useRemoveSelected();
   const copyToClipboard = useCopyToClipboard();
   const createGraphNode = useCreateGraphNode();
+  const createSubGraphNode = useCreateSubGraphNode();
   useShortcutCopy(
     React.useCallback(() => {
       copyToClipboard();
@@ -55,11 +57,18 @@ const RenderBoundingRectImpl = () => {
       fill: "orange",
     },
     {
-      name: "sub node",
+      name: "graph json",
       onMouseUp: () => {
         createGraphNode(graph).then(append);
       },
       fill: "green",
+    },
+    {
+      name: "sub graph",
+      onMouseUp: () => {
+        createSubGraphNode(graph).then(append);
+      },
+      fill: "pink",
     },
   ];
 

@@ -25,6 +25,7 @@ import asFn from "./asFn";
 import jsonNode from "./jsonNode";
 import { option as graph } from "../GraphNode";
 import { option as instantiate } from "../InstantiateNode";
+import { option as subGraph } from "../SubGraphNode";
 import inlet from "./inlet";
 import outlet from "./outlet";
 
@@ -60,6 +61,7 @@ const _nodeOptions = [
   jsonNode,
   graph,
   instantiate,
+  subGraph,
   inlet,
   outlet,
 ];

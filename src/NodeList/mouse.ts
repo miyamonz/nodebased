@@ -1,12 +1,11 @@
 import { atom } from "jotai";
 import { mouseAtom } from "../SVGContext";
+import { createOneOutputVariable } from "../Variable";
 
 const option = {
   name: "mouse",
   init: () => {
-    const inputAtoms = [] as any;
-    const outputAtoms = [atom((get) => get(mouseAtom))];
-    const variable = { inputAtoms, outputAtoms };
+    const variable = createOneOutputVariable(atom((get) => get(mouseAtom)));
     return { variable };
   },
 };

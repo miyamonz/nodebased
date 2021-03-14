@@ -2,7 +2,7 @@ import React from "react";
 import { atom } from "jotai";
 import { useAtomValue } from "jotai/utils";
 import { createAtomRef } from "../AtomRef";
-import type { OutputAtom } from "../Variable";
+import type { Variable } from "../Variable";
 
 const range = (n: number) => [...Array(n).keys()];
 const option = {
@@ -28,8 +28,10 @@ const option = {
         </>
       );
     };
-    const outputAtoms: OutputAtom<unknown>[] = [];
-    const variable = { inputAtoms, outputAtoms };
+    const variable: Variable = {
+      inputAtoms: atom(() => inputAtoms as any),
+      outputAtoms: atom(() => []),
+    };
     return { variable, component: Render };
   },
 };

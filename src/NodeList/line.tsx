@@ -32,7 +32,10 @@ const option = {
         };
       }),
     ];
-    const variable = { inputAtoms, outputAtoms };
+    const variable = {
+      inputAtoms: atom(() => inputAtoms),
+      outputAtoms: atom(() => outputAtoms),
+    };
     return { variable };
   },
 };

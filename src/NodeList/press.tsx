@@ -2,6 +2,7 @@ import React from "react";
 import { atom } from "jotai";
 import type { Atom, WritableAtom } from "jotai";
 import { useAtomValue, useUpdateAtom } from "jotai/utils";
+import type { Variable } from "../Variable";
 
 function getComponent(
   componentAtom: Atom<React.ComponentType | null>,
@@ -36,7 +37,6 @@ const option = {
   name: "press",
   init: () => {
     const componentAtom = atom(atom<React.ComponentType | null>(null));
-    const inputAtoms = [componentAtom];
     const pressAtom = atom(false);
 
     const outputAtoms = [
@@ -47,7 +47,10 @@ const option = {
       }),
       pressAtom,
     ];
-    const variable = { inputAtoms, outputAtoms };
+    const variable: Variable = {
+      inputAtoms: atom(() => [componentAtom]),
+      outputAtoms: atom(() => outputAtoms),
+    };
     return { variable };
   },
 };

@@ -16,6 +16,6 @@ export type Node = {
   name: string;
   component: NodeComponent;
   id: string;
-  saveData: boolean;
+  toSave: Atom<unknown> | undefined;
 };
 export type NodeComponent = React.FC<{ node: Node }>;

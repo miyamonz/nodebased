@@ -11,7 +11,7 @@ const option = {
       inputAtoms: atom(() => [refAtom as any]),
       outputAtoms: atom(() => [outAtom]),
     };
-    return { variable, saveData: false };
+    return { variable };
   },
 };
 
