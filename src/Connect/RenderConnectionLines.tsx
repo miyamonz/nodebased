@@ -1,10 +1,11 @@
 import { useAtom } from "jotai";
 import { connectionAtom } from "./atoms";
 import ConnectionLine from "./ConnectionLine";
+import type { Connection } from "./types";
 
-const RenderConnectionLines: React.FC = () => {
-  const [connections] = useAtom(connectionAtom);
-
+const RenderConnectionLines: React.FC<{
+  connections: Connection<unknown>[];
+}> = ({ connections }) => {
   return (
     <>
       {connections.map((c) => {

@@ -7,7 +7,6 @@ import {
   RenderBoundingRect,
   SelectCollisionArea,
 } from "../Select";
-import { RenderConnectionLines } from "../Connect";
 
 import { TmpConnectLine } from "../Connect";
 import { useDragMoveNode } from "../MoveNode";
@@ -26,7 +25,6 @@ function SVGContent() {
       <RenderGraphMenu transform="translate(0 40)" />
       <RenderBoundingRect />
       <RenderSelectRect />
-      <RenderConnectionLines />
       <TmpConnectLine />
       {graph && <RenderGraph graph={graph} />}
       <NodeMenu />
