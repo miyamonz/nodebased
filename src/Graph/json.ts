@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import { createGraph } from "./funcs";
 
 import { nodeToJson, jsonToNode } from "../Node";
@@ -14,13 +13,17 @@ export const graphToJson = (get: Getter) => (graph: GraphView): GraphJSON => {
   };
 };
 
-export function jsonToGraph(json: GraphJSON) {
+export function createNodesandConnections(json: GraphJSON) {
   const nodes = json.nodes.map(jsonToNode);
   const connections = json.connections.map(jsonToConnection(nodes));
   const _nodes = nodes.map((n) => ({
     ...n,
     id: Math.floor(Math.random() * 10 ** 12).toString(),
   }));
-  return createGraph(_nodes, connections);
+  return { nodes: _nodes, connections };
 }
 
+export function jsonToGraph(json: GraphJSON) {
+  const { nodes, connections } = createNodesandConnections(json);
+  return createGraph(nodes, connections);
+}
