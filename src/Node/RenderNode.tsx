@@ -84,10 +84,12 @@ const RenderNode: NodeComponent = ({ node }) => {
       </g>
       <ShowHovered node={node} />
       {node.component !== undefined && <node.component node={node} />}
-      {isockets.map((input) => {
-        return <InputCircle key={input.atom.toString()} input={input} />;
-      })}
-      {node.outputs.map((socket) => (
+
+      {node.name !== "inlet" &&
+        isockets.map((input) => {
+          return <InputCircle key={input.atom.toString()} input={input} />;
+        })}
+      {node.name !== 'outlet' && node.outputs.map((socket) => (
         <RenderOutSocket key={socket.atom.toString()} socket={socket} />
       ))}
     </>

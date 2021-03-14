@@ -25,6 +25,8 @@ import asFn from "./asFn";
 import jsonNode from "./jsonNode";
 import { option as graph } from "../GraphNode";
 import { option as instantiate } from "../InstantiateNode";
+import inlet from "./inlet";
+import outlet from "./outlet";
 
 type Option = {
   name: string;
@@ -58,6 +60,8 @@ const _nodeOptions = [
   jsonNode,
   graph,
   instantiate,
+  inlet,
+  outlet,
 ];
 export const nodeOptions: Option[] = _nodeOptions.map((option) => ({
   name: option.name,
