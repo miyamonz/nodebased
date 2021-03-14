@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { createGraphByNode } from "./funcs";
+import { createGraph } from "./funcs";
 
 import { nodeToJson, jsonToNode } from "../Node";
 import { connectionToJson, useSetConnectionJson } from "../Connect";

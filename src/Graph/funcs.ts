@@ -3,12 +3,16 @@ import type { Atom } from "jotai";
 import { getConnections } from "../Connect/atoms";
 import type { Graph, GraphView } from "./types";
 import type { Node } from "../Node";
+import type { Connection } from "../Connect";
 
-export function createGraphByNode(nodes: Node[]): Graph {
+export function createGraph(
+  nodes: Node[],
+  connections: Connection<unknown>[] = []
+): Graph {
   const nodesAtom = atom<Node[]>(nodes);
   return {
     nodes: nodesAtom,
-    connections: atom((get) => get(getConnections(nodes))),
+    connections: atom(connections),
   };
 }
 

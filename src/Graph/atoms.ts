@@ -1,7 +1,7 @@
 import { useAtomValue, useUpdateAtom } from "jotai/utils";
 import { atom } from "jotai";
 import { createGraphByNode } from "./funcs";
-import { useCreateGraph, graphToJson } from "./json";
+import { createGraph } from "./funcs";
 import type { Graph, GraphJSON } from "./types";
 
 type GraphStack = {
@@ -9,7 +9,7 @@ type GraphStack = {
   onPop: (graph: Graph) => void;
 };
 
-const rootGraph = createGraphByNode([]);
+const rootGraph = createGraph([]); //empty graph
 const graphStackAtom = atom<GraphStack[]>([]);
 
 export const currentGraphAtom = atom<Graph>((get) => {
