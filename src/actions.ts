@@ -2,7 +2,7 @@ import { atom } from "jotai";
 import { useUpdateAtom } from "jotai/utils";
 import type { SetStateAction } from "jotai/core/types";
 import { createNodeByName } from "./Node";
-import { currentGraphAtom } from "./Graph";
+import { currentGraphAtom, removeNodeFromGraphAtom } from "./Graph";
 import type { Node } from "./Node";
 import type { Connection } from "./Connect";
 import type { Graph } from "./Graph";
@@ -33,22 +33,16 @@ export function useAppendNode() {
   return useUpdateAtom(appendNode);
 }
 
-const removeNode = atom(null, (get, set, args: Node | Node[]) => {
+const removeNode = atom(null, (_get, set, args: Node | Node[]) => {
   const nodes = Array.isArray(args) ? args : [args];
-
-  nodes
-    .flatMap((node) => node.inputs)
-    .forEach((isocket) => {
-      set(isocket.ref, atom(get(isocket.atom)));
-    });
-
-  set(currentNodesAtom, (prev) => prev.filter((na) => !nodes.includes(na)));
+  set(removeNodeFromGraphAtom, { targetGraphAtom: currentGraphAtom, nodes });
 });
 
 export function useRemoveNode() {
   return useUpdateAtom(removeNode);
 }
-//
+
+// connection
 export const appendConnectionAtom = atom(
   null,
   (get, set, c: Connection<unknown>) => {

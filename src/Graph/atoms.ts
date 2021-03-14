@@ -1,8 +1,12 @@
 import { useAtomValue, useUpdateAtom } from "jotai/utils";
 import { atom } from "jotai";
+import type { Atom } from "jotai";
 import { createGraph } from "./funcs";
 import { jsonToGraph, graphToJson } from "./json";
 import type { Graph, GraphJSON } from "./types";
+
+import type { Node } from "../Node";
+import type { Connection } from "../Connect";
 
 type GraphStack = {
   graph: Graph;
@@ -58,3 +62,34 @@ export const popGraphAtom = atom(null, (_get, set) => {
 export function useSetRootGraph() {
   return useUpdateAtom(dropStackAtom);
 }
+
+// remove
+export const removeNodeFromGraphAtom = atom(
+  null,
+  (
+    get,
+    set,
+    { targetGraphAtom, nodes }: { targetGraphAtom: Atom<Graph>; nodes: Node[] }
+  ) => {
+    // remove connection
+    const graph = get(targetGraphAtom);
+    const shouldDisConnect = (c: Connection<unknown>) => {
+      const from = nodes.flatMap((n) => n.outputs).includes(c.from);
+      const to = nodes.flatMap((n) => n.inputs).includes(c.to);
+      return from || to;
+    };
+    set(graph.connections, (prev) => [
+      ...prev.filter((c) => !shouldDisConnect(c)),
+    ]);
+
+    //disconnect
+    nodes
+      .flatMap((node) => node.inputs)
+      .forEach((isocket) => {
+        set(isocket.ref, atom(get(isocket.atom)));
+      });
+
+    // remove node
+    set(graph.nodes, (prev) => prev.filter((na) => !nodes.includes(na)));
+  }
+);

@@ -3,6 +3,7 @@ export {
   currentGraphJsonAtom,
   usePushGraphJSON,
   useSetRootGraph,
+  removeNodeFromGraphAtom,
 } from "./atoms";
 export { getGraphViewByNodes } from "./funcs";
 export { graphToJson, jsonToGraph } from "./json";
