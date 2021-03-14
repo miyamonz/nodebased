@@ -10,10 +10,16 @@ import { defaultNodeSizeVariable } from "./variables";
 import { nodeOptions } from "../NodeList";
 import type { Position } from "../Position";
 
+const sizeAtom = atom(
+  (get) =>
+    get(get(defaultNodeSizeVariable.outputAtoms)[0]) as {
+      width: number;
+      height: number;
+    }
+);
 function createRect(position: Position) {
   const rectPos = atom(position);
-  const outputAtom = defaultNodeSizeVariable.outputAtoms[0];
-  const rect = createRectAtom(rectPos, outputAtom);
+  const rect = createRectAtom(rectPos, sizeAtom);
   return rect;
 }
 
@@ -44,14 +50,14 @@ export function createNode({
   id,
 }: createNodeProp) {
   const rect = createRect(position);
-  const inputSockets = createInputSockets(rect, variable.inputAtoms);
-  const outputSockets = createOutputSockets(rect, variable.outputAtoms);
+  const isockets = createInputSockets(rect, variable.inputAtoms);
+  const osockets = createOutputSockets(rect, variable.outputAtoms);
 
   id = id ?? Math.floor(Math.random() * 10 ** 12).toString();
   return {
     rect,
-    inputs: inputSockets,
-    outputs: outputSockets,
+    isockets,
+    osockets,
     name,
     component,
     id,

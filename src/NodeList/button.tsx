@@ -45,7 +45,7 @@ const option = {
       });
     });
     const downAtom = atom(
-      (get) => get(variable.outputAtoms[0]),
+      (get) => get(get(variable.outputAtoms)[0]) as boolean,
       (_get, set, arg: boolean) => set(buttonAtom, arg)
     );
     return {

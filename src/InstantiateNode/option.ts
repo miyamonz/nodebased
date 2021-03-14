@@ -4,7 +4,7 @@ import { atom } from "jotai";
 import { createAtomRef } from "../AtomRef";
 import type { GraphJSON } from "../Graph";
 
-import type { Variable } from "../Variable";
+import { createOneInputVariable } from "../Variable";
 
 const option = {
   name: "instantiate",
@@ -12,10 +12,7 @@ const option = {
     const graphJsonAtom = createAtomRef(
       atom<GraphJSON>({ nodes: [], connections: [] })
     );
-    const variable: Variable = {
-      inputAtoms: [graphJsonAtom as any],
-      outputAtoms: [],
-    };
+    const variable = createOneInputVariable(graphJsonAtom);
     const component = createComponent(atom((get) => get(get(graphJsonAtom))));
     return { variable, component, saveData: false };
   },

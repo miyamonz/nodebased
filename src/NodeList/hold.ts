@@ -32,8 +32,8 @@ const option = {
       return get(tmpAtom);
     });
     const variable: Variable = {
-      inputAtoms: [condAtom, inputAtom as any],
-      outputAtoms: [outAtom],
+      inputAtoms: atom(() => [condAtom, inputAtom as any]),
+      outputAtoms: atom(() => [outAtom]),
     };
     return { variable };
   },

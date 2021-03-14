@@ -4,6 +4,7 @@ import type { Atom, PrimitiveAtom } from "jotai";
 import { createAtomRef } from "../AtomRef";
 import type { AtomRef } from "../AtomRef";
 import type { NodeComponent } from "../Node";
+import type { Variable } from "../Variable";
 
 function getComponent(
   inputRef: AtomRef<number>,
@@ -58,9 +59,10 @@ const option = {
       return get(internalAtom);
     });
 
-    const inputAtoms = [inputRef];
-    const outputAtoms = [outputAtom];
-    const variable = { inputAtoms, outputAtoms };
+    const variable: Variable = {
+      inputAtoms: atom(() => [inputRef as any]),
+      outputAtoms: atom(() => [outputAtom]),
+    };
     const component = getComponent(inputRef, internalAtom, outputAtom);
     return { variable, component, saveData: true };
   },

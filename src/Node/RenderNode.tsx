@@ -1,5 +1,6 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
+import { useAtomValue } from "jotai/utils";
 import type { Atom } from "jotai";
 import type { Node } from "./types";
 import { useSelectedNodes } from "../Select";
@@ -9,13 +10,8 @@ import type { Position } from "../Position";
 
 type NodeComponent = React.FC<{ node: Node }>;
 
-function useRectAtom(node: Node) {
-  const [rect] = useAtom(node.rect);
-  return rect;
-}
-
 const ShowSelect: NodeComponent = ({ node }) => {
-  const rect = useRectAtom(node);
+  const rect = useAtomValue(node.rect);
   const selectedNodes = useSelectedNodes();
   const isSelected = selectedNodes.includes(node);
 
@@ -27,12 +23,11 @@ const ShowSelect: NodeComponent = ({ node }) => {
 
 export const hoveredNode = atom<Node | null>(null);
 export function useHoveredNode() {
-  const [node] = useAtom(hoveredNode);
-  return node;
+  return useAtomValue(hoveredNode);
 }
 
 const ShowHovered: NodeComponent = ({ node }) => {
-  const rect = useRectAtom(node);
+  const rect = useAtomValue(node.rect);
   const [hovered, setHovered] = useAtom(hoveredNode);
   const isHovered = node === hovered;
 
@@ -58,7 +53,7 @@ const RenderText = ({
   outputAtom: Atom<unknown>;
   center: Position;
 }) => {
-  const [outValue] = useAtom(outputAtom);
+  const outValue = useAtomValue(outputAtom);
   return (
     <text {...center}>
       {(typeof outValue === "number" || typeof outValue === "string") &&
@@ -68,16 +63,17 @@ const RenderText = ({
 };
 
 const RenderNode: NodeComponent = ({ node }) => {
-  const [rect] = useAtom(node.rect);
+  const rect = useAtomValue(node.rect);
 
   const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
 
-  const isockets = node.inputs;
+  const isockets = useAtomValue(node.isockets);
+  const osockets = useAtomValue(node.osockets);
   return (
     <>
       <ShowSelect node={node} />
-      {node.outputs.length > 0 && (
-        <RenderText outputAtom={node.outputs[0].atom} center={center} />
+      {osockets.length > 0 && (
+        <RenderText outputAtom={osockets[0].atom} center={center} />
       )}
       <g transform={`translate(${rect.x} ${rect.y - 5} )`}>
         <text>{node.name}</text>
@@ -89,9 +85,10 @@ const RenderNode: NodeComponent = ({ node }) => {
         isockets.map((input) => {
           return <InputCircle key={input.atom.toString()} input={input} />;
         })}
-      {node.name !== 'outlet' && node.outputs.map((socket) => (
-        <RenderOutSocket key={socket.atom.toString()} socket={socket} />
-      ))}
+      {node.name !== "outlet" &&
+        osockets.map((socket) => (
+          <RenderOutSocket key={socket.atom.toString()} socket={socket} />
+        ))}
     </>
   );
 };

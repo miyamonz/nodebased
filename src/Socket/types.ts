@@ -14,7 +14,10 @@ export type InputSocket<T> = Socket & {
   atom: Atom<T>;
   connection: Atom<Connection<T> | null>;
 };
+export type InputSocketAtom<T> = Atom<InputSocket<T>>;
+
 export type OutputSocket<T> = Socket & {
   type: "output";
   atom: OutputAtom<T>;
 };
+export type OutputSocketAtom<T> = Atom<OutputSocket<T>>;

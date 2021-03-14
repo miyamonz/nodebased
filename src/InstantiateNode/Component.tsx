@@ -8,18 +8,14 @@ import type { GraphJSON } from "../Graph";
 import { jsonToGraph } from "../Graph";
 import { RenderNode } from "../Node";
 
-function useGraph(graphJsonAtom: Atom<GraphJSON>) {
-  const [json] = useAtom(graphJsonAtom);
-  const graph = React.useMemo(() => jsonToGraph(json), [json]);
-  return graph;
-}
-
 export function createComponent(graphJsonAtom: Atom<GraphJSON>) {
+  const graphAtom = atom((get) => jsonToGraph(get)(get(graphJsonAtom)));
+
   const GraphNode: NodeComponent = ({ node }) => {
     //const pushGraphJSON = usePushGraphJSON();
     const [rect] = useAtom(node.rect);
 
-    const graph = useGraph(graphJsonAtom);
+    const [graph] = useAtom(graphAtom);
     const instancedRect = { ...rect, y: rect.y + rect.height };
     const createInstance = useCreateInstanceNode({
       position: {

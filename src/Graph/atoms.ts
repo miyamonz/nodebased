@@ -40,11 +40,23 @@ export function useCurrentIsRoot() {
 const pushGraphAtom = atom(null, (_get, set, graphStack: GraphStack) => {
   set(graphStackAtom, (prev) => [...prev, graphStack]);
 });
+
+const toGraphAtom = atom(
+  null,
+  (
+    get,
+    _set,
+    { json, callback }: { json: GraphJSON; callback: (graph: Graph) => void }
+  ) => {
+    const graph = jsonToGraph(get)(json);
+    callback(graph);
+  }
+);
 export function usePushGraphJSON() {
   const callback = useUpdateAtom(pushGraphAtom);
+  const setJson = useUpdateAtom(toGraphAtom);
   return (json: GraphJSON, onPop: GraphStack["onPop"]) => {
-    const graph = jsonToGraph(json);
-    callback({ graph, onPop });
+    setJson({ json, callback: (graph) => callback({ graph, onPop }) });
   };
 }
 
@@ -73,9 +85,11 @@ export const removeNodeFromGraphAtom = atom(
   ) => {
     // remove connection
     const graph = get(targetGraphAtom);
+    const osockets = nodes.flatMap((n) => get(n.osockets));
+    const isockets = nodes.flatMap((n) => get(n.isockets));
     const shouldDisConnect = (c: Connection<unknown>) => {
-      const from = nodes.flatMap((n) => n.outputs).includes(c.from);
-      const to = nodes.flatMap((n) => n.inputs).includes(c.to);
+      const from = osockets.includes(c.from);
+      const to = isockets.includes(c.to);
       return from || to;
     };
     set(graph.connections, (prev) => [
@@ -83,11 +97,9 @@ export const removeNodeFromGraphAtom = atom(
     ]);
 
     //disconnect
-    nodes
-      .flatMap((node) => node.inputs)
-      .forEach((isocket) => {
-        set(isocket.ref, atom(get(isocket.atom)));
-      });
+    isockets.forEach((isocket) => {
+      set(isocket.ref, atom(get(isocket.atom)));
+    });
 
     // remove node
     set(graph.nodes, (prev) => prev.filter((na) => !nodes.includes(na)));

@@ -11,7 +11,7 @@ export const nodeToJson = (get: Getter) => (node: Node): NodeJSON => {
       x: rect.x,
       y: rect.y,
     },
-    data: node.saveData ? (get(node.outputs[0].atom) as JSON) : undefined,
+    data: node.saveData ? (get(get(node.osockets)[0].atom) as JSON) : undefined,
   };
 };
 

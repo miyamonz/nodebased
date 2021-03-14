@@ -8,8 +8,8 @@ const option = {
     const refAtom = createAtomRef(atom(null));
     const outAtom = atom((get) => get(get(refAtom)));
     const variable: Variable = {
-      inputAtoms: [refAtom as any],
-      outputAtoms: [outAtom],
+      inputAtoms: atom(() => [refAtom as any]),
+      outputAtoms: atom(() => [outAtom]),
     };
     return { variable, saveData: false };
   },

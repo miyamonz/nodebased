@@ -5,12 +5,16 @@ import type { PositionAtom } from "../Position";
 
 import { socketRadiusVariable } from "./variables";
 
+const radiusAtom = atom<number>(
+  (get) => get(get(socketRadiusVariable.outputAtoms)[0]) as number
+);
+
 type IOCircleProps = {
   positionAtom: PositionAtom;
 } & JSX.IntrinsicElements["circle"];
 const IOCircle: React.FC<IOCircleProps> = ({ positionAtom, ...props }) => {
   const [position] = useAtom(positionAtom);
-  const [r] = useAtom(socketRadiusVariable.outputAtoms[0]);
+  const [r] = useAtom(radiusAtom);
   return (
     <circle
       cx={position.x}

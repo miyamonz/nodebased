@@ -3,6 +3,7 @@ import { atom, useAtom } from "jotai";
 import type { PrimitiveAtom } from "jotai";
 import { useAtomValue } from "jotai/utils";
 import type { Node } from "../Node";
+import { createOneOutputVariable, Variable } from "../Variable";
 import type { NodeComponent } from "../Node";
 import { useMouseStream } from "../SVGContext";
 
@@ -60,11 +61,9 @@ const option = {
     const nodeAtom = atom<Node | null>(null);
     const component = getComponent(nodeAtom);
 
-    const inputAtoms = [] as any;
     // TODO: set some function from node info
     const outValueAtom = atom((get) => get(nodeAtom)?.name);
-    const outputAtoms = [outValueAtom];
-    const variable = { inputAtoms, outputAtoms };
+    const variable: Variable = createOneOutputVariable(outValueAtom);
     return { variable, component };
   },
 };

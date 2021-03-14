@@ -1,3 +1,4 @@
+import type { Atom } from "jotai";
 import type { RectAtom } from "../Rect";
 import type { InputSocket, OutputSocket } from "../Socket";
 
@@ -10,8 +11,8 @@ export type NodeJSON = {
 
 export type Node = {
   rect: RectAtom;
-  inputs: InputSocket<unknown>[];
-  outputs: OutputSocket<unknown>[];
+  isockets: Atom<InputSocket<unknown>[]>;
+  osockets: Atom<OutputSocket<unknown>[]>;
   name: string;
   component: NodeComponent;
   id: string;

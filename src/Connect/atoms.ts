@@ -16,8 +16,8 @@ export const connectionAtom = atom<Connection<unknown>[]>((get) => {
 
 export function getConnections(nodes: Node[]): Atom<Connection<unknown>[]> {
   return atom((get) => {
-    const isockets = nodes.map((node) => node.inputs).flatMap((a) => a);
-    const osockets = nodes.map((node) => node.outputs).flatMap((a) => a);
+    const isockets = nodes.map((node) => get(node.isockets)).flatMap((a) => a);
+    const osockets = nodes.map((node) => get(node.osockets)).flatMap((a) => a);
     const connections = isockets
       .map((isocket) => {
         const found = osockets.find(

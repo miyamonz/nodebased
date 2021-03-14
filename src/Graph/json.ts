@@ -8,7 +8,7 @@ import type { ConnectionJSON } from "../Connect";
 
 export const graphToJson = (get: Getter) => (graph: GraphView): GraphJSON => {
   const { nodes, connections } = graph;
-  const cToJson = connectionToJson(get(nodes));
+  const cToJson = connectionToJson(get)(get(nodes));
   return {
     nodes: get(nodes).map(nodeToJson(get)),
     connections: get(connections)
@@ -17,24 +17,19 @@ export const graphToJson = (get: Getter) => (graph: GraphView): GraphJSON => {
           return cToJson(c);
         } catch (e: unknown) {
           console.error(e);
-          return;
+          return undefined;
         }
       })
       .filter((a): a is ConnectionJSON => a !== undefined),
   };
 };
 
-export function createNodesandConnections(json: GraphJSON) {
+export const jsonToGraph = (get: Getter) => (json: GraphJSON) => {
   const nodes = json.nodes.map(jsonToNode);
-  const connections = json.connections.map(jsonToConnection(nodes));
+  const connections = json.connections.map(jsonToConnection(get)(nodes));
   const _nodes = nodes.map((n) => ({
     ...n,
     id: Math.floor(Math.random() * 10 ** 12).toString(),
   }));
-  return { nodes: _nodes, connections };
-}
-
-export function jsonToGraph(json: GraphJSON) {
-  const { nodes, connections } = createNodesandConnections(json);
-  return createGraph(nodes, connections);
-}
+  return createGraph(_nodes, connections);
+};

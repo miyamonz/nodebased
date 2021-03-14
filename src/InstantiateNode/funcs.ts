@@ -1,4 +1,5 @@
 import React from "react";
+import { atom } from "jotai";
 import { useAtomCallback } from "jotai/utils";
 import { createNode } from "../Node";
 import type { Node } from "../Node";
@@ -14,8 +15,8 @@ export function useCreateInstanceNode({ position }: { position: Position }) {
       const outletNode = nodes.filter((n) => n.name === "outlet");
 
       const variable: Variable = {
-        inputAtoms: inletNode.map((n) => n.inputs[0].ref),
-        outputAtoms: outletNode.map((n) => n.outputs[0].atom),
+        inputAtoms: atom((get) => inletNode.map((n) => get(n.isockets)[0].ref)),
+        outputAtoms: atom(() => outletNode.map((n) => get(n.osockets)[0].atom)),
       };
       return createNode({
         name: "instance",
