@@ -1,4 +1,4 @@
-import { createComponent } from "./GraphNode";
+import { createComponent } from "./Component";
 import { atom } from "jotai";
 import type { GraphJSON } from "../Graph";
 
