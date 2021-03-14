@@ -4,12 +4,23 @@ import { nodeToJson, jsonToNode } from "../Node";
 import { connectionToJson, jsonToConnection } from "../Connect";
 import type { Getter } from "jotai/core/types";
 import type { GraphView, GraphJSON } from "./types";
+import type { ConnectionJSON } from "../Connect";
 
 export const graphToJson = (get: Getter) => (graph: GraphView): GraphJSON => {
   const { nodes, connections } = graph;
+  const cToJson = connectionToJson(get(nodes));
   return {
     nodes: get(nodes).map(nodeToJson(get)),
-    connections: get(connections).map(connectionToJson(get(nodes))),
+    connections: get(connections)
+      .map((c) => {
+        try {
+          return cToJson(c);
+        } catch (e: unknown) {
+          console.error(e);
+          return;
+        }
+      })
+      .filter((a): a is ConnectionJSON => a !== undefined),
   };
 };
 
