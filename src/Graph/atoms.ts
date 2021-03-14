@@ -92,14 +92,10 @@ export const removeNodeFromGraphAtom = atom(
       const to = isockets.map((s) => s.ref).includes(c.to.ref);
       return from || to;
     };
+
     set(graph.connections, (prev) => [
       ...prev.filter((c) => !shouldDisConnect(c)),
     ]);
-
-    //disconnect
-    isockets.forEach((isocket) => {
-      set(isocket.ref, atom(get(isocket.atom)));
-    });
 
     // remove node
     set(graph.nodes, (prev) => prev.filter((na) => !nodes.includes(na)));

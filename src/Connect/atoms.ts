@@ -27,7 +27,7 @@ export function getConnections(
   });
 }
 
-export const setConnectAtom = atom(
+const setConnectAtom = atom(
   null,
   (_get, set, c: Connection<unknown> | Connection<unknown>[]) => {
     console.log("connect");
@@ -39,7 +39,7 @@ export function useConnect() {
   return useUpdateAtom(setConnectAtom);
 }
 
-export const setDisconnectAtom = atom(
+const setDisconnectAtom = atom(
   null,
   (_get, set, c: Connection<unknown> | Connection<unknown>[]) => {
     console.log("disconnect");
