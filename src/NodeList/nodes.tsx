@@ -16,10 +16,12 @@ import hold from "./hold";
 import circle from "./circle";
 import rect from "./rect";
 import line from "./line";
+import g from "./g";
 import pack from "./pack";
 import unpack from "./unpack";
 import onMouse from "./onMouse";
 import press from "./press";
+import select from "./select";
 import mouse from "./mouse";
 import asFn from "./asFn";
 import jsonNode from "./jsonNode";
@@ -52,8 +54,10 @@ const _nodeOptions = [
   circle,
   rect,
   line,
+  g,
   onMouse,
   press,
+  select,
   pack,
   unpack,
   mouse,

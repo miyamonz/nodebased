@@ -4,21 +4,9 @@ import { useAtomValue } from "jotai/utils";
 import { createAtomRef } from "../AtomRef";
 import type { Variable } from "../Variable";
 
-const isClassComponent = (c: unknown) =>
-  typeof c === "function" && c?.prototype?.isReactComponent;
-const isFunctionComponent = (c: unknown) => {
-  return (
-    typeof c === "function" &&
-    String(c).includes("return") &&
-    !!String(c).match(/react(\d+)?./i)
-  );
-};
-const isComponent = (c: unknown): c is React.ComponentType =>
-  isClassComponent(c) || isFunctionComponent(c);
-
 const range = (n: number) => [...Array(n).keys()];
 const option = {
-  name: "render",
+  name: "g",
   init: () => {
     const inputAtoms = range(5).map(() => {
       return createAtomRef(atom<React.ComponentType | null>(null));
@@ -28,21 +16,26 @@ const option = {
       return inputAtoms.map(get).map(get);
     });
 
-    const Render = () => {
+    const G = (props: JSX.IntrinsicElements["g"]) => {
       const components = useAtomValue(componentsAtom);
       return (
-        <>
-          {components.filter(isComponent).map((Component, i) => (
-            <Component key={i} />
-          ))}
-        </>
+        <g {...props}>
+          {components
+            .filter(
+              (c): c is React.ComponentType =>
+                c !== null && c !== undefined && typeof c === "function"
+            )
+            .map((Component, i) => (
+              <Component key={i} />
+            ))}
+        </g>
       );
     };
     const variable: Variable = {
       inputAtoms: atom(() => inputAtoms as any),
-      outputAtoms: atom(() => []),
+      outputAtoms: atom(() => [atom(() => G)]),
     };
-    return { variable, component: Render };
+    return { variable };
   },
 };
 
