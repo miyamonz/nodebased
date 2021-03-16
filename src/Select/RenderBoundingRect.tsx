@@ -1,7 +1,7 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
 import { selectedNodesAtom, selectedGraphAtom } from "./atoms";
-import { useCopyToClipboard } from "./atoms";
+import { useSetSelected, useCopyToClipboard } from "./atoms";
 import { boundingRect, offsetRect } from "../Rect";
 
 import { useRemoveNode, useAppendNode } from "../actions";
@@ -40,6 +40,8 @@ const RenderBoundingRectImpl = () => {
   const copyToClipboard = useCopyToClipboard();
   const createGraphNode = useCreateGraphNode();
   const createSubGraphNode = useCreateSubGraphNode();
+
+  const setSelected = useSetSelected();
   useShortcutCopy(
     React.useCallback(() => {
       copyToClipboard();
@@ -59,14 +61,20 @@ const RenderBoundingRectImpl = () => {
     {
       name: "graph json",
       onMouseUp: () => {
-        createGraphNode(graph).then(append);
+        createGraphNode(graph).then((node) => {
+          append(node);
+          setSelected([node]);
+        });
       },
       fill: "green",
     },
     {
       name: "sub graph",
       onMouseUp: () => {
-        createSubGraphNode(graph).then(append);
+        createSubGraphNode(graph).then((node) => {
+          append(node);
+          setSelected([node]);
+        });
       },
       fill: "pink",
     },
