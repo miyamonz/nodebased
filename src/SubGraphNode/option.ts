@@ -30,7 +30,12 @@ const option = {
   init: (args?: { data?: {} }) => {
     const json: GraphJSON = args?.data as GraphJSON;
     const jsonAtom = atom(json);
-    const graphAtom = atom((get) => jsonToGraph(get)(get(jsonAtom)));
+    const graphAtom = atom((get) => {
+      const json = get(jsonAtom);
+      console.log("graphAtom", json);
+
+      return jsonToGraph(get)(json);
+    });
     const variable = createVariable(graphAtom);
     return {
       variable,

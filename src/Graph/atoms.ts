@@ -1,29 +1,35 @@
-import { useAtomValue, useUpdateAtom } from "jotai/utils";
 import { atom } from "jotai";
-import type { Atom } from "jotai";
-import { createGraph } from "./funcs";
-import { jsonToGraph, graphToJson } from "./json";
+import { useAtomValue, useUpdateAtom } from "jotai/utils";
+import type { Atom, PrimitiveAtom } from "jotai";
+import { graphToJson } from "./json";
+import { currentGraphAtom } from "../actions";
 import type { Graph, GraphJSON } from "./types";
 
 import type { Node } from "../Node";
 import type { Connection } from "../Connect";
 
 type GraphStack = {
-  graph: Graph;
+  graph: PrimitiveAtom<GraphJSON>;
   onPop: (json: GraphJSON) => void;
 };
 
-const rootGraph = createGraph([]); //empty graph
-const graphStackAtom = atom<GraphStack[]>([]);
+const rootGraphJsonAtom = atom<GraphJSON>({ nodes: [], connections: [] });
+export const graphStackAtom = atom<GraphStack[]>([]);
 
-export const currentGraphAtom = atom<Graph>((get) => {
-  const stack = get(graphStackAtom);
-  return stack.length > 0 ? stack[stack.length - 1].graph : rootGraph;
-});
-export const currentGraphJsonAtom = atom<GraphJSON>((get) => {
-  const graph = get(currentGraphAtom);
-  return graphToJson(get)(graph);
-});
+export const currentGraphJsonAtom: PrimitiveAtom<GraphJSON> = atom(
+  (get) => {
+    const stack = get(graphStackAtom);
+    return stack.length > 0
+      ? get(stack[stack.length - 1].graph)
+      : get(rootGraphJsonAtom);
+  },
+  (get, set, newJson) => {
+    const stack = get(graphStackAtom);
+    const graphJsonAtom =
+      stack.length > 0 ? stack[stack.length - 1].graph : rootGraphJsonAtom;
+    set(graphJsonAtom, newJson);
+  }
+);
 
 const dropStackAtom = atom(null, (get, set) => {
   let stack = get(graphStackAtom);
@@ -33,38 +39,35 @@ const dropStackAtom = atom(null, (get, set) => {
 });
 
 export function useCurrentIsRoot() {
-  const currentGraph = useAtomValue(currentGraphAtom);
-  return currentGraph === rootGraph;
+  const stack = useAtomValue(graphStackAtom);
+  return stack.length === 0;
 }
 
 const pushGraphAtom = atom(null, (_get, set, graphStack: GraphStack) => {
   set(graphStackAtom, (prev) => [...prev, graphStack]);
 });
 
-const toGraphAtom = atom(
-  null,
-  (
-    get,
-    _set,
-    { json, callback }: { json: GraphJSON; callback: (graph: Graph) => void }
-  ) => {
-    const graph = jsonToGraph(get)(json);
-    callback(graph);
-  }
-);
+const saveAtom = atom(null, (get, set) => {
+  // save graph to json
+  const graph = get(currentGraphAtom);
+  set(currentGraphJsonAtom, graphToJson(get)(graph));
+});
 export function usePushGraphJSON() {
-  const callback = useUpdateAtom(pushGraphAtom);
-  const setJson = useUpdateAtom(toGraphAtom);
+  const save = useUpdateAtom(saveAtom);
+  const push = useUpdateAtom(pushGraphAtom);
   return (json: GraphJSON, onPop: GraphStack["onPop"]) => {
-    setJson({ json, callback: (graph) => callback({ graph, onPop }) });
+    save();
+    push({ graph: atom(json), onPop });
   };
 }
 
 export const popGraphAtom = atom(null, (get, set) => {
+  const graph = get(currentGraphAtom);
+  const json = graphToJson(get)(graph);
   set(graphStackAtom, (prev) => {
     const popped = prev[prev.length - 1];
     if ("onPop" in popped) {
-      popped.onPop(graphToJson(get)(popped.graph));
+      popped.onPop(json);
     }
     prev.pop();
     return [...prev];

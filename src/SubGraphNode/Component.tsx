@@ -4,6 +4,7 @@ import type { NodeComponent } from "../Node";
 import { usePushGraphJSON } from "../Graph";
 import type { GraphJSON, Graph } from "../Graph";
 import { ConnectAtomLogic } from "../Connect/ConnectionLine";
+import { currentGraphJsonAtom } from "../Graph";
 
 export function createComponent(
   jsonAtom: PrimitiveAtom<GraphJSON>,
@@ -13,10 +14,11 @@ export function createComponent(
     const pushGraphJSON = usePushGraphJSON();
     const [rect] = useAtom(node.rect);
 
-    const [json, setGraph] = useAtom(jsonAtom);
+    const [json] = useAtom(jsonAtom);
     const [graph] = useAtom(graphAtom);
     const [connections] = useAtom(graph.connections);
 
+    const [, setCurrentGraphJson] = useAtom(currentGraphJsonAtom);
     return (
       <>
         {connections.map((c) => {
@@ -38,7 +40,19 @@ export function createComponent(
           width={rect.width}
           height={rect.height / 2}
           fill="transparent"
-          onClick={() => pushGraphJSON(json, setGraph)}
+          onClick={() =>
+            pushGraphJSON(json, (_json) => {
+              setCurrentGraphJson((json) => {
+                const found = json.nodes.find((n) => n.id === node.id);
+                if (found !== undefined) {
+                  found.data = _json;
+                } else {
+                  console.error("sub graph node not found");
+                }
+                return json;
+              });
+            })
+          }
         />
       </>
     );

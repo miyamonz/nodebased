@@ -1,5 +1,4 @@
 export {
-  currentGraphAtom,
   currentGraphJsonAtom,
   usePushGraphJSON,
   useSetRootGraph,

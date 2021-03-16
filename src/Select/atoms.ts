@@ -3,7 +3,7 @@ import { useAtomValue, useUpdateAtom } from "jotai/utils";
 import type { Node } from "../Node";
 import { copyToClipboard } from "../util";
 
-import { currentGraphAtom } from "../Graph";
+import { currentGraphAtom } from "../actions";
 import { getGraphViewByNodes, graphToJson } from "../Graph";
 
 // selected nodes

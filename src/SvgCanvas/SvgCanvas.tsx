@@ -1,7 +1,8 @@
 import { SVGProvider } from "../SVGContext";
 import { NodeMenu } from "../NodeMenu";
 import { useAtomValue } from "jotai/utils";
-import { currentGraphAtom, RenderGraph, RenderGraphMenu } from "../Graph";
+import { RenderGraph, RenderGraphMenu } from "../Graph";
+import { currentGraphJsonAtom } from "../Graph";
 import {
   RenderSelectRect,
   RenderBoundingRect,
@@ -14,7 +15,7 @@ import { Paste } from "../Paste";
 
 function SVGContent() {
   useDragMoveNode();
-  const graph = useAtomValue(currentGraphAtom);
+  const graphJson = useAtomValue(currentGraphJsonAtom);
   return (
     <>
       <Paste />
@@ -26,7 +27,7 @@ function SVGContent() {
       <RenderBoundingRect />
       <RenderSelectRect />
       <TmpConnectLine />
-      {graph && <RenderGraph graph={graph} />}
+      {graphJson && <RenderGraph jsonAtom={currentGraphJsonAtom} />}
       <NodeMenu />
     </>
   );

@@ -33,8 +33,6 @@ export const InputCircle = <T,>({ input }: { input: InputSocket<T> }) => {
   const isHovered = hovered === input;
 
   const isConnected = false;
-  const [val] = useAtom(input.atom);
-  const [position] = useAtom(input.position);
   return (
     <>
       <IOCircle
@@ -47,10 +45,6 @@ export const InputCircle = <T,>({ input }: { input: InputSocket<T> }) => {
         }}
         fill={isHovered ? "red" : isConnected ? "blue" : "white"}
       />
-      <text {...position} y={position.y + 60}>
-        {input.atom.toString()}
-      </text>
-      <text {...position}>{typeof val === "number" && val}</text>
     </>
   );
 };
@@ -60,8 +54,6 @@ export const OutputCircle = <T,>({ output }: { output: OutputSocket<T> }) => {
   const [hovered, setHovered] = useAtom(hoveredOutputSocketAtom);
   const isHovered = hovered === output;
 
-  const [val] = useAtom(output.atom);
-  const [position] = useAtom(output.position);
   return (
     <>
       <IOCircle
@@ -74,10 +66,6 @@ export const OutputCircle = <T,>({ output }: { output: OutputSocket<T> }) => {
         }}
         fill={isHovered ? "red" : "white"}
       />
-      <text {...position} y={position.y + 60}>
-        {output.atom.toString()}
-      </text>
-      <text {...position}>{typeof val === "number" && val}</text>
     </>
   );
 };
