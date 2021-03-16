@@ -15,4 +15,6 @@ export const nodeToJson = (get: Getter) => (node: Node): NodeJSON => {
   };
 };
 
-export const jsonToNode = createNodeByName;
+export const jsonToNode = (json: NodeJSON): Node => {
+  return createNodeByName(json);
+};

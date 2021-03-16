@@ -8,8 +8,8 @@ const option = {
     const variable: Variable = {
       inputAtoms: atom(() => [pos as any]),
       outputAtoms: atom(() => [
-        atom((get) => get(get(pos))?.x),
-        atom((get) => get(get(pos))?.y),
+        atom((get) => get(get(pos))?.x ?? 0),
+        atom((get) => get(get(pos))?.y ?? 0),
       ]),
     };
     return { variable };
