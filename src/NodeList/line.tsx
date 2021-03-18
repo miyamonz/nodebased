@@ -1,6 +1,7 @@
 import { atom, useAtom } from "jotai";
 import { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
+import { Variable } from "../Variable";
 
 const option: NodeDefinition = {
   name: "line",
@@ -40,8 +41,8 @@ const option: NodeDefinition = {
         };
       }),
     ];
-    const variable = {
-      inputAtoms: atom(() => inputAtoms),
+    const variable: Variable = {
+      inputAtoms: atom(() => inputAtoms as any),
       outputAtoms: atom(() => outputAtoms),
     };
     return { variable };
