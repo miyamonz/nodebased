@@ -12,6 +12,7 @@ export type ValueType =
   | "number"
   | "boolean"
   | "Position"
+  | "Json"
   | "ComponentType"
   | "any";
 

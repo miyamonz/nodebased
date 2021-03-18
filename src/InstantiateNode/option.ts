@@ -8,6 +8,7 @@ import { createOneInputVariable } from "../Variable";
 
 const option = {
   name: "instantiate",
+  inputs: [{ type: "Json" }],
   init: () => {
     const graphJsonAtom = createAtomRef(
       atom<GraphJSON>({ nodes: [], connections: [] })
