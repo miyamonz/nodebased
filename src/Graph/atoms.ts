@@ -90,9 +90,14 @@ export const removeNodeFromGraphAtom = atom(
     const graph = get(targetGraphAtom);
     const osockets = nodes.flatMap((n) => get(n.osockets));
     const isockets = nodes.flatMap((n) => get(n.isockets));
+    const ids = nodes.map((n) => n.id);
     const shouldDisConnect = (c: Connection<unknown>) => {
-      const from = osockets.map((s) => s.name).includes(c.from.name);
-      const to = isockets.map((s) => s.name).includes(c.to.name);
+      const from =
+        osockets.map((s) => s.name).includes(c.from.name) &&
+        ids.includes(c.from.nodeId);
+      const to =
+        isockets.map((s) => s.name).includes(c.to.name) &&
+        ids.includes(c.to.nodeId);
       return from || to;
     };
 
