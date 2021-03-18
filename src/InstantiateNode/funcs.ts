@@ -7,6 +7,8 @@ import type { Graph } from "../Graph";
 import type { Position } from "../Position";
 import type { Variable } from "../Variable";
 
+import type { InputSocketJSON, OutputSocketJSON } from "../Socket";
+
 export function useCreateInstanceNode({ position }: { position: Position }) {
   return useAtomCallback<Node, Graph>(
     React.useCallback((get, _set, graph) => {
@@ -14,14 +16,22 @@ export function useCreateInstanceNode({ position }: { position: Position }) {
       const inletNode = nodes.filter((n) => n.name === "inlet");
       const outletNode = nodes.filter((n) => n.name === "outlet");
 
-      const variable: Variable = {
-        inputAtoms: atom((get) => inletNode.map((n) => get(n.isockets)[0].ref)),
-        outputAtoms: atom(() => outletNode.map((n) => get(n.osockets)[0].atom)),
+      const isockets: InputSocketJSON[] = inletNode.map(
+        (n) => get(n.isockets)[0]
+      );
+      const osockets: OutputSocketJSON[] = outletNode.map(
+        (n) => get(n.osockets)[0]
+      );
+
+      const _variable: Variable = {
+        inputAtoms: atom(() => inletNode.map(() => atom(atom(0)) as any)),
+        outputAtoms: atom(() => outletNode.map(() => atom(0))),
       };
       return createNode({
         name: "instance",
         position,
-        variable,
+        isockets,
+        osockets,
         component: () => null,
         toSave: undefined,
       });

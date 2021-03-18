@@ -24,11 +24,23 @@ export const graphToJson = (get: Getter) => (graph: GraphView): GraphJSON => {
   };
 };
 
+const uuid = () => Math.floor(Math.random() * 10 ** 12).toString();
+
+function replaceNodeIds(json: GraphJSON): GraphJSON {
+  const idMap = Object.fromEntries(json.nodes.map((n) => [n.id, uuid()]));
+  const nodes = json.nodes.map((n) => ({ ...n, id: idMap[n.id] }));
+  const connections = json.connections.map((c) => {
+    const from = { ...c.from, nodeId: idMap[c.from.nodeId] };
+    const to = { ...c.to, nodeId: idMap[c.to.nodeId] };
+    return { from, to };
+  });
+
+  return { nodes, connections };
+}
+
 export const jsonToGraph = (get: Getter) => (json: GraphJSON) => {
-  // replacing id should be at first
-  const nodes = json.nodes.map(jsonToNode);
-  const connections: Connection<unknown>[] = json.connections.map(
-    jsonToConnection(get)(nodes)
-  );
+  const _json = replaceNodeIds(json); // replacing id should be at first
+  const nodes = _json.nodes.map(jsonToNode);
+  const connections = _json.connections.map(jsonToConnection(get)(nodes));
   return createGraph(nodes, connections);
 };

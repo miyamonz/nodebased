@@ -17,10 +17,6 @@ const Paste = () => {
       const text = await getClipboard();
       try {
         const json = JSON.parse(text) as GraphJSON;
-        json.nodes = json.nodes.map((n) => ({
-          ...n,
-          id: Math.floor(Math.random() * 10 ** 12).toString(),
-        }));
         const graph = jsonToGraph(get)(json);
         mergeGraph(graph);
 
