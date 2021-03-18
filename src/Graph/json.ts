@@ -26,11 +26,7 @@ export const graphToJson = (get: Getter) => (graph: GraphView): GraphJSON => {
 
 export const jsonToGraph = (get: Getter) => (json: GraphJSON) => {
   // replacing id should be at first
-  const _jsonNode = json.nodes.map((n) => ({
-    ...n,
-    id: Math.floor(Math.random() * 10 ** 12).toString(),
-  }));
-  const nodes = _jsonNode.map(jsonToNode);
+  const nodes = json.nodes.map(jsonToNode);
   const connections: Connection<unknown>[] = json.connections.map(
     jsonToConnection(get)(nodes)
   );

@@ -6,7 +6,7 @@ import { getClipboard } from "../util";
 import { useMergeGraph } from "../actions";
 import { useSetSelected } from "../Select";
 
-import { jsonToGraph } from "../Graph";
+import { jsonToGraph, GraphJSON } from "../Graph";
 
 const Paste = () => {
   const mergeGraph = useMergeGraph();
@@ -16,7 +16,11 @@ const Paste = () => {
     React.useCallback(async (get) => {
       const text = await getClipboard();
       try {
-        const json = JSON.parse(text);
+        const json = JSON.parse(text) as GraphJSON;
+        json.nodes = json.nodes.map((n) => ({
+          ...n,
+          id: Math.floor(Math.random() * 10 ** 12).toString(),
+        }));
         const graph = jsonToGraph(get)(json);
         mergeGraph(graph);
 

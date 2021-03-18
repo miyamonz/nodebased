@@ -1,12 +1,12 @@
 import { atom } from "jotai";
 import { useAtomValue, useUpdateAtom } from "jotai/utils";
 import type { Atom, PrimitiveAtom } from "jotai";
-import { graphToJson } from "./json";
-import { currentGraphAtom } from "../actions";
+import { graphToJson, jsonToGraph } from "./json";
 import type { Graph, GraphJSON } from "./types";
 
 import type { Node } from "../Node";
 import type { Connection } from "../Connect";
+import { createGraph } from "./funcs";
 
 type GraphStack = {
   graph: PrimitiveAtom<GraphJSON>;
@@ -28,6 +28,12 @@ export const currentGraphJsonAtom: PrimitiveAtom<GraphJSON> = atom(
     const graphJsonAtom =
       stack.length > 0 ? stack[stack.length - 1].graph : rootGraphJsonAtom;
     set(graphJsonAtom, newJson);
+  }
+);
+export const currentGraphAtom = atom<Graph, Graph>(
+  (get) => jsonToGraph(get)(get(currentGraphJsonAtom)),
+  (get, set, newGraph) => {
+    set(currentGraphJsonAtom, graphToJson(get)(newGraph));
   }
 );
 

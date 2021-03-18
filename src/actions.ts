@@ -2,6 +2,7 @@ import { atom } from "jotai";
 import { useUpdateAtom } from "jotai/utils";
 import type { SetStateAction } from "jotai/core/types";
 import { createNodeByName } from "./Node";
+import { currentGraphAtom } from "./Graph/atoms";
 import { removeNodeFromGraphAtom } from "./Graph";
 import type { Node } from "./Node";
 import type { Connection } from "./Connect";
@@ -9,14 +10,12 @@ import type { Graph } from "./Graph";
 
 import equal from "fast-deep-equal";
 
-import { createGraph } from "./Graph/funcs";
-export const currentGraphAtom = atom<Graph>(createGraph([]));
+export { currentGraphAtom };
 export const currentNodesAtom = atom<Node[], SetStateAction<Node[]>>(
   (get) => get(get(currentGraphAtom).nodes),
   (get, set, action: SetStateAction<Node[]>) => {
     const graph = get(currentGraphAtom);
     set(graph.nodes, action);
-    set(currentGraphAtom, graph);
   }
 );
 
@@ -41,7 +40,6 @@ export function useAppendNode() {
 const removeNode = atom(null, (get, set, args: Node | Node[]) => {
   const nodes = Array.isArray(args) ? args : [args];
   set(removeNodeFromGraphAtom, { targetGraphAtom: currentGraphAtom, nodes });
-  set(currentGraphAtom, get(currentGraphAtom));
 });
 
 export function useRemoveNode() {
@@ -57,7 +55,6 @@ export const appendConnectionAtom = atom(
       ...prev.filter((conn) => !equal(conn.to, c.to)),
       c,
     ]);
-    set(currentGraphAtom, get(currentGraphAtom));
   }
 );
 
@@ -69,7 +66,6 @@ const mergeGraphAtom = atom(null, (get, set, graph: Graph) => {
     const connectionsAtom = get(currentGraphAtom).connections;
     set(connectionsAtom, (prev) => [...prev, c]);
   });
-  set(currentGraphAtom, get(currentGraphAtom));
 });
 export function useMergeGraph() {
   return useUpdateAtom(mergeGraphAtom);

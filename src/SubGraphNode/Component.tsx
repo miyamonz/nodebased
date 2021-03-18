@@ -42,6 +42,8 @@ export function createComponent(
           height={rect.height / 2}
           fill="transparent"
           onClick={() =>
+            // TODO: don't want to depend current graph
+            // node のidをjsonに保存したくないけど、入れないとここうごかなそう
             pushGraphJSON(json, (_json) => {
               setCurrentGraphJson((json) => {
                 const found = json.nodes.find((n) => n.id === node.id);
