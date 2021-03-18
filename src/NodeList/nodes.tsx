@@ -23,13 +23,11 @@ import onMouse from "./onMouse";
 import press from "./press";
 import select from "./select";
 import mouse from "./mouse";
-import asFn from "./asFn";
-import jsonNode from "./jsonNode";
+import inlet from "./inlet";
+import outlet from "./outlet";
 import { option as graph } from "../GraphNode";
 import { option as instantiate } from "../InstantiateNode";
 import { option as subGraph } from "../SubGraphNode";
-import inlet from "./inlet";
-import outlet from "./outlet";
 
 type Option = {
   name: string;
@@ -42,32 +40,43 @@ const optionFromVariable = (name: string, variable: Variable) => ({
 });
 
 const _nodeOptions = [
+  // ui
   slider,
-  ...fnNodes,
-  optionFromVariable("nodeSize", defaultNodeSizeVariable as any),
-  optionFromVariable("socketRadius", socketRadiusVariable as any),
-  elapsed,
   button,
+
+  // function
+  ...fnNodes,
+
+  // time
+  elapsed,
+
+  // control flow
   _if,
   hold,
+  // svg
   render,
   circle,
   rect,
   line,
   g,
+  //svg envent
   onMouse,
   press,
   select,
+  //position
   pack,
   unpack,
   mouse,
-  asFn,
-  jsonNode,
+  // graph
   graph,
   instantiate,
   subGraph,
   inlet,
   outlet,
+
+  // meta variable
+  optionFromVariable("nodeSize", defaultNodeSizeVariable as any),
+  optionFromVariable("socketRadius", socketRadiusVariable as any),
 ];
 export const nodeOptions: Option[] = _nodeOptions.map((option) => ({
   name: option.name,

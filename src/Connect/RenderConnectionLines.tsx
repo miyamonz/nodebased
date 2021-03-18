@@ -9,7 +9,7 @@ const RenderConnectionLines: React.FC<{
       {connections.map((c) => {
         return (
           <ConnectionLine
-            key={c.from.atom.toString() + c.to.atom.toString()}
+            key={c.from.atom.toString() + c.to.ref.toString()}
             connection={c}
           />
         );
