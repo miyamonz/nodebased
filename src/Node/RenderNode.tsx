@@ -5,7 +5,6 @@ import type { Atom } from "jotai";
 import type { Node } from "./types";
 import { useSelectedNodes } from "../Select";
 import { InputCircle, OutputCircle } from "../Socket";
-import type { OutputSocket } from "../Socket";
 import type { Position } from "../Position";
 
 type NodeComponent = React.FC<{ node: Node }>;
@@ -72,29 +71,29 @@ const RenderNode: NodeComponent = ({ node }) => {
   return (
     <>
       <ShowSelect node={node} />
+      {/*
       {osockets.length > 0 && (
         <RenderText outputAtom={osockets[0].atom} center={center} />
       )}
+      */}
       <g transform={`translate(${rect.x} ${rect.y - 5} )`}>
         <text>{node.name}</text>
       </g>
       <ShowHovered node={node} />
-      {node.component !== undefined && <node.component node={node} />}
 
+      {node.component !== undefined && <node.component node={node} />}
       {node.name !== "inlet" &&
         isockets.map((input) => {
-          return <InputCircle key={input.atom.toString()} input={input} />;
+          return <InputCircle key={input.position.toString()} input={input} />;
         })}
       {node.name !== "outlet" &&
-        osockets.map((socket) => (
-          <RenderOutSocket key={socket.atom.toString()} socket={socket} />
-        ))}
+        osockets.map((output) => {
+          return (
+            <OutputCircle key={output.position.toString()} output={output} />
+          );
+        })}
     </>
   );
 };
-
-function RenderOutSocket({ socket }: { socket: OutputSocket<unknown> }) {
-  return <OutputCircle output={socket} />;
-}
 
 export default React.memo(RenderNode);

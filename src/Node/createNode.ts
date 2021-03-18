@@ -96,20 +96,29 @@ export function createNode({
   console.log("createNode", name);
   const rect = createRect(position);
 
-  const _isockets = atom((get) =>
+  const _isockets = atom(
     isockets.map((s, i) => {
-      const p = { ...position, y: position.y + get(rect).height / 2 + i * 25 };
-      return createInputSocket(s, atom(p));
+      const pAtom = atom((get) => {
+        const position = get(rect);
+        return {
+          ...position,
+          y: position.y + get(rect).height / 2 + i * 25,
+        };
+      });
+      return createInputSocket(s, pAtom);
     })
   );
-  const _osockets = atom((get) =>
+  const _osockets = atom(() =>
     osockets.map((s, i) => {
-      const p = {
-        ...position,
-        y: position.y + get(rect).height / 2 + i * 25,
-        x: position.x + get(rect).width,
-      };
-      return createOutputSocket(s, atom(p));
+      const pAtom = atom((get) => {
+        const position = get(rect);
+        return {
+          ...position,
+          x: position.x + get(rect).width,
+          y: position.y + get(rect).height / 2 + i * 25,
+        };
+      });
+      return createOutputSocket(s, pAtom);
     })
   );
 

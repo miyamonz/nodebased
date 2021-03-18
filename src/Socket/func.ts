@@ -5,14 +5,11 @@ import type { PositionAtom } from "../Position";
 
 export const createInputSocket = <IN>(
   json: InputSocketJSON,
-  anchor: PositionAtom
+  position: PositionAtom
 ): InputSocket<IN> => {
   return {
     ...json,
-    position: atom((get) => {
-      const p = get(anchor);
-      return { x: p.x, y: p.y };
-    }),
+    position,
   };
 };
 
