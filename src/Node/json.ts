@@ -1,6 +1,6 @@
 import type { Getter } from "jotai/core/types";
 import type { Node, NodeJSON } from "./types";
-import { createNodeByJson } from "./createNode";
+import { createNodeByName } from "./createNode";
 import { socketsToJson } from "../Socket/json";
 
 export const nodeToJson = (get: Getter) => (node: Node): NodeJSON => {
@@ -20,5 +20,5 @@ export const nodeToJson = (get: Getter) => (node: Node): NodeJSON => {
 
 export const jsonToNode = (json: NodeJSON): Node => {
   // TODO check whether this json satisfies node definiton
-  return createNodeByJson(json);
+  return createNodeByName(json);
 };

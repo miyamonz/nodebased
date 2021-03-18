@@ -15,20 +15,24 @@ function createVariable(graphAtom: Atom<Graph>) {
   );
 
   const variable: Variable = {
-    inputAtoms: atom((get) =>
-      get(inletNode).map((n) => get(n.isockets)[0].ref)
-    ),
-    outputAtoms: atom((get) =>
-      get(outletNode).map((n) => get(n.osockets)[0].atom)
-    ),
+    inputAtoms: atom((get) => get(inletNode).map(() => atom(atom(0)) as any)),
+    outputAtoms: atom((get) => get(outletNode).map(() => atom(0))),
   };
   return variable;
 }
 
 const option = {
   name: "subGraph",
-  init: (args?: { data?: {} }) => {
-    const json: GraphJSON = args?.data as GraphJSON;
+  inputs: (data: GraphJSON) =>
+    data.nodes
+      .filter((n) => n.name === "inlet")
+      .map((_, i) => ({ type: "input" as const, name: i })),
+  outputs: (data: GraphJSON) =>
+    data.nodes
+      .filter((n) => n.name === "outlet")
+      .map((_, i) => ({ type: "output" as const, name: i })),
+  init: ({ data = {} }) => {
+    const json: GraphJSON = data as GraphJSON;
     const jsonAtom = atom(json);
     const graphAtom = atom((get) => {
       const json = get(jsonAtom);

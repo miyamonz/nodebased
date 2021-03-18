@@ -24,15 +24,21 @@ function createRect(position: Position) {
   return rect;
 }
 
-function getSocketsJsonByName(name: string) {
+function getSocketsJsonByName(name: string, data?: {}) {
   const option = nodeOptions.find((option) => option.name === name);
   if (option === undefined) throw new Error(`${name} not found`);
 
-  const isockets: InputSocketJSON[] = option.inputs.map((t, i) => ({
+  const _inputs =
+    typeof option.inputs === "function" ? option.inputs(data) : option.inputs;
+  const isockets: InputSocketJSON[] = _inputs.map((t, i) => ({
     type: "input",
     name: t.name ?? i,
   }));
-  const osockets: OutputSocketJSON[] = option.outputs.map((t, i) => ({
+  const _outputs =
+    typeof option.outputs === "function"
+      ? option.outputs(data)
+      : option.outputs;
+  const osockets: OutputSocketJSON[] = _outputs.map((t, i) => ({
     type: "output",
     name: t.name ?? i,
   }));
@@ -46,17 +52,15 @@ export function createNodeByName({ name, position, id, data }: Props): Node {
   const option = nodeOptions.find((option) => option.name === name);
   if (option === undefined) throw new Error(`${name} not found`);
 
-  const { isockets, osockets } = getSocketsJsonByName(name);
-  const { component = () => null, toSave } = option.init({ data });
+  const { isockets, osockets } = getSocketsJsonByName(name, data);
 
-  return createNode({
+  return createNodeByJson({
     name,
     position,
+    id,
     isockets,
     osockets,
-    id,
-    component,
-    toSave,
+    data,
   });
 }
 

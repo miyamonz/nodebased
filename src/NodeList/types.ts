@@ -21,8 +21,8 @@ type IOType = {
 };
 export type NodeDefinition<T = unknown> = {
   name: string;
-  inputs?: readonly IOType[];
-  outputs?: readonly IOType[];
+  inputs?: readonly IOType[] | ((data: T) => readonly IOType[]);
+  outputs?: readonly IOType[] | ((data: T) => readonly IOType[]);
 
   init: (args: unknown extends T ? {} : { data: T }) => CreateNodeProps<T>;
 } & (unknown extends T
