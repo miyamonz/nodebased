@@ -2,7 +2,7 @@ import React from "react";
 import { useAtom } from "jotai";
 import type { Connection } from "./types";
 
-import { useConnect, useDisconnect } from "./atoms";
+import { useConnect, useDisconnect } from "./connectionEffect";
 
 function useSocket<T>(connection: Connection<T>) {
   const osocket = connection.from;
