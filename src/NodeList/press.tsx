@@ -2,6 +2,7 @@ import React from "react";
 import { atom } from "jotai";
 import type { Atom, WritableAtom } from "jotai";
 import { useAtomValue, useUpdateAtom } from "jotai/utils";
+import { NodeDefinition } from "./types";
 import type { Variable } from "../Variable";
 
 function getComponent(
@@ -33,8 +34,11 @@ function getComponent(
   };
 }
 
-const option = {
+const option: NodeDefinition = {
   name: "press",
+  inputs: [{ type: "ComponentType" }],
+  outputs: [{ type: "ComponentType" }, { type: "boolean" }],
+
   init: () => {
     const componentAtom = atom(atom<React.ComponentType | null>(null));
     const pressAtom = atom(false);

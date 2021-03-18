@@ -1,8 +1,10 @@
 import { atom } from "jotai";
+import { NodeDefinition } from "./types";
 import { createVariable } from "../Variable";
 
-const option = {
+const option: NodeDefinition = {
   name: "elapsed",
+  outputs: [{ type: "number" }],
   init: () => {
     const variable = createVariable([], () => {
       const oscAtom = atom(0);

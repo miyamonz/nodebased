@@ -1,6 +1,9 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
 import type { Atom, PrimitiveAtom } from "jotai";
+
+import type { NodeDefinition } from "./types";
+
 import { createAtomRef } from "../AtomRef";
 import type { AtomRef } from "../AtomRef";
 import type { NodeComponent } from "../Node";
@@ -45,10 +48,14 @@ function getComponent(
   return React.memo(SliderNode);
 }
 
-const option = {
+const option: NodeDefinition<number> = {
   name: "slider",
-  init: (args?: { data?: number }) => {
-    const initialValue = typeof args?.data === "number" ? args.data : 0;
+  inputs: [{ type: "number" }],
+  outputs: [{ type: "number" }],
+  save: 0,
+
+  init({ data }) {
+    const initialValue: number = typeof data === "number" ? data : 0;
     const inputRef = createAtomRef(atom(initialValue));
     const internalAtom = atom(initialValue);
 

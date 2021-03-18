@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
 import type { Variable } from "../Variable";
 
@@ -6,8 +7,10 @@ const isPosition = (a: any): a is { x: number; y: number } => {
   return typeof a?.x === "number" && typeof a?.y === "number";
 };
 
-const option = {
+const option: NodeDefinition = {
   name: "hold",
+  inputs: [{ type: "boolean" }],
+  outputs: [{ type: "boolean" }],
   init: () => {
     const condAtom = createAtomRef(atom(false));
     const inputAtom = createAtomRef(atom<unknown>(null));

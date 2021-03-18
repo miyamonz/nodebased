@@ -1,9 +1,17 @@
 import { atom } from "jotai";
+import { NodeDefinition } from "./types";
 import { useAtomValue } from "jotai/utils";
 import { createAtomRef } from "../AtomRef";
 
-const option = {
+const option: NodeDefinition = {
   name: "rect",
+  inputs: [
+    { type: "number" },
+    { type: "number" },
+    { type: "number" },
+    { type: "number" },
+  ],
+  outputs: [{ type: "ComponentType" }],
   init: () => {
     const x = createAtomRef(atom(0));
     const y = createAtomRef(atom(0));

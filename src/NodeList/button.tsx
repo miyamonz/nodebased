@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { atom, useAtom } from "jotai";
 import type { WritableAtom } from "jotai";
+import { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
 import { createVariable } from "../Variable";
 import type { NodeComponent } from "../Node";
@@ -33,8 +34,10 @@ function getComponent(downAtom: WritableAtom<boolean, boolean>) {
   return RenderButtonNode;
 }
 
-const option = {
+const option: NodeDefinition = {
   name: "button",
+  inputs: [{ type: "boolean" }],
+  outputs: [{ type: "boolean" }],
   init: () => {
     const input = createAtomRef(atom(false));
     const buttonAtom = atom(false);

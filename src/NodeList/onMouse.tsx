@@ -2,10 +2,13 @@ import React from "react";
 import { atom } from "jotai";
 import { useAtomValue, useUpdateAtom } from "jotai/utils";
 import type { WritableAtom } from "jotai";
+import { NodeDefinition } from "./types";
 import { transformAtom } from "../SVGContext";
 
-const option = {
+const option: NodeDefinition = {
   name: "onMouse",
+  inputs: [{ type: "ComponentType" }],
+  outputs: [{ type: "ComponentType" }, { type: "Position" }],
   init: () => {
     const componentAtom = atom(atom<React.ReactNode | null>(null));
     const inputAtoms = [componentAtom];

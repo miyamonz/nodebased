@@ -1,6 +1,7 @@
 import React from "react";
 import { atom } from "jotai";
 import { useAtomValue } from "jotai/utils";
+import { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
 import type { Variable } from "../Variable";
 
@@ -17,8 +18,9 @@ const isComponent = (c: unknown): c is React.ComponentType =>
   isClassComponent(c) || isFunctionComponent(c);
 
 const range = (n: number) => [...Array(n).keys()];
-const option = {
+const option: NodeDefinition = {
   name: "render",
+  inputs: range(5).map(() => ({ type: "ComponentType" })),
   init: () => {
     const inputAtoms = range(5).map(() => {
       return createAtomRef(atom<React.ComponentType | null>(null));

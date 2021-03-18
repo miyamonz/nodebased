@@ -1,8 +1,12 @@
 import { atom } from "jotai";
+import { NodeDefinition } from "./types";
 import type { Variable } from "../Variable";
 
-const option = {
+const option: NodeDefinition = {
   name: "pack",
+  inputs: [{ type: "number" }, { type: "number" }],
+  outputs: [{ type: "Position" }],
+
   init: () => {
     const xAtom = atom(atom(0));
     const yAtom = atom(atom(0));

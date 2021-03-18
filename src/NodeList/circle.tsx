@@ -1,9 +1,17 @@
 import { atom } from "jotai";
 import { useAtomValue } from "jotai/utils";
+import { NodeDefinition } from "./types";
 import type { Variable } from "../Variable";
 
-const option = {
+const option: NodeDefinition = {
   name: "circle",
+  inputs: [
+    { type: "number", name: "x" },
+    { type: "number", name: "y" },
+    { type: "number", name: "r" },
+  ],
+  outputs: [{ type: "ComponentType" }],
+
   init: () => {
     const x = atom(atom(0));
     const y = atom(atom(0));

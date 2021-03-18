@@ -1,8 +1,10 @@
 import { atom } from "jotai";
-import type { Variable } from "../Variable";
+import { NodeDefinition } from "./types";
+import { Variable } from "../Variable";
 
-const option = {
+const option: NodeDefinition = {
   name: "inlet",
+  outputs: [{ type: "any" }],
   init: () => {
     const refAtom = atom(atom(null));
     const outAtom = atom((get) => get(get(refAtom)));

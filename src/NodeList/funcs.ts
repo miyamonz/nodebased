@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { NodeDefinition, ValueType } from "./types";
 import type { NodeComponent } from "../Node";
 import { createVariable } from "../Variable";
 import { createAtomRef } from "../AtomRef";
@@ -14,8 +15,12 @@ export function createVariableFromFn(fn: (...args: unknown[]) => unknown) {
   );
 }
 
+//TODO runtime type やったらoutput value は推論させたい
 type OptionFn = {
   name: string;
+  inputsType?: ValueType[];
+  outputType?: ValueType;
+
   component?: NodeComponent;
   fn: (...args: any[]) => unknown;
 };
@@ -34,24 +39,37 @@ const nodes: OptionFn[] = [
   { name: "max", fn: (a: number, b: number) => Math.max(a, b) },
   {
     name: "add vec2",
+    inputsType: ["Position", "Position"],
+    outputType: "Position",
     fn: (a: Position, b: Position) => ({ x: a?.x + b?.x, y: a?.y + b?.y }),
   },
   {
     name: "sub vec2",
+    inputsType: ["Position", "Position"],
+    outputType: "Position",
     fn: (a: Position, b: Position) => ({ x: a?.x - b?.x, y: a?.y - b?.y }),
   },
-  { name: "magnitude", fn: (a: Position) => Math.sqrt(a.x ** 2 + a.y ** 2) },
+  {
+    name: "magnitude",
+    inputsType: ["Position"],
+    outputType: "number",
+    fn: (a: Position) => Math.sqrt(a.x ** 2 + a.y ** 2),
+  },
   {
     name: "console.log",
+    inputsType: ["any"],
     fn: (_) => {
       console.log(_);
     },
   },
 ];
-const converted = nodes.map((option) => {
-  const { name, fn, ...rest } = option;
+const converted: NodeDefinition[] = nodes.map((option) => {
+  const { name, fn, inputsType, outputType, ...rest } = option;
   return {
     name,
+    inputs: inputsType?.map((t) => ({ type: t })),
+    outputs:
+      typeof outputType !== "undefined" ? [{ type: outputType }] : undefined,
     init: () => {
       const variable = createVariableFromFn(fn);
       return {
