@@ -24,13 +24,9 @@ function createRect(position: Position) {
   return rect;
 }
 
-type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
-type Props = PartialBy<NodeJSON, "id" | "isockets" | "osockets">;
-export function createNodeByName({ name, position, id, data }: Props): Node {
+function getSocketsJsonByName(name: string) {
   const option = nodeOptions.find((option) => option.name === name);
   if (option === undefined) throw new Error(`${name} not found`);
-
-  const { component = () => null, toSave } = option.init({ data });
 
   const isockets: InputSocketJSON[] = option.inputs.map((t, i) => ({
     type: "input",
@@ -40,6 +36,19 @@ export function createNodeByName({ name, position, id, data }: Props): Node {
     type: "output",
     name: t.name ?? i,
   }));
+
+  return { isockets, osockets };
+}
+
+type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+type Props = PartialBy<NodeJSON, "id" | "isockets" | "osockets">;
+export function createNodeByName({ name, position, id, data }: Props): Node {
+  const option = nodeOptions.find((option) => option.name === name);
+  if (option === undefined) throw new Error(`${name} not found`);
+
+  const { isockets, osockets } = getSocketsJsonByName(name);
+  const { component = () => null, toSave } = option.init({ data });
+
   return createNode({
     name,
     position,
