@@ -1,4 +1,3 @@
-import { atom } from "jotai";
 import type { InputSocket, InputSocketJSON } from "./types";
 import type { OutputSocket, OutputSocketJSON } from "./types";
 import type { PositionAtom } from "../Position";
@@ -6,8 +5,8 @@ import type { Node } from "../Node";
 
 export const createInputSocket = <IN>(
   json: InputSocketJSON,
-  nodeId: Node["id"],
-  position: PositionAtom
+  position: PositionAtom,
+  nodeId: Node["id"]
 ): InputSocket<IN> => {
   return {
     ...json,
@@ -18,8 +17,8 @@ export const createInputSocket = <IN>(
 
 export const createOutputSocket = <OUT>(
   json: OutputSocketJSON,
-  nodeId: Node["id"],
-  position: PositionAtom
+  position: PositionAtom,
+  nodeId: Node["id"]
 ): OutputSocket<OUT> => {
   return {
     ...json,

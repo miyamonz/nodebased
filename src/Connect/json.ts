@@ -8,20 +8,18 @@ export const connectionToJson = (get: Getter) => (nodes: Node[]) => (
   const isocket = c.to;
   const osocket = c.from;
 
-  const fromNodeIdx = nodes.findIndex((node) =>
+  const fromNode = nodes.find((node) =>
     get(node.osockets)
       .map((s) => s.nodeId)
       .includes(osocket.nodeId)
   );
-  const toNodeIdx = nodes.findIndex((node) =>
+  const toNode = nodes.find((node) =>
     get(node.isockets)
       .map((s) => s.nodeId)
       .includes(isocket.nodeId)
   );
-  if (fromNodeIdx === -1) throw new Error("from node socket not found");
-  if (toNodeIdx === -1) throw new Error("to node socket not found");
-  const fromNode = nodes[fromNodeIdx];
-  const toNode = nodes[toNodeIdx];
+  if (fromNode === undefined) throw new Error("from node socket not found");
+  if (toNode === undefined) throw new Error("to node socket not found");
 
   const fromSocket = get(fromNode.osockets).find(
     (output) => output.nodeId === osocket.nodeId && output.name === osocket.name
@@ -34,11 +32,11 @@ export const connectionToJson = (get: Getter) => (nodes: Node[]) => (
 
   return {
     from: {
-      nodeIndex: fromNodeIdx,
+      nodeId: fromNode.id,
       socketName: fromSocket.name,
     },
     to: {
-      nodeIndex: toNodeIdx,
+      nodeId: toNode.id,
       socketName: toSocket.name,
     },
   };
@@ -47,8 +45,8 @@ export const connectionToJson = (get: Getter) => (nodes: Node[]) => (
 export const jsonToConnection = (get: Getter) => (nodes: Node[]) => (
   c: ConnectionJSON
 ): Connection<unknown> => {
-  const fromNode = nodes[c.from.nodeIndex];
-  const toNode = nodes[c.to.nodeIndex];
+  const fromNode = nodes.find((n) => n.id === c.from.nodeId);
+  const toNode = nodes.find((n) => n.id === c.to.nodeId);
   if (fromNode === undefined) {
     throw new Error("fromNode not found");
   }

@@ -109,7 +109,7 @@ export function createNode({
   console.log("createNode", name);
   const rect = createRect(position);
 
-  const id_ = id ?? Math.floor(Math.random() * 10 ** 12).toString();
+  const nodeId = id ?? Math.floor(Math.random() * 10 ** 12).toString();
 
   const _isockets = atom(
     isockets.map((s, i) => {
@@ -120,7 +120,7 @@ export function createNode({
           y: position.y + get(rect).height / 2 + i * 25,
         };
       });
-      return createInputSocket(s, id_, pAtom);
+      return createInputSocket(s, pAtom, nodeId);
     })
   );
   const _osockets = atom(() =>
@@ -133,7 +133,7 @@ export function createNode({
           y: position.y + get(rect).height / 2 + i * 25,
         };
       });
-      return createOutputSocket(s, id_, pAtom);
+      return createOutputSocket(s, pAtom, nodeId);
     })
   );
 
@@ -143,7 +143,7 @@ export function createNode({
     osockets: _osockets,
     name,
     component,
-    id: id_,
+    id: nodeId,
     toSave,
   };
 }

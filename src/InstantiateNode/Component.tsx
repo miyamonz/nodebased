@@ -46,7 +46,9 @@ export function createComponent(graphJsonAtom: Atom<GraphJSON>) {
     return (
       <>
         {connections.map((c) => {
-          return <ConnectAtomLogic key={c.to.atom.toString()} connection={c} />;
+          return (
+            <ConnectAtomLogic key={c.to.position.toString()} connection={c} />
+          );
         })}
         <g>
           <rect {...instancedRect} fill="lightblue" />
