@@ -36,7 +36,7 @@ export function createNodeByName({ name, position, id, data }: Props): Node {
     type: "input",
     name: t.name ?? i,
   }));
-  const osockets: OutputSocketJSON[] = option.inputs.map((t, i) => ({
+  const osockets: OutputSocketJSON[] = option.outputs.map((t, i) => ({
     type: "output",
     name: t.name ?? i,
   }));

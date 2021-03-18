@@ -14,13 +14,16 @@ export function getConnections(
   graph: Graph
 ): Atom<Connection<unknown>[]> {
   return atom((get) => {
-    const isockets = nodes.map((node) => get(node.isockets)).flatMap((a) => a);
-    const osockets = nodes.map((node) => get(node.osockets)).flatMap((a) => a);
+    const isockets = nodes.flatMap((node) => get(node.isockets));
+    const osockets = nodes.flatMap((node) => get(node.osockets));
 
+    const ids = nodes.map((n) => n.id);
     const conns = get(graph.connections).filter((c) => {
       return (
-        osockets.map((s) => s.atom).includes(c.from.atom) &&
-        isockets.map((s) => s.ref).includes(c.to.ref)
+        ids.includes(c.from.nodeId) &&
+        ids.includes(c.to.nodeId) &&
+        osockets.map((s) => s.name).includes(c.from.name) &&
+        isockets.map((s) => s.name).includes(c.to.name)
       );
     });
     return conns;

@@ -22,9 +22,8 @@ export function createComponent(
     return (
       <>
         {connections.map((c) => {
-          return (
-            <ConnectAtomLogic key={c.to.position.toString()} connection={c} />
-          );
+          const key = [c.from, c.to].map((s) => s.nodeId + s.name).join("-");
+          return <ConnectAtomLogic key={key} connection={c} />;
         })}
         <rect
           x={rect.x}

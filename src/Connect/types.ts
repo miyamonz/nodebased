@@ -1,14 +1,14 @@
 import { InputSocket, OutputSocket } from "../Socket";
-import type { Node } from "../Node";
+import type { Socket } from "../Socket/types";
 
 export type ConnectionJSON = {
   from: {
-    node: Node["id"];
-    socket: number;
+    nodeIndex: number;
+    socketName: Socket["name"];
   };
   to: {
-    node: Node["id"];
-    socket: number;
+    nodeIndex: number;
+    socketName: Socket["name"];
   };
 };
 

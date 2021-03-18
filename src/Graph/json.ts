@@ -4,7 +4,7 @@ import { nodeToJson, jsonToNode } from "../Node";
 import { connectionToJson, jsonToConnection } from "../Connect";
 import type { Getter } from "jotai/core/types";
 import type { GraphView, GraphJSON } from "./types";
-import type { ConnectionJSON } from "../Connect";
+import type { Connection, ConnectionJSON } from "../Connect";
 
 export const graphToJson = (get: Getter) => (graph: GraphView): GraphJSON => {
   const { nodes, connections } = graph;
@@ -25,11 +25,14 @@ export const graphToJson = (get: Getter) => (graph: GraphView): GraphJSON => {
 };
 
 export const jsonToGraph = (get: Getter) => (json: GraphJSON) => {
-  const nodes = json.nodes.map(jsonToNode);
-  const connections = json.connections.map(jsonToConnection(get)(nodes));
-  const _nodes = nodes.map((n) => ({
+  // replacing id should be at first
+  const _jsonNode = json.nodes.map((n) => ({
     ...n,
     id: Math.floor(Math.random() * 10 ** 12).toString(),
   }));
-  return createGraph(_nodes, connections);
+  const nodes = _jsonNode.map(jsonToNode);
+  const connections: Connection<unknown>[] = json.connections.map(
+    jsonToConnection(get)(nodes)
+  );
+  return createGraph(nodes, connections);
 };
