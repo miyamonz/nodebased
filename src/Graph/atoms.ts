@@ -6,7 +6,6 @@ import type { Graph, GraphJSON } from "./types";
 
 import type { Node } from "../Node";
 import type { Connection } from "../Connect";
-import { createGraph } from "./funcs";
 
 type GraphStack = {
   graph: PrimitiveAtom<GraphJSON>;

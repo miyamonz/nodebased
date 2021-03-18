@@ -33,10 +33,10 @@ const RenderGraph: React.FC<{
   jsonAtom: WritableAtom<GraphJSON, GraphJSON>;
 }> = ({ jsonAtom }) => {
   const graph = useCreateGraphFromJson(jsonAtom);
-  return <>{graph && <Render_ graph={graph} />}</>;
+  return <>{graph && <Render graph={graph} />}</>;
 };
 
-function Render_({ graph }: { graph: Graph }) {
+function Render({ graph }: { graph: Graph }) {
   const nodes = useAtomValue(graph.nodes);
   const connections = useAtomValue(graph.connections);
   return (
