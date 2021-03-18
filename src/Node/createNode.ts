@@ -4,7 +4,8 @@ import type { Atom } from "jotai";
 import type { Node, NodeJSON, NodeComponent } from "./types";
 import type { Variable } from "../Variable";
 
-import { createInputSockets, createOutputSockets } from "../Socket";
+import { createInputSocket, createOutputSocket } from "../Socket";
+import type { InputSocketJSON, OutputSocketJSON } from "../Socket";
 
 import { createRectAtom } from "../Rect";
 import { defaultNodeSizeVariable } from "./variables";

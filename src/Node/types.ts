@@ -2,10 +2,14 @@ import type { Atom } from "jotai";
 import type { RectAtom } from "../Rect";
 import type { InputSocket, OutputSocket } from "../Socket";
 
+import type { InputSocketJSON, OutputSocketJSON } from "../Socket/types";
+
 export type NodeJSON = {
   name: string;
   position: { x: number; y: number };
   id: string;
+  isockets: InputSocketJSON[];
+  osockets: OutputSocketJSON[];
   data?: {};
 };
 
