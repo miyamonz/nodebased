@@ -1,92 +1,27 @@
 import { atom } from "jotai";
-import { atomFamily } from "jotai/utils";
-import type { Atom } from "jotai";
-import type { InputSocket, OutputSocket } from "./types";
-import type { InputAtom } from "../Variable";
-import type { AtomRef } from "../AtomRef";
-import type { RectAtom } from "../Rect";
+import type { InputSocket, InputSocketJSON } from "./types";
+import type { OutputSocket, OutputSocketJSON } from "./types";
 import type { PositionAtom } from "../Position";
 
-import type { Connection } from "../Connect";
-
 export const createInputSocket = <IN>(
-  defaultAtom: AtomRef<IN>,
+  json: InputSocketJSON,
   anchor: PositionAtom
 ): InputSocket<IN> => {
   return {
-    type: "input",
+    ...json,
     position: atom((get) => {
       const p = get(anchor);
       return { x: p.x, y: p.y };
     }),
-    ref: defaultAtom,
-    atom: atom((get) => get(get(defaultAtom))),
-    /*
-    connection: atom((get) => {
-      const connections = get(connectionAtom);
-      const ref = get(defaultAtom);
-      const found = connections.find(({ from }) => from.atom === ref);
-      return (found as Connection<IN>) || null;
-    }),
-     * */
   };
 };
-
-// input sockets depend on rect because they contain their own position.
-export function createInputSockets(
-  rect: RectAtom,
-  inputsAtom: Atom<InputAtom<unknown>[]>
-): Atom<InputSocket<unknown>[]> {
-  const inputPositionAnchor = atom((get) => {
-    const r = get(rect);
-    return { x: r.x, y: r.y + r.height / 2 };
-  });
-  const socketFamily = atomFamily((key: number) => (get) => {
-    const inputs = get(inputsAtom);
-    const inputAtom = inputs[key];
-    const position = atom((get) => {
-      const p = get(inputPositionAnchor);
-      return { x: p.x, y: p.y + 25 * key };
-    });
-    return createInputSocket(inputAtom, position);
-  });
-  const inputSockets = atom((get) => {
-    const inputs = get(inputsAtom);
-    return inputs.map((_, i) => {
-      return get(socketFamily(i));
-    });
-  });
-  return inputSockets;
-}
 
 export const createOutputSocket = <OUT>(
-  position: PositionAtom,
-  outAtom: OutputSocket<OUT>["atom"]
+  json: OutputSocketJSON,
+  position: PositionAtom
 ): OutputSocket<OUT> => {
   return {
-    type: "output",
+    ...json,
     position,
-    atom: outAtom,
   };
-};
-
-export const createOutputSockets = (
-  rectAtom: RectAtom,
-  outsAtom: Atom<OutputSocket<unknown>["atom"][]>
-): Atom<OutputSocket<unknown>[]> => {
-  const anchor = atom((get) => {
-    const rect = get(rectAtom);
-    return { x: rect.x + rect.width, y: rect.y + rect.height / 2 };
-  });
-  const socketFamily = atomFamily((key: number) => (get) => {
-    const position = atom((get) => ({
-      ...get(anchor),
-      y: get(anchor).y + 25 * key,
-    }));
-    const outAtom = get(outsAtom)[key];
-    return createOutputSocket(position, outAtom);
-  });
-  return atom((get) => {
-    return get(outsAtom).map((_, i) => get(socketFamily(i)));
-  });
 };

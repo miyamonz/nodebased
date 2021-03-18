@@ -1,8 +1,9 @@
 export { useConnected } from "./utils";
 export type { InputSocket, OutputSocket } from "./types";
+export type { InputSocketJSON, OutputSocketJSON } from "./types";
 export type { InputSocketAtom, OutputSocketAtom } from "./types";
 
-export { createInputSockets, createOutputSockets } from "./func";
+export { createInputSocket, createOutputSocket } from "./func";
 export { InputCircle, OutputCircle } from "./IOCircle";
 export { hoveredInputSocketAtom, hoveredOutputSocketAtom } from "./IOCircle";
 
