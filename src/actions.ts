@@ -7,6 +7,8 @@ import type { Node } from "./Node";
 import type { Connection } from "./Connect";
 import type { Graph } from "./Graph";
 
+import equal from "fast-deep-equal";
+
 import { createGraph } from "./Graph/funcs";
 export const currentGraphAtom = atom<Graph>(createGraph([]));
 export const currentNodesAtom = atom<Node[], SetStateAction<Node[]>>(
@@ -52,7 +54,7 @@ export const appendConnectionAtom = atom(
   (get, set, c: Connection<unknown>) => {
     const connectionsAtom = get(currentGraphAtom).connections;
     set(connectionsAtom, (prev) => [
-      ...prev.filter((conn) => conn.to.ref !== c.to.ref),
+      ...prev.filter((conn) => !equal(conn.to, c.to)),
       c,
     ]);
     set(currentGraphAtom, get(currentGraphAtom));

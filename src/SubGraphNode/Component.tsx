@@ -22,7 +22,9 @@ export function createComponent(
     return (
       <>
         {connections.map((c) => {
-          return <ConnectAtomLogic key={c.to.atom.toString()} connection={c} />;
+          return (
+            <ConnectAtomLogic key={c.to.position.toString()} connection={c} />
+          );
         })}
         <rect
           x={rect.x}

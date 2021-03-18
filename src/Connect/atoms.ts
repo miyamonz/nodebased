@@ -32,7 +32,7 @@ const setConnectAtom = atom(
   (_get, set, c: Connection<unknown> | Connection<unknown>[]) => {
     console.log("connect");
     const conns = Array.isArray(c) ? c : [c];
-    conns.forEach((c) => set(c.to.ref, c.from.atom));
+    //conns.forEach((c) => set(c.to.ref, c.from.atom));
   }
 );
 export function useConnect() {
@@ -44,7 +44,7 @@ const setDisconnectAtom = atom(
   (_get, set, c: Connection<unknown> | Connection<unknown>[]) => {
     console.log("disconnect");
     const conns = Array.isArray(c) ? c : [c];
-    conns.forEach((c) => set(c.to.ref, atom(null)));
+    //conns.forEach((c) => set(c.to.ref, atom(null)));
   }
 );
 export function useDisconnect() {

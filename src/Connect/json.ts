@@ -10,23 +10,23 @@ export const connectionToJson = (get: Getter) => (nodes: Node[]) => (
 
   const fromNode = nodes.find((node) =>
     get(node.osockets)
-      .map((s) => s.atom)
-      .includes(osocket.atom)
+      .map((s) => s.nodeId)
+      .includes(osocket.nodeId)
   );
   const toNode = nodes.find((node) =>
     get(node.isockets)
-      .map((s) => s.ref)
-      .includes(isocket.ref)
+      .map((s) => s.nodeId)
+      .includes(isocket.nodeId)
   );
 
   if (fromNode === undefined) throw new Error("from node socket not found");
   if (toNode === undefined) throw new Error("to node socket not found");
 
   const fromIdx = get(fromNode.osockets).findIndex(
-    (output) => output.atom === osocket.atom
+    (output) => output.nodeId === osocket.nodeId
   );
   const toIdx = get(toNode.isockets).findIndex(
-    (input) => input.ref === isocket.ref
+    (input) => input.nodeId === isocket.nodeId
   );
   if (fromIdx === -1) throw new Error("from index not found");
   if (toIdx === -1) throw new Error("to index not found");

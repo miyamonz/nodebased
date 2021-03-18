@@ -18,9 +18,9 @@ export const ConnectAtomLogic = ({
   const setConnect = useConnect();
   const setDisconnect = useDisconnect();
   React.useEffect(() => {
-    setConnect(connection as Connection<unknown>);
+    setConnect(connection);
     return () => {
-      setDisconnect(connection as Connection<unknown>);
+      setDisconnect(connection);
     };
   }, []);
 

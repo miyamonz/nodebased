@@ -1,9 +1,11 @@
 import type { Atom } from "jotai";
 import type { PositionAtom } from "../Position";
+import type { Node } from "../Node";
 
 export type Socket = {
   name: string | number;
   position: PositionAtom;
+  nodeId: Node["id"];
 };
 export type InputSocket<T> = Socket & {
   type: "input";
