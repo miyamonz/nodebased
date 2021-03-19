@@ -3,7 +3,7 @@ import { atom } from "jotai";
 import { useAtomValue } from "jotai/utils";
 import { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
-import type { Variable } from "../Variable";
+import type { Stream } from "../Stream";
 
 const isClassComponent = (c: unknown) =>
   typeof c === "function" && c?.prototype?.isReactComponent;
@@ -40,11 +40,11 @@ const option: NodeDefinition = {
         </>
       );
     };
-    const variable: Variable = {
+    const stream: Stream = {
       inputAtoms: atom(() => inputAtoms as any),
       outputAtoms: atom(() => []),
     };
-    return { variable, component: Render };
+    return { stream, component: Render };
   },
 };
 

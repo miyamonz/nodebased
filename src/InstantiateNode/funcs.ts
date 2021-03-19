@@ -5,7 +5,7 @@ import { createNode } from "../Node";
 import type { Node } from "../Node";
 import type { Graph } from "../Graph";
 import type { Position } from "../Position";
-import type { Variable } from "../Variable";
+import type { Stream } from "../Stream";
 
 import type { InputSocketJSON, OutputSocketJSON } from "../Socket";
 
@@ -23,7 +23,7 @@ export function useCreateInstanceNode({ position }: { position: Position }) {
         (n) => get(n.osockets)[0]
       );
 
-      const _variable: Variable = {
+      const _stream: Stream = {
         inputAtoms: atom(() => inletNode.map(() => atom(atom(0)) as any)),
         outputAtoms: atom(() => outletNode.map(() => atom(0))),
       };

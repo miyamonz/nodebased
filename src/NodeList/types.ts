@@ -1,9 +1,9 @@
 import type { Atom } from "jotai";
 import type { NodeComponent } from "../Node";
-import type { Variable } from "../Variable";
+import type { Stream } from "../Stream";
 
 export type CreateNodeProps<T = unknown> = {
-  variable: Variable;
+  stream: Stream;
   component?: NodeComponent;
   toSave?: Atom<unknown>;
 } & (unknown extends T ? {} : { toSave: Atom<T> });

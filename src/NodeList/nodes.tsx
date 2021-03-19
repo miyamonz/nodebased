@@ -1,9 +1,9 @@
 import type { NodeDefinition } from "./types";
 
-// variables
-import { defaultNodeSizeVariable } from "../Node/variables"; //bug
-import { socketRadiusVariable } from "../Socket";
-import type { Variable } from "../Variable";
+// streams
+import { defaultNodeSizeStream } from "../Node/streams"; //bug
+import { socketRadiusStream } from "../Socket";
+import type { Stream } from "../Stream";
 
 import { fnNodes } from "./funcs";
 
@@ -29,12 +29,12 @@ import { option as graph } from "../GraphNode";
 import { option as instantiate } from "../InstantiateNode";
 import { option as subGraph } from "../SubGraphNode";
 
-const optionFromVariable = (
+const optionFromStream = (
   name: string,
-  variable: Variable
+  stream: Stream
 ): NodeDefinition => ({
   name,
-  init: () => ({ variable }),
+  init: () => ({ stream }),
 });
 
 export const nodeOptions: Required<NodeDefinition>[] = [
@@ -71,8 +71,8 @@ export const nodeOptions: Required<NodeDefinition>[] = [
   subGraph,
   inlet,
   outlet,
-  optionFromVariable("nodeSize", defaultNodeSizeVariable),
-  optionFromVariable("socketRadius", socketRadiusVariable),
+  optionFromStream("nodeSize", defaultNodeSizeStream),
+  optionFromStream("socketRadius", socketRadiusStream),
 ].map((def) => ({
   ...def,
   inputs: def?.inputs ?? [],

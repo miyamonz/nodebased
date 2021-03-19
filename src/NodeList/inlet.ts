@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 import { NodeDefinition } from "./types";
-import { Variable } from "../Variable";
+import { Stream } from "../Stream";
 
 const option: NodeDefinition = {
   name: "inlet",
@@ -8,11 +8,11 @@ const option: NodeDefinition = {
   init: () => {
     const refAtom = atom(atom(null));
     const outAtom = atom((get) => get(get(refAtom)));
-    const variable: Variable = {
+    const stream: Stream = {
       inputAtoms: atom(() => [refAtom as any]),
       outputAtoms: atom(() => [outAtom]),
     };
-    return { variable };
+    return { stream };
   },
 };
 

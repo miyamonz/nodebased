@@ -1,7 +1,7 @@
 import { atom, useAtom } from "jotai";
 import { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
-import { Variable } from "../Variable";
+import { Stream } from "../Stream";
 
 const option: NodeDefinition = {
   name: "line",
@@ -41,11 +41,11 @@ const option: NodeDefinition = {
         };
       }),
     ];
-    const variable: Variable = {
+    const stream: Stream = {
       inputAtoms: atom(() => inputAtoms as any),
       outputAtoms: atom(() => outputAtoms),
     };
-    return { variable };
+    return { stream };
   },
 };
 

@@ -1,16 +1,16 @@
 import { atom } from "jotai";
 import { NodeDefinition, ValueType } from "./types";
 import type { NodeComponent } from "../Node";
-import { createVariable } from "../Variable";
+import { createStream } from "../Stream";
 import { createAtomRef } from "../AtomRef";
 import type { Position } from "../Position";
 
 const range = (num: number) => [...Array(num).keys()];
 
-export function createVariableFromFn(fn: (...args: unknown[]) => unknown) {
+export function createStreamFromFn(fn: (...args: unknown[]) => unknown) {
   const num = fn.length;
   const inputAtoms = range(num).map(() => createAtomRef(atom(0)));
-  return createVariable(inputAtoms, (inputs) =>
+  return createStream(inputAtoms, (inputs) =>
     atom((get) => fn(...get(inputs)))
   );
 }
@@ -126,9 +126,9 @@ const converted: NodeDefinition[] = nodes.map((option) => {
     outputs:
       typeof outputType !== "undefined" ? [{ type: outputType }] : undefined,
     init: () => {
-      const variable = createVariableFromFn(fn);
+      const stream = createStreamFromFn(fn);
       return {
-        variable,
+        stream,
         ...rest,
       };
     },

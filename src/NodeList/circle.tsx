@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { useAtomValue } from "jotai/utils";
 import { NodeDefinition } from "./types";
-import type { Variable } from "../Variable";
+import type { Stream } from "../Stream";
 
 const option: NodeDefinition = {
   name: "circle",
@@ -38,11 +38,11 @@ const option: NodeDefinition = {
         );
       };
     });
-    const variable: Variable = {
+    const stream: Stream = {
       inputAtoms: atom(() => inputAtoms as any),
       outputAtoms: atom(() => [outAtom]),
     };
-    return { variable };
+    return { stream };
   },
 };
 

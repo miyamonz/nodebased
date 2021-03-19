@@ -1,9 +1,9 @@
 import { atom } from "jotai";
-import { createVariable } from "../Variable";
+import { createStream } from "../Stream";
 import { createAtomRef } from "../AtomRef";
 
 const inputAtoms = [createAtomRef(atom(10))];
-export const socketRadiusVariable = createVariable(inputAtoms, (inputsAtom) =>
+export const socketRadiusStream = createStream(inputAtoms, (inputsAtom) =>
   atom((get) => {
     const inputValues = get(inputsAtom);
     return inputValues[0];

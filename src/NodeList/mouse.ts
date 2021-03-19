@@ -1,14 +1,14 @@
 import { atom } from "jotai";
 import { NodeDefinition } from "./types";
 import { mouseAtom } from "../SVGContext";
-import { createOneOutputVariable } from "../Variable";
+import { createOneOutputStream } from "../Stream";
 
 const option: NodeDefinition = {
   name: "mouse",
   outputs: [{ type: "Position" }],
   init: () => {
-    const variable = createOneOutputVariable(atom((get) => get(mouseAtom)));
-    return { variable };
+    const stream = createOneOutputStream(atom((get) => get(mouseAtom)));
+    return { stream };
   },
 };
 

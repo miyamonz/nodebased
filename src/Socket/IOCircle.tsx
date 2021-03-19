@@ -3,10 +3,10 @@ import { atom, useAtom } from "jotai";
 import type { InputSocket, OutputSocket } from "./types";
 import type { PositionAtom } from "../Position";
 
-import { socketRadiusVariable } from "./variables";
+import { socketRadiusStream } from "./streams";
 
 const radiusAtom = atom<number>(
-  (get) => get(get(socketRadiusVariable.outputAtoms)[0]) as number
+  (get) => get(get(socketRadiusStream.outputAtoms)[0]) as number
 );
 
 type IOCircleProps = {

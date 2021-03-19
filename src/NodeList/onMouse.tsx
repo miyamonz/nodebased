@@ -4,7 +4,7 @@ import { useAtomValue, useUpdateAtom } from "jotai/utils";
 import type { WritableAtom } from "jotai";
 import { NodeDefinition } from "./types";
 import { transformAtom } from "../SVGContext";
-import { Variable } from "../Variable";
+import { Stream } from "../Stream";
 
 const option: NodeDefinition = {
   name: "onMouse",
@@ -53,11 +53,11 @@ const option: NodeDefinition = {
       }),
       mouseAtom,
     ];
-    const variable: Variable = {
+    const stream: Stream = {
       inputAtoms: atom(() => inputAtoms as any),
       outputAtoms: atom(() => outputAtoms),
     };
-    return { variable };
+    return { stream };
   },
 };
 

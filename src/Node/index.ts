@@ -2,7 +2,7 @@ export { hoveredNode, useHoveredNode } from "./RenderNode";
 export { default as RenderNode } from "./RenderNode";
 
 export { createNodeByName, createNodeByJson, createNode } from "./createNode";
-export { defaultNodeSizeVariable } from "./variables";
+export { defaultNodeSizeStream } from "./streams";
 
 export { nodeToJson, jsonToNode } from "./json";
 export type { Node, NodeJSON, NodeComponent } from "./types";

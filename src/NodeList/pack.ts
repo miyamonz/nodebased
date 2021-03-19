@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 import { NodeDefinition } from "./types";
-import type { Variable } from "../Variable";
+import type { Stream } from "../Stream";
 
 const option: NodeDefinition = {
   name: "pack",
@@ -16,11 +16,11 @@ const option: NodeDefinition = {
       return { x, y };
     });
 
-    const variable: Variable = {
+    const stream: Stream = {
       inputAtoms: atom(() => [xAtom, yAtom] as any),
       outputAtoms: atom(() => [outAtom]),
     };
-    return { variable };
+    return { stream };
   },
 };
 export default option;

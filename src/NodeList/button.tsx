@@ -3,7 +3,7 @@ import { atom, useAtom } from "jotai";
 import type { WritableAtom } from "jotai";
 import { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
-import { createVariable } from "../Variable";
+import { createStream } from "../Stream";
 import type { NodeComponent } from "../Node";
 
 function getComponent(downAtom: WritableAtom<boolean, boolean>) {
@@ -41,19 +41,19 @@ const option: NodeDefinition = {
   init: () => {
     const input = createAtomRef(atom(false));
     const buttonAtom = atom(false);
-    const variable = createVariable([input], (input_) => {
+    const stream = createStream([input], (input_) => {
       return atom((get) => {
         const [in_] = get(input_);
         return Boolean(in_ || get(buttonAtom));
       });
     });
     const downAtom = atom(
-      (get) => get(get(variable.outputAtoms)[0]) as boolean,
+      (get) => get(get(stream.outputAtoms)[0]) as boolean,
       (_get, set, arg: boolean) => set(buttonAtom, arg)
     );
     return {
       component: getComponent(downAtom),
-      variable,
+      stream,
     };
   },
 };

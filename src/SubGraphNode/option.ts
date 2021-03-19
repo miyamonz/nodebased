@@ -3,10 +3,10 @@ import type { Atom } from "jotai";
 import { createComponent } from "./Component";
 import type { GraphJSON, Graph } from "../Graph";
 
-import type { Variable } from "../Variable";
+import type { Stream } from "../Stream";
 import { jsonToGraph } from "../Graph";
 
-function createVariable(graphAtom: Atom<Graph>) {
+function createStream(graphAtom: Atom<Graph>) {
   const inletNode = atom((get) =>
     get(get(graphAtom).nodes).filter((n) => n.name === "inlet")
   );
@@ -14,11 +14,11 @@ function createVariable(graphAtom: Atom<Graph>) {
     get(get(graphAtom).nodes).filter((n) => n.name === "outlet")
   );
 
-  const variable: Variable = {
+  const stream: Stream = {
     inputAtoms: atom((get) => get(inletNode).map(() => atom(atom(0)) as any)),
     outputAtoms: atom((get) => get(outletNode).map(() => atom(0))),
   };
-  return variable;
+  return stream;
 }
 
 const option = {
@@ -40,9 +40,9 @@ const option = {
 
       return jsonToGraph(get)(json);
     });
-    const variable = createVariable(graphAtom);
+    const stream = createStream(graphAtom);
     return {
-      variable,
+      stream,
       component: createComponent(jsonAtom, graphAtom),
       toSave: jsonAtom,
     };

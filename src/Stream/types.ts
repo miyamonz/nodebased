@@ -5,15 +5,15 @@ import type { AtomRef } from "../AtomRef";
 export type InputAtom<T> = AtomRef<T>;
 export type OutputAtom<T> = Atom<T>;
 
-export type Variable = {
+export type Stream = {
   inputAtoms: Atom<InputAtom<unknown>[]>;
   outputAtoms: Atom<OutputAtom<unknown>[]>;
 };
 
-export function createVariable<IN, OUT>(
+export function createStream<IN, OUT>(
   inputAtoms: InputAtom<IN>[],
   createOutput: (inputValuesAtom: Atom<IN[]>) => OutputAtom<OUT>
-): Variable {
+): Stream {
   const input = atom((get) => inputAtoms.map(get).map(get));
   const outputAtom = createOutput(input);
   return {
@@ -22,13 +22,13 @@ export function createVariable<IN, OUT>(
   };
 }
 
-export function createOneOutputVariable<T>(outputAtom: Atom<T>): Variable {
+export function createOneOutputStream<T>(outputAtom: Atom<T>): Stream {
   return {
     inputAtoms: atom(() => []),
     outputAtoms: atom(() => [outputAtom]),
   };
 }
-export function createOneInputVariable<T>(inputAtom: AtomRef<T>): Variable {
+export function createOneInputStream<T>(inputAtom: AtomRef<T>): Stream {
   return {
     inputAtoms: atom(() => [inputAtom as any]),
     outputAtoms: atom(() => []),

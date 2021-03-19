@@ -3,7 +3,7 @@ import { atom } from "jotai";
 import { useAtomValue } from "jotai/utils";
 import { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
-import type { Variable } from "../Variable";
+import type { Stream } from "../Stream";
 
 const range = (n: number) => [...Array(n).keys()];
 const option: NodeDefinition = {
@@ -34,11 +34,11 @@ const option: NodeDefinition = {
         </g>
       );
     };
-    const variable: Variable = {
+    const stream: Stream = {
       inputAtoms: atom(() => inputAtoms as any),
       outputAtoms: atom(() => [atom(() => G)]),
     };
-    return { variable };
+    return { stream };
   },
 };
 

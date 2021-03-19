@@ -3,7 +3,7 @@ import { atom } from "jotai";
 import type { GraphJSON } from "../Graph";
 import type { NodeDefinition } from "../NodeList/types";
 
-import { createOneOutputVariable } from "../Variable";
+import { createOneOutputStream } from "../Stream";
 
 const option: NodeDefinition = {
   name: "graph",
@@ -12,9 +12,9 @@ const option: NodeDefinition = {
     const jsonAtom = atom(
       (args?.data ?? { nodes: [], connections: [] }) as GraphJSON
     );
-    const variable = createOneOutputVariable(jsonAtom);
+    const stream = createOneOutputStream(jsonAtom);
     const component = createComponent(jsonAtom);
-    return { variable, component, toSave: jsonAtom };
+    return { stream, component, toSave: jsonAtom };
   },
 };
 

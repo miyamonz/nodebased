@@ -7,4 +7,4 @@ export { createInputSocket, createOutputSocket } from "./func";
 export { InputCircle, OutputCircle } from "./IOCircle";
 export { hoveredInputSocketAtom, hoveredOutputSocketAtom } from "./IOCircle";
 
-export { socketRadiusVariable } from "./variables";
+export { socketRadiusStream } from "./streams";

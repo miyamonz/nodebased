@@ -1,12 +1,12 @@
 import { atom } from "jotai";
 import { NodeDefinition } from "./types";
-import { createVariable } from "../Variable";
+import { createStream } from "../Stream";
 
 const option: NodeDefinition = {
   name: "elapsed",
   outputs: [{ type: "number" }],
   init: () => {
-    const variable = createVariable([], () => {
+    const stream = createStream([], () => {
       const oscAtom = atom(0);
       oscAtom.onMount = (set) => {
         const id = setInterval(() => set((prev) => prev + 1));
@@ -15,7 +15,7 @@ const option: NodeDefinition = {
       return oscAtom;
     });
     return {
-      variable,
+      stream,
     };
   },
 };

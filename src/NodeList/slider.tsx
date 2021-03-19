@@ -7,7 +7,7 @@ import type { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
 import type { AtomRef } from "../AtomRef";
 import type { NodeComponent } from "../Node";
-import type { Variable } from "../Variable";
+import type { Stream } from "../Stream";
 
 function getComponent(
   inputRef: AtomRef<number>,
@@ -66,12 +66,12 @@ const option: NodeDefinition<number> = {
       return get(internalAtom);
     });
 
-    const variable: Variable = {
+    const stream: Stream = {
       inputAtoms: atom(() => [inputRef as any]),
       outputAtoms: atom(() => [outputAtom]),
     };
     const component = getComponent(inputRef, internalAtom, outputAtom);
-    return { variable, component, toSave: internalAtom };
+    return { stream, component, toSave: internalAtom };
   },
 };
 

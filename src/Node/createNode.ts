@@ -7,13 +7,13 @@ import { createInputSocket, createOutputSocket } from "../Socket";
 import type { InputSocketJSON, OutputSocketJSON } from "../Socket";
 
 import { createRectAtom } from "../Rect";
-import { defaultNodeSizeVariable } from "./variables";
+import { defaultNodeSizeStream } from "./streams";
 import { nodeOptions } from "../NodeList";
 import type { Position } from "../Position";
 
 const sizeAtom = atom(
   (get) =>
-    get(get(defaultNodeSizeVariable.outputAtoms)[0]) as {
+    get(get(defaultNodeSizeStream.outputAtoms)[0]) as {
       width: number;
       height: number;
     }

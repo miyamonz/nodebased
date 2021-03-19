@@ -3,7 +3,7 @@ import { atom } from "jotai";
 import type { Atom, WritableAtom } from "jotai";
 import { useAtomValue, useUpdateAtom } from "jotai/utils";
 import { NodeDefinition } from "./types";
-import type { Variable } from "../Variable";
+import type { Stream } from "../Stream";
 
 function getComponent(
   componentAtom: Atom<React.ComponentType | null>,
@@ -59,11 +59,11 @@ const option: NodeDefinition = {
       }),
       pressAtom,
     ];
-    const variable: Variable = {
+    const stream: Stream = {
       inputAtoms: atom(() => [componentAtom as any]),
       outputAtoms: atom(() => outputAtoms),
     };
-    return { variable };
+    return { stream };
   },
 };
 
