@@ -18,7 +18,7 @@ export function createStreamFromFn(fn: (...args: unknown[]) => unknown) {
 //TODO runtime type やったらoutput value は推論させたい
 type OptionFn = {
   name: string;
-  inputsType?: ValueType[];
+  inputsType: ValueType[];
   outputType?: ValueType;
 
   component?: NodeComponent;
@@ -55,7 +55,12 @@ const nodes: OptionFn[] = [
     outputType: "number",
     fn: (a) => -a,
   },
-  { name: "not", fn: (a) => !a },
+  {
+    name: "not",
+    inputsType: ["boolean"],
+    outputType: "boolean",
+    fn: (a) => !a,
+  },
   {
     name: "sin",
     inputsType: ["number"],
