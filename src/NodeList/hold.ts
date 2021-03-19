@@ -9,8 +9,8 @@ const isPosition = (a: any): a is { x: number; y: number } => {
 
 const option: NodeDefinition = {
   name: "hold",
-  inputs: [{ type: "boolean" }],
-  outputs: [{ type: "boolean" }],
+  inputs: [{ type: "boolean" }, { type: "any" }],
+  outputs: [{ type: "any" }],
   init: () => {
     const condAtom = createAtomRef(atom(false));
     const inputAtom = createAtomRef(atom<unknown>(null));
