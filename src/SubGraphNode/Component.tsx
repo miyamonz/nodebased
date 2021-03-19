@@ -3,7 +3,7 @@ import type { Atom, PrimitiveAtom } from "jotai";
 import type { NodeComponent } from "../Node";
 import { usePushGraphJSON } from "../Graph";
 import type { GraphJSON, Graph } from "../Graph";
-import { ConnectAtomLogic } from "../Connect/ConnectionLine";
+import { ConnectAtomLogic } from "../Edge/EdgeLine";
 import { currentGraphJsonAtom } from "../Graph";
 
 export function createComponent(
@@ -16,14 +16,14 @@ export function createComponent(
 
     const [json] = useAtom(jsonAtom);
     const [graph] = useAtom(graphAtom);
-    const [connections] = useAtom(graph.connections);
+    const [edges] = useAtom(graph.edges);
 
     const [, setCurrentGraphJson] = useAtom(currentGraphJsonAtom);
     return (
       <>
-        {connections.map((c) => {
+        {edges.map((c) => {
           const key = [c.from, c.to].map((s) => s.nodeId + s.name).join("-");
-          return <ConnectAtomLogic key={key} connection={c} />;
+          return <ConnectAtomLogic key={key} edge={c} />;
         })}
         <rect
           x={rect.x}

@@ -1,17 +1,17 @@
 import { createGraph } from "./funcs";
 
 import { nodeToJson, jsonToNode } from "../Node";
-import { connectionToJson, jsonToConnection } from "../Connect";
+import { edgeToJson, jsonToEdge } from "../Edge";
 import type { Getter } from "jotai/core/types";
 import type { GraphView, GraphJSON } from "./types";
-import type { ConnectionJSON } from "../Connect";
+import type { EdgeJSON } from "../Edge";
 
 export const graphToJson = (get: Getter) => (graph: GraphView): GraphJSON => {
-  const { nodes, connections } = graph;
-  const cToJson = connectionToJson(get)(get(nodes));
+  const { nodes, edges } = graph;
+  const cToJson = edgeToJson(get)(get(nodes));
   return {
     nodes: get(nodes).map(nodeToJson(get)),
-    connections: get(connections)
+    edges: get(edges)
       .map((c) => {
         try {
           return cToJson(c);
@@ -20,7 +20,7 @@ export const graphToJson = (get: Getter) => (graph: GraphView): GraphJSON => {
           return undefined;
         }
       })
-      .filter((a): a is ConnectionJSON => a !== undefined),
+      .filter((a): a is EdgeJSON => a !== undefined),
   };
 };
 
@@ -34,18 +34,18 @@ export function replaceNodeIds(
     json.nodes.map((n, i) => [n.id, replacer(i)])
   );
   const nodes = json.nodes.map((n) => ({ ...n, id: idMap[n.id] }));
-  const connections = json.connections.map((c) => {
+  const edges = json.edges.map((c) => {
     const from = { ...c.from, nodeId: idMap[c.from.nodeId] };
     const to = { ...c.to, nodeId: idMap[c.to.nodeId] };
     return { from, to };
   });
 
-  return { nodes, connections };
+  return { nodes, edges };
 }
 
 export const jsonToGraph = (get: Getter) => (json: GraphJSON) => {
   const _json = replaceNodeIds(json); // replacing id should be at first
   const nodes = _json.nodes.map(jsonToNode);
-  const connections = _json.connections.map(jsonToConnection(get)(nodes));
-  return createGraph(nodes, connections);
+  const edges = _json.edges.map(jsonToEdge(get)(nodes));
+  return createGraph(nodes, edges);
 };

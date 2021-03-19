@@ -9,7 +9,7 @@ import {
   SelectCollisionArea,
 } from "../Select";
 
-import { TmpConnectLine } from "../Connect";
+import { TmpEdgeLine } from "../Edge";
 import { useDragMoveNode } from "../MoveNode";
 import { Paste } from "../Paste";
 
@@ -26,7 +26,7 @@ function SVGContent() {
       <RenderGraphMenu transform="translate(0 40)" />
       <RenderBoundingRect />
       <RenderSelectRect />
-      <TmpConnectLine />
+      <TmpEdgeLine />
       {graphJson && <RenderGraph jsonAtom={currentGraphJsonAtom} />}
       <NodeMenu />
     </>

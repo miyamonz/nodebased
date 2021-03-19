@@ -10,7 +10,7 @@ const option: NodeDefinition = {
   outputs: [{ type: "Json" }],
   init: (args?: { data?: {} }) => {
     const jsonAtom = atom(
-      (args?.data ?? { nodes: [], connections: [] }) as GraphJSON
+      (args?.data ?? { nodes: [], edges: [] }) as GraphJSON
     );
     const stream = createOneOutputStream(jsonAtom);
     const component = createComponent(jsonAtom);

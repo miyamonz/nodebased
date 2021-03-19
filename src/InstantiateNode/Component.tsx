@@ -7,7 +7,7 @@ import type { Node, NodeComponent } from "../Node";
 import type { GraphJSON } from "../Graph";
 import { jsonToGraph } from "../Graph";
 import { RenderNode } from "../Node";
-import { ConnectAtomLogic } from "../Connect/ConnectionLine";
+import { ConnectAtomLogic } from "../Edge/EdgeLine";
 
 export function createComponent(graphJsonAtom: Atom<GraphJSON>) {
   const graphAtom = atom((get) => jsonToGraph(get)(get(graphJsonAtom)));
@@ -17,7 +17,7 @@ export function createComponent(graphJsonAtom: Atom<GraphJSON>) {
     const [rect] = useAtom(node.rect);
 
     const [graph] = useAtom(graphAtom);
-    const [connections] = useAtom(graph.connections);
+    const [edges] = useAtom(graph.edges);
 
     const instancedRect = { ...rect, y: rect.y + rect.height };
     const createInstance = useCreateInstanceNode({
@@ -45,9 +45,9 @@ export function createComponent(graphJsonAtom: Atom<GraphJSON>) {
 
     return (
       <>
-        {connections.map((c) => {
+        {edges.map((c) => {
           return (
-            <ConnectAtomLogic key={c.to.position.toString()} connection={c} />
+            <ConnectAtomLogic key={c.to.position.toString()} edge={c} />
           );
         })}
         <g>

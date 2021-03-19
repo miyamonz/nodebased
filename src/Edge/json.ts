@@ -1,10 +1,10 @@
 import type { Getter } from "jotai/core/types";
-import type { Connection, ConnectionJSON } from "./types";
+import type { Edge, EdgeJSON } from "./types";
 import type { Node } from "../Node";
 
-export const connectionToJson = (get: Getter) => (nodes: Node[]) => (
-  c: Connection<unknown>
-): ConnectionJSON => {
+export const edgeToJson = (get: Getter) => (nodes: Node[]) => (
+  c: Edge<unknown>
+): EdgeJSON => {
   const isocket = c.to;
   const osocket = c.from;
 
@@ -42,9 +42,9 @@ export const connectionToJson = (get: Getter) => (nodes: Node[]) => (
   };
 };
 
-export const jsonToConnection = (get: Getter) => (nodes: Node[]) => (
-  c: ConnectionJSON
-): Connection<unknown> => {
+export const jsonToEdge = (get: Getter) => (nodes: Node[]) => (
+  c: EdgeJSON
+): Edge<unknown> => {
   const fromNode = nodes.find((n) => n.id === c.from.nodeId);
   const toNode = nodes.find((n) => n.id === c.to.nodeId);
   if (fromNode === undefined) {

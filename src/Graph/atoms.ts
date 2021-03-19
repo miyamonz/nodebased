@@ -5,14 +5,14 @@ import { graphToJson, jsonToGraph } from "./json";
 import type { Graph, GraphJSON } from "./types";
 
 import type { Node } from "../Node";
-import type { Connection } from "../Connect";
+import type { Edge } from "../Edge";
 
 type GraphStack = {
   graph: PrimitiveAtom<GraphJSON>;
   onPop: (json: GraphJSON) => void;
 };
 
-const rootGraphJsonAtom = atom<GraphJSON>({ nodes: [], connections: [] });
+const rootGraphJsonAtom = atom<GraphJSON>({ nodes: [], edges: [] });
 export const graphStackAtom = atom<GraphStack[]>([]);
 
 export const currentGraphJsonAtom: PrimitiveAtom<GraphJSON> = atom(
@@ -91,12 +91,12 @@ export const removeNodeFromGraphAtom = atom(
     set,
     { targetGraphAtom, nodes }: { targetGraphAtom: Atom<Graph>; nodes: Node[] }
   ) => {
-    // remove connection
+    // remove edge
     const graph = get(targetGraphAtom);
     const osockets = nodes.flatMap((n) => get(n.osockets));
     const isockets = nodes.flatMap((n) => get(n.isockets));
     const ids = nodes.map((n) => n.id);
-    const shouldDisConnect = (c: Connection<unknown>) => {
+    const shouldDisConnect = (c: Edge<unknown>) => {
       const from =
         osockets.map((s) => s.name).includes(c.from.name) &&
         ids.includes(c.from.nodeId);
@@ -106,7 +106,7 @@ export const removeNodeFromGraphAtom = atom(
       return from || to;
     };
 
-    set(graph.connections, (prev) => [
+    set(graph.edges, (prev) => [
       ...prev.filter((c) => !shouldDisConnect(c)),
     ]);
 

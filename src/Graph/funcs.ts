@@ -1,18 +1,18 @@
 import { atom } from "jotai";
 import type { Atom } from "jotai";
-import { getConnections } from "../Connect/atoms";
+import { getEdges } from "../Edge/atoms";
 import type { Graph, GraphView } from "./types";
 import type { Node } from "../Node";
-import type { Connection } from "../Connect";
+import type { Edge } from "../Edge";
 
 export function createGraph(
   nodes: Node[],
-  connections: Connection<unknown>[] = []
+  edges: Edge<unknown>[] = []
 ): Graph {
   const nodesAtom = atom<Node[]>(nodes);
   return {
     nodes: nodesAtom,
-    connections: atom(connections),
+    edges: atom(edges),
   };
 }
 
@@ -22,6 +22,6 @@ export function getGraphViewByNodes(
 ): GraphView {
   return {
     nodes: nodesAtom,
-    connections: atom((get) => get(getConnections(get(nodesAtom), graph))),
+    edges: atom((get) => get(getEdges(get(nodesAtom), graph))),
   };
 }

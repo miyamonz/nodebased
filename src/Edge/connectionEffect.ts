@@ -1,10 +1,10 @@
 import { atom } from "jotai";
 import { useUpdateAtom } from "jotai/utils";
-import type { Connection } from "./types";
+import type { Edge } from "./types";
 
 const setConnectAtom = atom(
   null,
-  (_get, _set, _c: Connection<unknown> | Connection<unknown>[]) => {
+  (_get, _set, _c: Edge<unknown> | Edge<unknown>[]) => {
     console.log("connect");
     //const conns = Array.isArray(c) ? c : [c];
     //conns.forEach((c) => set(c.to.ref, c.from.atom));
@@ -16,7 +16,7 @@ export function useConnect() {
 
 const setDisconnectAtom = atom(
   null,
-  (_get, _set, _c: Connection<unknown> | Connection<unknown>[]) => {
+  (_get, _set, _c: Edge<unknown> | Edge<unknown>[]) => {
     console.log("disconnect");
     //const _conns = Array.isArray(c) ? c : [c];
     //conns.forEach((c) => set(c.to.ref, atom(null)));

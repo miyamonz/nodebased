@@ -1,17 +1,17 @@
 import type { Atom, PrimitiveAtom } from "jotai";
 import type { Node, NodeJSON } from "../Node";
-import type { Connection, ConnectionJSON } from "../Connect";
+import type { Edge, EdgeJSON } from "../Edge";
 
 export type GraphJSON = {
   nodes: NodeJSON[];
-  connections: ConnectionJSON[];
+  edges: EdgeJSON[];
 };
 
 export type Graph = {
   nodes: PrimitiveAtom<Node[]>;
-  connections: PrimitiveAtom<Connection<unknown>[]>;
+  edges: PrimitiveAtom<Edge<unknown>[]>;
 };
 export type GraphView = {
   nodes: Atom<Node[]>;
-  connections: Atom<Connection<unknown>[]>;
+  edges: Atom<Edge<unknown>[]>;
 };

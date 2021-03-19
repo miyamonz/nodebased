@@ -5,7 +5,7 @@ import { connectTargetAtom } from "./atoms";
 import { useMousePosition } from "../SVGContext";
 import type { OutputSocket } from "../Socket";
 
-const TmpConnectLineImpl = <T,>({ socket }: { socket: OutputSocket<T> }) => {
+const TmpEdgeLineImpl = <T,>({ socket }: { socket: OutputSocket<T> }) => {
   const socketPos = useAtomValue(socket.position);
   const mousePos = useMousePosition();
   return (
@@ -18,14 +18,14 @@ const TmpConnectLineImpl = <T,>({ socket }: { socket: OutputSocket<T> }) => {
     />
   );
 };
-const TmpConnectLine = () => {
+const TmpEdgeLine = () => {
   useMouseToConnect();
   const connectTarget = useAtomValue(connectTargetAtom);
 
   if (connectTarget) {
-    return <TmpConnectLineImpl socket={connectTarget} />;
+    return <TmpEdgeLineImpl socket={connectTarget} />;
   }
   return null;
 };
 
-export default TmpConnectLine;
+export default TmpEdgeLine;

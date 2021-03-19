@@ -1,34 +1,30 @@
 import React from "react";
 import { useAtom } from "jotai";
-import type { Connection } from "./types";
+import type { Edge } from "./types";
 
 import { useConnect, useDisconnect } from "./connectionEffect";
 
-function useSocket<T>(connection: Connection<T>) {
-  const osocket = connection.from;
-  const isocket = connection.to;
+function useSocket<T>(edge: Edge<T>) {
+  const osocket = edge.from;
+  const isocket = edge.to;
   return [osocket, isocket] as const;
 }
 
-export const ConnectAtomLogic = ({
-  connection,
-}: {
-  connection: Connection<unknown>;
-}) => {
+export const ConnectAtomLogic = ({ edge }: { edge: Edge<unknown> }) => {
   const setConnect = useConnect();
   const setDisconnect = useDisconnect();
   React.useEffect(() => {
-    setConnect(connection);
+    setConnect(edge);
     return () => {
-      setDisconnect(connection);
+      setDisconnect(edge);
     };
   }, []);
 
   return null;
 };
 
-const ConnectionLine = <T,>({ connection }: { connection: Connection<T> }) => {
-  const [osocket, isocket] = useSocket(connection);
+const EdgeLine = <T,>({ edge }: { edge: Edge<T> }) => {
+  const [osocket, isocket] = useSocket(edge);
 
   const [pos] = useAtom(isocket.position);
   const [fromPos] = useAtom(osocket.position);
@@ -39,7 +35,7 @@ const ConnectionLine = <T,>({ connection }: { connection: Connection<T> }) => {
       {/*
       <line stroke="blue" x1={pos.x} y1={pos.y} x2={fromPos.x} y2={fromPos.y} />
       */}
-      <ConnectAtomLogic connection={connection as Connection<unknown>} />
+      <ConnectAtomLogic edge={edge as Edge<unknown>} />
       <path
         stroke="blue"
         fill="none"
@@ -51,4 +47,4 @@ const ConnectionLine = <T,>({ connection }: { connection: Connection<T> }) => {
   );
 };
 
-export default ConnectionLine;
+export default EdgeLine;
