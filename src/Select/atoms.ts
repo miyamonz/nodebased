@@ -4,7 +4,7 @@ import type { Node } from "../Node";
 import { copyToClipboard } from "../util";
 
 import { currentGraphAtom } from "../actions";
-import { getGraphViewByNodes, graphToJson } from "../Graph";
+import { getGraphViewByNodes, graphToJson, replaceNodeIds } from "../Graph";
 
 // selected nodes
 export const selectedNodesAtom = atom<Node[]>([]);
@@ -27,7 +27,8 @@ const selectedAtomJSON = atom(
   },
   (get) => {
     const json = get(selectedAtomJSON);
-    copyToClipboard(JSON.stringify(json));
+    const json_ = replaceNodeIds(json, (i) => i.toString());
+    copyToClipboard(JSON.stringify(json_));
   }
 );
 

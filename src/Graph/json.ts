@@ -26,8 +26,13 @@ export const graphToJson = (get: Getter) => (graph: GraphView): GraphJSON => {
 
 const uuid = () => Math.floor(Math.random() * 10 ** 12).toString();
 
-function replaceNodeIds(json: GraphJSON): GraphJSON {
-  const idMap = Object.fromEntries(json.nodes.map((n) => [n.id, uuid()]));
+export function replaceNodeIds(
+  json: GraphJSON,
+  replacer = (_: number) => uuid()
+): GraphJSON {
+  const idMap = Object.fromEntries(
+    json.nodes.map((n, i) => [n.id, replacer(i)])
+  );
   const nodes = json.nodes.map((n) => ({ ...n, id: idMap[n.id] }));
   const connections = json.connections.map((c) => {
     const from = { ...c.from, nodeId: idMap[c.from.nodeId] };
