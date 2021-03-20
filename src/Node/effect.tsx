@@ -23,11 +23,7 @@ export function NodeEffect({ node }: { node: Node }) {
 
 const setConnectAtom = atom(null, (_get, set, node: Node) => {
   console.log("add stream");
-  const option = nodeOptions.find((option) => option.name === node.name);
-  if (option === undefined) throw new Error(`${node.name} not found`);
-
   const { stream } = node;
-
   set(appendStreamAtom, [node.id, stream]);
 });
 
