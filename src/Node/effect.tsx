@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { atom } from "jotai";
 import { useUpdateAtom } from "jotai/utils";
 import type { Node } from "./types";
-import { nodeOptions } from "../NodeList";
 import { appendStreamAtom, removeStreamAtom } from "../Stream";
 
 export const useNodeEffect = (node: Node) => {
@@ -21,7 +20,7 @@ export function NodeEffect({ node }: { node: Node }) {
   return null;
 }
 
-const setConnectAtom = atom(null, (_get, set, node: Node) => {
+const setConnectAtom = atom(null, async (_get, set, node: Node) => {
   console.log("add stream");
   const { stream } = node;
   set(appendStreamAtom, [node.id, stream]);

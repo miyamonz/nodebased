@@ -11,6 +11,7 @@ export const useGraphEffect = (graph: Graph) => {
   nodes.forEach((n) => <NodeEffect node={n} />);
   edges.forEach((e) => <EdgeEffect edge={e} />);
 };
+
 export function GraphEffect({ graph }: { graph: Graph }) {
   const nodes = useAtomValue(graph.nodes);
   const edges = useAtomValue(graph.edges);
