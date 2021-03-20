@@ -67,6 +67,8 @@ const option: NodeDefinition<number> = {
     });
 
     const stream: Stream = {
+      // @ts-ignore
+      id: Math.random(),
       inputAtoms: atom(() => [inputRef as any]),
       outputAtoms: atom(() => [outputAtom]),
     };

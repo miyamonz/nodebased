@@ -6,6 +6,7 @@ import type { Stream } from "../Stream";
 const option: NodeDefinition = {
   name: "outlet",
   inputs: [{ type: "any" }],
+  outputs: [{ type: "any" }],
   init: () => {
     const refAtom = createAtomRef(atom(null));
     const outAtom = atom((get) => get(get(refAtom)));

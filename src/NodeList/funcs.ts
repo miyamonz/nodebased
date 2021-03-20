@@ -7,7 +7,11 @@ import type { Position } from "../Position";
 
 const range = (num: number) => [...Array(num).keys()];
 
-export function createStreamFromFn(fn: (...args: unknown[]) => unknown) {
+export function createStreamFromFn(
+  fn: (...args: unknown[]) => unknown,
+  inputsType: ValueType[],
+  outputType?: ValueType
+) {
   const num = fn.length;
   const inputAtoms = range(num).map(() => createAtomRef(atom(0)));
   return createStream(inputAtoms, (inputs) =>
@@ -131,7 +135,7 @@ const converted: NodeDefinition[] = nodes.map((option) => {
     outputs:
       typeof outputType !== "undefined" ? [{ type: outputType }] : undefined,
     init: () => {
-      const stream = createStreamFromFn(fn);
+      const stream = createStreamFromFn(fn, inputsType, outputType);
       return {
         stream,
         ...rest,

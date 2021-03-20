@@ -9,6 +9,7 @@ import { jsonToGraph } from "./json";
 
 import { currentGraphAtom } from "../actions";
 import { graphStackAtom } from "../Graph/atoms";
+import { GraphEffect } from "./effect";
 
 function useCreateGraphFromJson(jsonAtom: WritableAtom<GraphJSON, GraphJSON>) {
   const [graph, setGraph] = useAtom(currentGraphAtom);
@@ -16,7 +17,6 @@ function useCreateGraphFromJson(jsonAtom: WritableAtom<GraphJSON, GraphJSON>) {
     React.useCallback(
       (get, _set) => {
         const json = get(jsonAtom);
-        console.log("create graph from ", json);
         return jsonToGraph(get)(json);
       },
       [jsonAtom.toString()]
@@ -41,6 +41,7 @@ function Render({ graph }: { graph: Graph }) {
   const edges = useAtomValue(graph.edges);
   return (
     <>
+      <GraphEffect graph={graph} />
       <RenderEdgeLines edges={edges} />
       {nodes.map((node) => {
         return <RenderNode key={node.id} node={node} />;

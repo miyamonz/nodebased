@@ -1,11 +1,13 @@
 import React from "react";
 import { atom, useAtom } from "jotai";
-import { useAtomValue } from "jotai/utils";
 import type { Atom } from "jotai";
+import { useAtomValue } from "jotai/utils";
 import type { Node } from "./types";
 import { useSelectedNodes } from "../Select";
 import { InputCircle, OutputCircle } from "../Socket";
 import type { Position } from "../Position";
+
+import { currentStreamsAtom } from "../Stream";
 
 type NodeComponent = React.FC<{ node: Node }>;
 
@@ -61,6 +63,14 @@ const RenderText = ({
   );
 };
 
+function useStreamById(nodeId: Node["id"]) {
+  const streamMap = useAtomValue(currentStreamsAtom);
+  const stream = streamMap[nodeId];
+  const inputs = useAtomValue(stream?.inputAtoms ?? atom(0));
+  const outputs = useAtomValue(stream?.outputAtoms ?? atom(0));
+  return { inputs, outputs };
+}
+
 const RenderNode: NodeComponent = ({ node }) => {
   const rect = useAtomValue(node.rect);
 
@@ -68,14 +78,15 @@ const RenderNode: NodeComponent = ({ node }) => {
 
   const isockets = useAtomValue(node.isockets);
   const osockets = useAtomValue(node.osockets);
+
+  const { outputs } = useStreamById(node.id);
+
   return (
     <>
       <ShowSelect node={node} />
-      {/*
-      {osockets.length > 0 && (
-        <RenderText outputAtom={osockets[0].atom} center={center} />
+      {outputs.length > 0 && (
+        <RenderText outputAtom={outputs[0]} center={center} />
       )}
-      */}
       <g transform={`translate(${rect.x} ${rect.y - 5} )`}>
         <text>{node.name}</text>
       </g>

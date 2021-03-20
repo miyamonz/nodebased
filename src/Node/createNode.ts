@@ -5,6 +5,7 @@ import type { Node, NodeJSON, NodeComponent } from "./types";
 
 import { createInputSocket, createOutputSocket } from "../Socket";
 import type { InputSocketJSON, OutputSocketJSON } from "../Socket";
+import type { Stream } from "../Stream";
 
 import { createRectAtom } from "../Rect";
 import { defaultNodeSizeStream } from "./streams";
@@ -76,7 +77,8 @@ export function createNodeByJson({
   const option = nodeOptions.find((option) => option.name === name);
   if (option === undefined) throw new Error(`${name} not found`);
 
-  const { component = () => null, toSave } = option.init({ data });
+  const { component = () => null, stream, toSave } = option.init({ data });
+
   return createNode({
     name,
     position,
@@ -84,6 +86,7 @@ export function createNodeByJson({
     isockets,
     osockets,
     component,
+    stream,
     toSave,
   });
 }
@@ -94,6 +97,7 @@ type createNodeProp = {
   isockets: InputSocketJSON[];
   osockets: OutputSocketJSON[];
   component: NodeComponent;
+  stream: Stream;
   toSave: Atom<unknown> | undefined;
   id?: string;
 };
@@ -103,6 +107,7 @@ export function createNode({
   isockets,
   osockets,
   component,
+  stream,
   toSave,
   id,
 }: createNodeProp): Node {
@@ -144,6 +149,7 @@ export function createNode({
     name,
     component,
     id: nodeId,
+    stream,
     toSave,
   };
 }

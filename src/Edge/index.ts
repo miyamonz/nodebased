@@ -5,4 +5,4 @@ export { default as RenderEdgeLines } from "./RenderEdgeLines";
 
 export { edgeToJson, jsonToEdge } from "./json";
 
-export { ConnectAtomLogic } from "./EdgeLine";
+export { useEdgeEffect, EdgeEffect } from "./effect";

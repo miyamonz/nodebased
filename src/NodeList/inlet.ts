@@ -4,6 +4,7 @@ import { Stream } from "../Stream";
 
 const option: NodeDefinition = {
   name: "inlet",
+  inputs: [{ type: "any" }],
   outputs: [{ type: "any" }],
   init: () => {
     const refAtom = atom(atom(null));
