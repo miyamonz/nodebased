@@ -23,7 +23,7 @@ export function useCreateInstanceNode({ position }: { position: Position }) {
         (n) => get(n.osockets)[0]
       );
 
-      const _stream: Stream = {
+      const stream: Stream = {
         inputAtoms: atom(() => inletNode.map(() => atom(atom(0)) as any)),
         outputAtoms: atom(() => outletNode.map(() => atom(0))),
       };
@@ -33,6 +33,7 @@ export function useCreateInstanceNode({ position }: { position: Position }) {
         isockets,
         osockets,
         component: () => null,
+        stream,
         toSave: undefined,
       });
     }, [])
