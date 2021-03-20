@@ -4,7 +4,8 @@ export type { InputSocketJSON, OutputSocketJSON } from "./types";
 export type { InputSocketAtom, OutputSocketAtom } from "./types";
 
 export { createInputSocket, createOutputSocket } from "./func";
-export { InputCircle, OutputCircle } from "./IOCircle";
-export { hoveredInputSocketAtom, hoveredOutputSocketAtom } from "./IOCircle";
+
+export { InputCircle, hoveredInputSocketAtom } from "./InputCircle";
+export { OutputCircle, hoveredOutputSocketAtom } from "./OutputCircle";
 
 export { socketRadiusStream } from "./streams";
