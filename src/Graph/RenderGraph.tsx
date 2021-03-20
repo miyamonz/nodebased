@@ -4,7 +4,6 @@ import { WritableAtom } from "jotai";
 import { useAtomCallback, useAtomValue } from "jotai/utils";
 import { Graph, GraphJSON } from "./types";
 import { RenderNode } from "../Node";
-import { RenderEdgeLines } from "../Edge";
 import { jsonToGraph } from "./json";
 
 import { currentGraphAtom } from "../actions";
@@ -38,11 +37,9 @@ const RenderGraph: React.FC<{
 
 function Render({ graph }: { graph: Graph }) {
   const nodes = useAtomValue(graph.nodes);
-  const edges = useAtomValue(graph.edges);
   return (
     <>
       <GraphEffect graph={graph} />
-      <RenderEdgeLines edges={edges} />
       {nodes.map((node) => {
         return <RenderNode key={node.id} node={node} />;
       })}

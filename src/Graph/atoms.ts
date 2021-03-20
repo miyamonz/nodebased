@@ -12,7 +12,7 @@ type GraphStack = {
   onPop: (json: GraphJSON) => void;
 };
 
-const rootGraphJsonAtom = atom<GraphJSON>({ nodes: [], edges: [] });
+const rootGraphJsonAtom = atom<GraphJSON>({ nodes: [] });
 export const graphStackAtom = atom<GraphStack[]>([]);
 
 export const currentGraphJsonAtom: PrimitiveAtom<GraphJSON> = atom(
@@ -96,7 +96,7 @@ export const removeNodeFromGraphAtom = atom(
     const osockets = nodes.flatMap((n) => get(n.osockets));
     const isockets = nodes.flatMap((n) => get(n.isockets));
     const ids = nodes.map((n) => n.id);
-    const shouldDisConnect = (c: Edge<unknown>) => {
+    const _shouldDisConnect = (c: Edge<unknown>) => {
       const from =
         osockets.map((s) => s.name).includes(c.from.name) &&
         ids.includes(c.from.nodeId);
@@ -105,10 +105,6 @@ export const removeNodeFromGraphAtom = atom(
         ids.includes(c.to.nodeId);
       return from || to;
     };
-
-    set(graph.edges, (prev) => [
-      ...prev.filter((c) => !shouldDisConnect(c)),
-    ]);
 
     // remove node
     set(graph.nodes, (prev) => prev.filter((na) => !nodes.includes(na)));

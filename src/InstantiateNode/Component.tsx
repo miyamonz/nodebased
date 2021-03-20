@@ -8,12 +8,6 @@ import type { GraphJSON } from "../Graph";
 import { jsonToGraph } from "../Graph";
 import { RenderNode } from "../Node";
 
-import { useEdgeEffect, Edge } from "../Edge";
-function EdgeEffect({ edge }: { edge: Edge<unknown> }) {
-  useEdgeEffect(edge);
-  return null;
-}
-
 export function createComponent(graphJsonAtom: Atom<GraphJSON>) {
   const graphAtom = atom((get) => jsonToGraph(get)(get(graphJsonAtom)));
 
@@ -22,7 +16,6 @@ export function createComponent(graphJsonAtom: Atom<GraphJSON>) {
     const [rect] = useAtom(node.rect);
 
     const [graph] = useAtom(graphAtom);
-    const [edges] = useAtom(graph.edges);
 
     const instancedRect = { ...rect, y: rect.y + rect.height };
     const createInstance = useCreateInstanceNode({
@@ -50,9 +43,6 @@ export function createComponent(graphJsonAtom: Atom<GraphJSON>) {
 
     return (
       <>
-        {edges.map((c) => {
-          return <EdgeEffect key={c.to.position.toString()} edge={c} />;
-        })}
         <g>
           <rect {...instancedRect} fill="lightblue" />
           {instanceNode && <RenderNode node={instanceNode} />}

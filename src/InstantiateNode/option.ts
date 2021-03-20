@@ -11,7 +11,7 @@ const option = {
   inputs: [{ type: "Json" }],
   init: () => {
     const graphJsonAtom = createAtomRef(
-      atom<GraphJSON>({ nodes: [], edges: [] })
+      atom<GraphJSON>({ nodes: [] })
     );
     const stream = createOneInputStream(graphJsonAtom);
     const component = createComponent(atom((get) => get(get(graphJsonAtom))));

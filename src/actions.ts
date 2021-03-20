@@ -8,8 +8,6 @@ import type { Node } from "./Node";
 import type { Edge } from "./Edge";
 import type { Graph } from "./Graph";
 
-import equal from "fast-deep-equal";
-
 export { currentGraphAtom };
 export const currentNodesAtom = atom<Node[], SetStateAction<Node[]>>(
   (get) => get(get(currentGraphAtom).nodes),
@@ -47,25 +45,11 @@ export function useRemoveNode() {
 }
 
 // edge
-export const appendEdgeAtom = atom(
-  null,
-  (get, set, c: Edge<unknown>) => {
-    const edgesAtom = get(currentGraphAtom).edges;
-    set(edgesAtom, (prev) => [
-      ...prev.filter((conn) => !equal(conn.to, c.to)),
-      c,
-    ]);
-  }
-);
+export const appendEdgeAtom = atom(null, (get, set, _c: Edge<unknown>) => {});
 
 // graph
 const mergeGraphAtom = atom(null, (get, set, graph: Graph) => {
   get(graph.nodes).map((n) => set(appendNode, n));
-
-  get(graph.edges).map((c) => {
-    const edgesAtom = get(currentGraphAtom).edges;
-    set(edgesAtom, (prev) => [...prev, c]);
-  });
 });
 export function useMergeGraph() {
   return useUpdateAtom(mergeGraphAtom);

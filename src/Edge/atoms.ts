@@ -8,10 +8,8 @@ import type { Graph } from "../Graph";
 // output
 export const connectTargetAtom = atom<OutputSocket<unknown> | null>(null);
 
-export function getEdges(
-  nodes: Node[],
-  graph: Graph
-): Atom<Edge<unknown>[]> {
+/*
+function getEdges(nodes: Node[], graph: Graph): Atom<Edge<unknown>[]> {
   return atom((get) => {
     const isockets = nodes.flatMap((node) => get(node.isockets));
     const osockets = nodes.flatMap((node) => get(node.osockets));
@@ -28,3 +26,4 @@ export function getEdges(
     return conns;
   });
 }
+* */
