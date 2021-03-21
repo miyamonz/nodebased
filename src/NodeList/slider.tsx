@@ -23,7 +23,7 @@ function getComponent(
     const isConnected = useConnected();
 
     const [, setInput] = useAtom(internalAtom);
-    const [rect] = useAtom(node.rect);
+    const [rect] = useAtom(node._rect);
     const [num] = useAtom(outputAtom);
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {

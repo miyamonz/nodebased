@@ -7,7 +7,7 @@ import type { GraphJSON } from "../Graph";
 export function createComponent(jsonAtom: PrimitiveAtom<GraphJSON>) {
   const GraphNode: NodeComponent = ({ node }) => {
     const pushGraphJSON = usePushGraphJSON();
-    const [rect] = useAtom(node.rect);
+    const [rect] = useAtom(node._rect);
 
     const [json] = useAtom(jsonAtom);
     const [, setGraph] = useAtom(jsonAtom);

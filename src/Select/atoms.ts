@@ -30,7 +30,12 @@ const selectedAtomJSON = atom(
   (get) => {
     const json = get(selectedAtomJSON);
     const json_ = replaceNodeIds(json, (i) => i.toString());
-    copyToClipboard(JSON.stringify(json_));
+    copyToClipboard(
+      JSON.stringify(json_, (key, val) => {
+        if (key.startsWith("_")) return undefined;
+        return val;
+      })
+    );
   }
 );
 

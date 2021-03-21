@@ -16,6 +16,7 @@ const Paste = () => {
       const text = await getClipboard();
       try {
         const graph = JSON.parse(text) as GraphJSON;
+        console.log(graph);
         mergeGraph(graph);
 
         setSelected(graph.nodes);

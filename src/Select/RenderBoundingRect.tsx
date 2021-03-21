@@ -13,7 +13,7 @@ import { useShortcutCopy } from "./shortcutHooks";
 
 const boundingRectAtom = atom((get) => {
   const selectedRectAtoms = get(selectedNodesAtom);
-  return boundingRect(selectedRectAtoms.map((node) => get(node.rect)));
+  return boundingRect(selectedRectAtoms.map((node) => get(node._rect)));
 });
 
 function useRemoveSelected() {

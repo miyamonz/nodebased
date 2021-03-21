@@ -1,4 +1,4 @@
-import type { Atom, PrimitiveAtom } from "jotai";
+import type { Atom } from "jotai";
 import type { Node, NodeJSON } from "../Node";
 
 export type GraphJSON = {
@@ -6,7 +6,7 @@ export type GraphJSON = {
 };
 
 type Graph = {
-  nodes: PrimitiveAtom<Node[]>;
+  nodes: Node[];
 };
 export type GraphView = {
   nodes: NodeJSON[];

@@ -10,8 +10,8 @@ function useSocket<T>(edge: Edge<T>) {
 const EdgeLine = <T,>({ edge }: { edge: Edge<T> }) => {
   const [osocket, isocket] = useSocket(edge);
 
-  const [pos] = useAtom(isocket.position);
-  const [fromPos] = useAtom(osocket.position);
+  const [pos] = useAtom(isocket._position);
+  const [fromPos] = useAtom(osocket._position);
   const arm = Math.abs(fromPos.x - pos.x) / 3;
 
   return (

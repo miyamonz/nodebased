@@ -1,4 +1,4 @@
-import type { Atom } from "jotai";
+import type { Atom, PrimitiveAtom } from "jotai";
 import type { RectAtom } from "../Rect";
 import type { InputSocket, OutputSocket } from "../Socket";
 import type { Stream } from "../Stream";
@@ -14,14 +14,10 @@ export type NodeJSON = {
   data?: {};
 };
 
-export type Node = {
-  rect: RectAtom;
-  isockets: Atom<InputSocket<unknown>[]>;
-  osockets: Atom<OutputSocket<unknown>[]>;
-  name: string;
-  component: NodeComponent;
-  id: string;
-  stream: Stream;
-  toSave: Atom<unknown> | undefined;
+export type Node = NodeJSON & {
+  _rect: RectAtom;
+  _component: NodeComponent;
+  _stream: Stream;
+  _toSave: Atom<unknown> | undefined;
 };
-export type NodeComponent = React.FC<{ node: NodeJSON }>;
+export type NodeComponent = React.FC<{ node: Node }>;

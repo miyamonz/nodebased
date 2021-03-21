@@ -1,10 +1,14 @@
 import { atom } from "jotai";
 import type { Atom } from "jotai";
 
-import type { NodeJSON, NodeComponent } from "./types";
+import type { NodeJSON, Node, NodeComponent } from "./types";
 
 import { createInputSocket, createOutputSocket } from "../Socket";
 import type { InputSocketJSON, OutputSocketJSON } from "../Socket";
+import type {
+  InputSocketJSONParts,
+  OutputSocketJSONParts,
+} from "../Socket/types";
 import type { Stream } from "../Stream";
 
 import { createRectAtom } from "../Rect";
@@ -31,7 +35,7 @@ function getSocketsJsonByName(name: string, data?: {}) {
 
   const _inputs =
     typeof option.inputs === "function" ? option.inputs(data) : option.inputs;
-  const isockets: InputSocketJSON[] = _inputs.map((t, i) => ({
+  const isockets: InputSocketJSONParts[] = _inputs.map((t, i) => ({
     type: "input",
     name: t.name ?? i,
   }));
@@ -39,7 +43,7 @@ function getSocketsJsonByName(name: string, data?: {}) {
     typeof option.outputs === "function"
       ? option.outputs(data)
       : option.outputs;
-  const osockets: OutputSocketJSON[] = _outputs.map((t, i) => ({
+  const osockets: OutputSocketJSONParts[] = _outputs.map((t, i) => ({
     type: "output",
     name: t.name ?? i,
   }));
@@ -49,12 +53,7 @@ function getSocketsJsonByName(name: string, data?: {}) {
 
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type Props = PartialBy<NodeJSON, "id" | "isockets" | "osockets">;
-export function createNodeByName({
-  name,
-  position,
-  id,
-  data,
-}: Props): NodeJSON {
+export function createNodeByName({ name, position, id, data }: Props): Node {
   const option = nodeOptions.find((option) => option.name === name);
   if (option === undefined) throw new Error(`${name} not found`);
 
@@ -70,7 +69,13 @@ export function createNodeByName({
   });
 }
 
-type JSONProps = PartialBy<NodeJSON, "id">;
+type JSONProps = PartialBy<
+  Omit<NodeJSON, "isockets" | "osockets" | "_rect" | "_component">,
+  "id"
+> & {
+  isockets: InputSocketJSONParts[];
+  osockets: OutputSocketJSONParts[];
+};
 export function createNodeByJson({
   name,
   position,
@@ -78,7 +83,7 @@ export function createNodeByJson({
   isockets,
   osockets,
   data,
-}: JSONProps): NodeJSON {
+}: JSONProps): Node {
   const option = nodeOptions.find((option) => option.name === name);
   if (option === undefined) throw new Error(`${name} not found`);
 
@@ -99,8 +104,8 @@ export function createNodeByJson({
 type createNodeProp = {
   name: string;
   position: Position;
-  isockets: InputSocketJSON[];
-  osockets: OutputSocketJSON[];
+  isockets: InputSocketJSONParts[];
+  osockets: OutputSocketJSONParts[];
   component: NodeComponent;
   stream: Stream;
   toSave: Atom<unknown> | undefined;
@@ -115,7 +120,7 @@ export function createNode({
   stream,
   toSave,
   id,
-}: createNodeProp): NodeJSON {
+}: createNodeProp): Node {
   console.log("createNode", name);
   const rect = createRect(position);
 
@@ -129,7 +134,7 @@ export function createNode({
         y: position.y + get(rect).height / 2 + i * 25,
       };
     });
-    return createInputSocket(s, nodeId);
+    return createInputSocket(s, nodeId, pAtom);
   });
 
   const _osockets = osockets.map((s, i) => {
@@ -141,14 +146,16 @@ export function createNode({
         y: position.y + get(rect).height / 2 + i * 25,
       };
     });
-    return createOutputSocket(s, nodeId);
+    return createOutputSocket(s, nodeId, pAtom);
   });
 
   return {
     isockets: _isockets,
     osockets: _osockets,
     name,
-    //component,
+    position,
+    _rect: rect,
+    _component: component,
     id: nodeId,
     //stream,
     //toSave,

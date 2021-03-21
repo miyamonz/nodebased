@@ -12,7 +12,7 @@ export function useCreateSubGraphNode() {
   const callback = useAtomCallback<NodeJSON, GraphJSON>(
     useCallback((get, _set, graph) => {
       const nodes = graph.nodes;
-      const position = getCenter(nodes.map((n) => get(n.rect)));
+      const position = getCenter(nodes.map((n) => get(n._rect)));
 
       remove(nodes);
       return createNodeByName({ name: "subGraph", position, data: graph });

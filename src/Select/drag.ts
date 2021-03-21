@@ -23,7 +23,7 @@ const filteredRectAtomListAtom = atom((get) => {
   const currentNodes = get(currentNodesAtom);
   const selectRect = get(selectRectAtom);
   if (selectRect === null) return [];
-  return currentNodes.filter((node) => intersect(selectRect)(get(node.rect)));
+  return currentNodes.filter((node) => intersect(selectRect)(get(node._rect)));
 });
 
 const startConditionAtom = atom((get) => {

@@ -2,7 +2,7 @@ import type { Atom } from "jotai";
 export type Position = { x: number; y: number };
 export type PositionAtom = Atom<Position>;
 
-export const getCenter = (positions: Position[]) => {
+export const getCenter = (positions: Position[]): Position => {
   const sum = positions.reduce(
     (acc, rect) => ({ x: acc.x + rect.x, y: acc.y + rect.y }),
     {

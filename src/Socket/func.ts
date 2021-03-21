@@ -1,24 +1,29 @@
 import type { InputSocket, InputSocketJSON } from "./types";
 import type { OutputSocket, OutputSocketJSON } from "./types";
+import type { InputSocketJSONParts, OutputSocketJSONParts } from "./types";
 import type { PositionAtom } from "../Position";
-import type { Node } from "../Node";
+import type { NodeJSON } from "../Node";
 
 export const createInputSocket = (
-  json: InputSocketJSON,
-  nodeId: Node["id"]
+  json: InputSocketJSONParts,
+  nodeId: NodeJSON["id"],
+  position: PositionAtom
 ): InputSocketJSON => {
   return {
     ...json,
-    nodeId,
+    _nodeId: nodeId,
+    _position: position,
   };
 };
 
 export const createOutputSocket = (
-  json: OutputSocketJSON,
-  nodeId: Node["id"]
+  json: OutputSocketJSONParts,
+  nodeId: NodeJSON["id"],
+  position: PositionAtom
 ): OutputSocketJSON => {
   return {
     ...json,
-    nodeId,
+    _nodeId: nodeId,
+    _position: position,
   };
 };

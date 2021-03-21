@@ -1,4 +1,5 @@
 import { InputSocket, OutputSocket } from "../Socket";
+import { InputSocketJSON, OutputSocketJSON } from "../Socket";
 import type { Node } from "../Node";
 import type { Socket } from "../Socket/types";
 
@@ -13,7 +14,7 @@ export type EdgeJSON = {
   };
 };
 
-export type Edge<T> = {
-  from: OutputSocket<T>;
-  to: InputSocket<T>;
+export type Edge = {
+  from: OutputSocketJSON;
+  to: InputSocketJSON;
 };

@@ -1,12 +1,10 @@
 import { atom } from "jotai";
 import type { Atom } from "jotai";
 import type { Edge } from "./types";
-import type { OutputSocket } from "../Socket";
-import type { Node } from "../Node";
-import type { Graph } from "../Graph";
+import type { OutputSocketJSON } from "../Socket";
 
 // output
-export const connectTargetAtom = atom<OutputSocket<unknown> | null>(null);
+export const connectTargetAtom = atom<OutputSocketJSON | null>(null);
 
 /*
 function getEdges(nodes: Node[], graph: Graph): Atom<Edge<unknown>[]> {

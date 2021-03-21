@@ -8,7 +8,7 @@ import type { NodeComponent } from "../Node";
 
 function getComponent(downAtom: WritableAtom<boolean, boolean>) {
   const RenderButtonNode: NodeComponent = ({ node }) => {
-    const [rect] = useAtom(node.rect);
+    const [rect] = useAtom(node._rect);
     const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
     const [isDown, setDown] = useAtom(downAtom);
 

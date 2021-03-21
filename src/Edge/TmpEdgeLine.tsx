@@ -3,10 +3,10 @@ import { useAtomValue } from "jotai/utils";
 import { useMouseToConnect } from "./drag";
 import { connectTargetAtom } from "./atoms";
 import { useMousePosition } from "../SVGContext";
-import type { OutputSocket } from "../Socket";
+import type { OutputSocketJSON } from "../Socket";
 
-const TmpEdgeLineImpl = <T,>({ socket }: { socket: OutputSocket<T> }) => {
-  const socketPos = useAtomValue(socket.position);
+const TmpEdgeLineImpl = ({ socket }: { socket: OutputSocketJSON }) => {
+  const socketPos = useAtomValue(socket._position);
   const mousePos = useMousePosition();
   return (
     <line

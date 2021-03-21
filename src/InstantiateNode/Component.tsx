@@ -10,7 +10,7 @@ import { RenderNode } from "../Node";
 export function createComponent(graphJsonAtom: Atom<GraphJSON>) {
   const GraphNode: NodeComponent = ({ node }) => {
     //const pushGraphJSON = usePushGraphJSON();
-    const [rect] = useAtom(node.rect);
+    const [rect] = useAtom(node._rect);
 
     const [graph] = useAtom(graphJsonAtom);
 
@@ -27,12 +27,12 @@ export function createComponent(graphJsonAtom: Atom<GraphJSON>) {
       createInstance(graph).then((inode) => {
         const rectAtom = atom(
           (get) => {
-            const rect = get(node.rect);
+            const rect = get(node._rect);
             return { ...rect, y: rect.y + rect.height };
           },
           (_get, _set) => {}
         );
-        inode.rect = rectAtom;
+        inode._rect = rectAtom;
         setInstanceNode(inode);
       });
       return () => {};

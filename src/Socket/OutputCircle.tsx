@@ -1,16 +1,16 @@
 import { atom, useAtom } from "jotai";
-import type { OutputSocket } from "./types";
+import type { OutputSocketJSON } from "./types";
 import { IOCircle } from "./IOCircle";
 
-export const hoveredOutputSocketAtom = atom<OutputSocket<unknown> | null>(null);
-export const OutputCircle = <T,>({ output }: { output: OutputSocket<T> }) => {
+export const hoveredOutputSocketAtom = atom<OutputSocketJSON | null>(null);
+export const OutputCircle = ({ output }: { output: OutputSocketJSON }) => {
   const [hovered, setHovered] = useAtom(hoveredOutputSocketAtom);
   const isHovered = hovered === output;
 
   return (
     <>
       <IOCircle
-        positionAtom={output.position}
+        positionAtom={output._position}
         onMouseEnter={() => {
           setHovered(output);
         }}

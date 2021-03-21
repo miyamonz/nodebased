@@ -7,7 +7,7 @@ const positionsWhenGrabbed = atom<Map<string, Position>>(new Map());
 export const setGrabAtom = atom(null, (get, set, dragTarget: Node[]) => {
   const keyValues = dragTarget.map((node) => {
     const key = node.id;
-    const rect = get(node.rect);
+    const rect = get(node._rect);
     const pos = { x: rect.x, y: rect.y };
     return [key, pos] as const;
   });
@@ -26,7 +26,7 @@ export const setDragDiffAtom = atom(
         x: startRectPos.x + mouseDiff.x,
         y: startRectPos.y + mouseDiff.y,
       };
-      set(node.rect, (prev) => ({ ...prev, ...moved }));
+      set(node._rect, (prev) => ({ ...prev, ...moved }));
     });
   }
 );
