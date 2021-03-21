@@ -7,8 +7,6 @@ import { useSelectedNodes } from "../Select";
 import { InputCircle, OutputCircle } from "../Socket";
 import type { Position } from "../Position";
 
-import { currentStreamsAtom } from "../Stream";
-
 type NodeComponent = React.FC<{ node: Node }>;
 
 const ShowSelect: NodeComponent = ({ node }) => {
@@ -64,8 +62,6 @@ const RenderText = ({
 };
 
 function useStream(node: Node) {
-  //const streamMap = useAtomValue(currentStreamsAtom);
-  //const stream = streamMap[node.id];
   const { stream } = node;
   const inputs = useAtomValue(stream?.inputAtoms ?? atom(0));
   const outputs = useAtomValue(stream?.outputAtoms ?? atom(0));

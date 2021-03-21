@@ -6,8 +6,6 @@ import type { GraphJSON, Graph } from "../Graph";
 import type { Stream } from "../Stream";
 import { jsonToGraph } from "../Graph";
 
-import { currentStreamsAtom } from "../Stream";
-
 function createStream(graphAtom: Atom<Graph>) {
   const inletNode = atom((get) =>
     get(get(graphAtom).nodes).filter((n) => n.name === "inlet")
@@ -19,21 +17,15 @@ function createStream(graphAtom: Atom<Graph>) {
   // TODO ここらへんcurrentStream側で吸収したり、nullableなのをなんとかしたい
   const stream: Stream = {
     inputAtoms: atom((get) => {
-      const streamMap = get(currentStreamsAtom);
       return get(inletNode).map((node) => {
-        const socket = get(node.isockets)[0];
-        const inputAtoms = streamMap[socket.nodeId]?.inputAtoms;
-        if (inputAtoms === undefined) return atom(atom(0)) as any;
-        return get(inputAtoms)[socket.name as number];
+        const inputAtoms = node.stream.inputAtoms;
+        return get(inputAtoms)[0];
       });
     }),
     outputAtoms: atom((get) => {
-      const streamMap = get(currentStreamsAtom);
       return get(outletNode).map((node) => {
-        const socket = get(node.osockets)[0];
-        const outputAtoms = streamMap[socket.nodeId]?.outputAtoms;
-        if (outputAtoms === undefined) return atom(1);
-        return get(outputAtoms)[socket.name as number];
+        const outputAtoms = node.stream.outputAtoms;
+        return get(outputAtoms)[0];
       });
     }),
   };
@@ -55,8 +47,6 @@ const option = {
     const jsonAtom = atom(json);
     const graphAtom = atom((get) => {
       const json = get(jsonAtom);
-      console.log("graphAtom", json);
-
       return jsonToGraph(get)(json);
     });
     const stream = createStream(graphAtom);

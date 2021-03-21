@@ -4,9 +4,7 @@ import type { Graph } from "./types";
 import { NodeEffect } from "../Node/effect";
 
 export const useGraphEffect = (graph: Graph) => {
-  const nodes = useAtomValue(graph.nodes);
-
-  nodes.forEach((n) => <NodeEffect node={n} />);
+  <GraphEffect graph={graph} />;
 };
 
 export function GraphEffect({ graph }: { graph: Graph }) {
@@ -15,7 +13,7 @@ export function GraphEffect({ graph }: { graph: Graph }) {
   return (
     <>
       {nodes.map((n) => (
-        <NodeEffect key={n.id} node={n} />
+        <NodeEffect key={n.id} graph={graph} node={n} />
       ))}
     </>
   );

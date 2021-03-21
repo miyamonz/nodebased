@@ -2,10 +2,9 @@ import { useEffect } from "react";
 import { atom } from "jotai";
 import { useAtom } from "jotai";
 import { useUpdateAtom } from "jotai/utils";
+import type { Graph } from "../Graph";
 import type { Node } from "./types";
-import { appendStreamAtom, removeStreamAtom } from "../Stream";
 import { EdgeEffect, Edge } from "../Edge";
-import { currentEdgesAtom } from "../actions";
 
 export const useNodeEffect = (node: Node) => {
   const mount = useUpdateAtom(mountNodeAtom);
@@ -18,9 +17,9 @@ export const useNodeEffect = (node: Node) => {
   }, []);
 };
 
-export function NodeEffect({ node }: { node: Node }) {
+export function NodeEffect({ graph, node }: { graph: Graph; node: Node }) {
   useNodeEffect(node);
-  const [edges] = useAtom(currentEdgesAtom);
+  const [edges] = useAtom(graph.edges);
   const [inputs] = useAtom(node.isockets);
   return (
     <>
@@ -28,21 +27,13 @@ export function NodeEffect({ node }: { node: Node }) {
         .map((input) => edges.find((e) => e.to === input))
         .filter((edge): edge is Edge<unknown> => edge !== undefined)
         .map((edge) => {
-          return <EdgeEffect edge={edge} />;
+          const key = `${edge.from.nodeId}${edge.from.name}-${edge.to.nodeId}${edge.to.name}`;
+          return <EdgeEffect graph={graph} key={key} edge={edge} />;
         })}
     </>
   );
 }
 
-const mountNodeAtom = atom(null, async (_get, set, node: Node) => {
-  console.log("add stream");
-  // stream
-  const { stream } = node;
-  set(appendStreamAtom, [node.id, stream]);
-});
+const mountNodeAtom = atom(null, async (_get, set, node: Node) => {});
 
-const unmountNodeAtom = atom(null, (_get, set, node: Node) => {
-  // stream
-  console.log("remove stream");
-  set(removeStreamAtom, node.id);
-});
+const unmountNodeAtom = atom(null, (_get, set, node: Node) => {});

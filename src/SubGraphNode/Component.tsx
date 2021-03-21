@@ -16,7 +16,6 @@ export function createComponent(
 
     const [json] = useAtom(jsonAtom);
     const [graph] = useAtom(graphAtom);
-    const [edges] = useAtom(graph.edges);
 
     const [, setCurrentGraphJson] = useAtom(currentGraphJsonAtom);
     return (

@@ -67,12 +67,11 @@ export const appendEdgeAtom = atom(null, (get, set, edge: Edge<unknown>) => {
 
 // graph
 const mergeGraphAtom = atom(null, (get, set, graph: Graph) => {
-  get(graph.nodes).map((n) => set(appendNode, n));
-
   get(graph.edges).map((c) => {
     const edgesAtom = get(currentGraphAtom).edges;
     set(edgesAtom, (prev) => [...prev, c]);
   });
+  get(graph.nodes).map((n) => set(appendNode, n));
 });
 export function useMergeGraph() {
   return useUpdateAtom(mergeGraphAtom);
