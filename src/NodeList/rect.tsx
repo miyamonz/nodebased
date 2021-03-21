@@ -1,6 +1,5 @@
 import { atom } from "jotai";
 import { NodeDefinition } from "./types";
-import { useAtomValue } from "jotai/utils";
 import { createAtomRef } from "../AtomRef";
 import { Stream } from "../Stream";
 
@@ -22,15 +21,8 @@ const option: NodeDefinition = {
 
     const outputAtoms = [
       atom((get) => {
-        const xAtom = get(x);
-        const yAtom = get(y);
-        const widthAtom = get(width);
-        const heightAtom = get(height);
+        const [x, y, width, height] = inputAtoms.map(get).map(get);
         return (props: JSX.IntrinsicElements["rect"]) => {
-          const x = useAtomValue(xAtom);
-          const y = useAtomValue(yAtom);
-          const width = useAtomValue(widthAtom);
-          const height = useAtomValue(heightAtom);
           return <rect {...{ x, y, width, height }} fill="blue" {...props} />;
         };
       }),

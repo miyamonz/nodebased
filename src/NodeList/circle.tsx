@@ -1,5 +1,4 @@
 import { atom } from "jotai";
-import { useAtomValue } from "jotai/utils";
 import { NodeDefinition } from "./types";
 import type { Stream } from "../Stream";
 
@@ -15,13 +14,8 @@ const option: NodeDefinition = {
     const inputAtoms = [x, y, r];
 
     const outAtom = atom((get) => {
-      const xAtom = get(x);
-      const yAtom = get(y);
-      const rAtom = get(r);
+      const [cx, cy, r] = inputAtoms.map(get).map(get);
       return (props: JSX.IntrinsicElements["circle"]) => {
-        const cx = useAtomValue(xAtom);
-        const cy = useAtomValue(yAtom);
-        const r = useAtomValue(rAtom);
         return (
           <circle
             cx={cx}

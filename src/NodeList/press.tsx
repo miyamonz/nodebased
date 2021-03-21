@@ -1,16 +1,15 @@
 import React from "react";
 import { atom } from "jotai";
-import type { Atom, WritableAtom } from "jotai";
-import { useAtomValue, useUpdateAtom } from "jotai/utils";
+import type { WritableAtom } from "jotai";
+import { useUpdateAtom } from "jotai/utils";
 import { NodeDefinition } from "./types";
 import type { Stream } from "../Stream";
 
 function getComponent(
-  componentAtom: Atom<React.ComponentType | null>,
+  Component: React.ComponentType | null,
   pressAtom: WritableAtom<boolean, boolean>
 ) {
   return (props: any) => {
-    const Component = useAtomValue(componentAtom);
     const set = useUpdateAtom(pressAtom);
 
     React.useEffect(() => {
@@ -45,9 +44,9 @@ const option: NodeDefinition = {
 
     const outputAtoms = [
       atom((get) => {
-        const componentAtom_ = get(componentAtom);
+        const Component = get(get(componentAtom));
 
-        return getComponent(componentAtom_, pressAtom);
+        return getComponent(Component, pressAtom);
       }),
       pressAtom,
     ];

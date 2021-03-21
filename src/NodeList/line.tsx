@@ -1,4 +1,4 @@
-import { atom, useAtom } from "jotai";
+import { atom } from "jotai";
 import { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
 import { Stream } from "../Stream";
@@ -21,15 +21,8 @@ const option: NodeDefinition = {
 
     const outputAtoms = [
       atom((get) => {
-        const x1Atom = get(x1);
-        const y1Atom = get(y1);
-        const x2Atom = get(x2);
-        const y2Atom = get(y2);
+        const [x1, y1, x2, y2] = inputAtoms.map(get).map(get);
         return (props: JSX.IntrinsicElements["line"]) => {
-          const [x1] = useAtom(x1Atom);
-          const [y1] = useAtom(y1Atom);
-          const [x2] = useAtom(x2Atom);
-          const [y2] = useAtom(y2Atom);
           return (
             <line
               {...{ x1, y1, x2, y2 }}
