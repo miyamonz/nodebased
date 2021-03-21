@@ -47,16 +47,13 @@ export function useRemoveNode() {
 }
 
 // edge
-export const appendEdgeAtom = atom(
-  null,
-  (get, set, c: Edge<unknown>) => {
-    const edgesAtom = get(currentGraphAtom).edges;
-    set(edgesAtom, (prev) => [
-      ...prev.filter((conn) => !equal(conn.to, c.to)),
-      c,
-    ]);
-  }
-);
+export const appendEdgeAtom = atom(null, (get, set, edge: Edge<unknown>) => {
+  const edgesAtom = get(currentGraphAtom).edges;
+  set(edgesAtom, (prev) => [
+    ...prev.filter((conn) => !equal(conn.to, edge.to)),
+    edge,
+  ]);
+});
 
 // graph
 const mergeGraphAtom = atom(null, (get, set, graph: Graph) => {
