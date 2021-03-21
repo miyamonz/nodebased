@@ -35,7 +35,7 @@ const setConnectAtom = atom(
     const fromNode = nodes.find((n) => n.id === edge.from.nodeId);
     const toNode = nodes.find((n) => n.id === edge.to.nodeId);
     if (!(fromNode && toNode)) {
-      throw new Error("from Node and to node not  found");
+      throw new Error("from Node and to node not found");
     }
     const fromAtom = get(fromNode.stream.outputAtoms)[edge.from.name as number];
     const toAtom = get(toNode.stream.inputAtoms)[edge.to.name as number];
@@ -51,8 +51,9 @@ const setDisconnectAtom = atom(
     const nodes = get(graph.nodes);
 
     const toNode = nodes.find((n) => n.id === edge.to.nodeId);
+    // TODO たぶんnode unmountが先に動いてる
     if (!toNode) {
-      throw new Error("from Node and to node not  found");
+      return;
     }
     const toAtom = get(toNode.stream.inputAtoms)[edge.to.name as number];
 

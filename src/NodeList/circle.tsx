@@ -5,11 +5,7 @@ import type { Stream } from "../Stream";
 
 const option: NodeDefinition = {
   name: "circle",
-  inputs: [
-    { type: "number", name: "x" },
-    { type: "number", name: "y" },
-    { type: "number", name: "r" },
-  ],
+  inputs: [{ type: "number" }, { type: "number" }, { type: "number" }],
   outputs: [{ type: "ComponentType" }],
 
   init: () => {
