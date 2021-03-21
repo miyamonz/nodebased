@@ -1,19 +1,22 @@
 import { atom, useAtom } from "jotai";
-import type { InputSocket, OutputSocket } from "./types";
+import type { InputSocket } from "./types";
 import { IOCircle } from "./IOCircle";
 import EdgeLine from "../Edge/EdgeLine";
+
+import { currentEdgesAtom } from "../actions";
 
 export const hoveredInputSocketAtom = atom<InputSocket<unknown> | null>(null);
 export const InputCircle = <T,>({ input }: { input: InputSocket<T> }) => {
   const [hovered, setHovered] = useAtom(hoveredInputSocketAtom);
   const isHovered = hovered === input;
 
-  const isConnected = input.from !== undefined;
+  const [edges] = useAtom(currentEdgesAtom);
+  const myEdge = edges.find((e) => e.to === input);
+
+  const isConnected = myEdge !== undefined;
   return (
     <>
-      {input.from !== undefined && (
-        <WhenConnected input={input} output={input.from} />
-      )}
+      {myEdge && <EdgeLine edge={myEdge} />}
       <IOCircle
         positionAtom={input.position}
         onMouseEnter={() => {
@@ -27,17 +30,3 @@ export const InputCircle = <T,>({ input }: { input: InputSocket<T> }) => {
     </>
   );
 };
-
-function WhenConnected({
-  input,
-  output,
-}: {
-  input: InputSocket<unknown>;
-  output: OutputSocket<unknown>;
-}) {
-  const edge = {
-    from: output,
-    to: input,
-  };
-  return <EdgeLine edge={edge} />;
-}

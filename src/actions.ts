@@ -18,6 +18,16 @@ export const currentNodesAtom = atom<Node[], SetStateAction<Node[]>>(
     set(graph.nodes, action);
   }
 );
+export const currentEdgesAtom = atom<
+  Edge<unknown>[],
+  SetStateAction<Edge<unknown>[]>
+>(
+  (get) => get(get(currentGraphAtom).edges),
+  (get, set, action: SetStateAction<Edge<unknown>[]>) => {
+    const graph = get(currentGraphAtom);
+    set(graph.edges, action);
+  }
+);
 
 // node
 const appendNode = atom(null, (_get, set, node: Node) => {
