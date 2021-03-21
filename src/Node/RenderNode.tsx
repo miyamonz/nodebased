@@ -63,9 +63,10 @@ const RenderText = ({
   );
 };
 
-function useStreamById(nodeId: Node["id"]) {
-  const streamMap = useAtomValue(currentStreamsAtom);
-  const stream = streamMap[nodeId];
+function useStream(node: Node) {
+  //const streamMap = useAtomValue(currentStreamsAtom);
+  //const stream = streamMap[node.id];
+  const { stream } = node;
   const inputs = useAtomValue(stream?.inputAtoms ?? atom(0));
   const outputs = useAtomValue(stream?.outputAtoms ?? atom(0));
   return { inputs, outputs };
@@ -79,7 +80,7 @@ const RenderNode: NodeComponent = ({ node }) => {
   const isockets = useAtomValue(node.isockets);
   const osockets = useAtomValue(node.osockets);
 
-  const { outputs } = useStreamById(node.id);
+  const { outputs } = useStream(node);
 
   return (
     <>
