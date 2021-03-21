@@ -1,29 +1,19 @@
 import React from "react";
 import { useAtom } from "jotai";
 import { WritableAtom } from "jotai";
-import { useAtomCallback, useAtomValue } from "jotai/utils";
-import { Graph, GraphJSON } from "./types";
+import { GraphJSON } from "./types";
 import { RenderNode } from "../Node";
-import { jsonToGraph } from "./json";
 
-import { currentGraphAtom } from "../actions";
+import { currentGraphJsonAtom } from "../actions";
 import { graphStackAtom } from "../Graph/atoms";
 import { GraphEffect } from "./effect";
 
 function useCreateGraphFromJson(jsonAtom: WritableAtom<GraphJSON, GraphJSON>) {
-  const [graph, setGraph] = useAtom(currentGraphAtom);
-  const callback = useAtomCallback<Graph>(
-    React.useCallback(
-      (get, _set) => {
-        const json = get(jsonAtom);
-        return jsonToGraph(get)(json);
-      },
-      [jsonAtom.toString()]
-    )
-  );
+  const [json] = useAtom(jsonAtom);
+  const [graph, setGraph] = useAtom(currentGraphJsonAtom);
   const [stack] = useAtom(graphStackAtom);
   React.useEffect(() => {
-    callback().then(setGraph);
+    setGraph(json);
   }, [stack.length]);
   return graph;
 }
@@ -35,8 +25,8 @@ const RenderGraph: React.FC<{
   return <>{graph && <Render graph={graph} />}</>;
 };
 
-function Render({ graph }: { graph: Graph }) {
-  const nodes = useAtomValue(graph.nodes);
+function Render({ graph }: { graph: GraphJSON }) {
+  const nodes = graph.nodes;
   return (
     <>
       <GraphEffect graph={graph} />

@@ -1,15 +1,4 @@
-import { createGraph } from "./funcs";
-
-import { nodeToJson, jsonToNode } from "../Node";
-import type { Getter } from "jotai/core/types";
-import type { GraphView, GraphJSON } from "./types";
-
-export const graphToJson = (get: Getter) => (graph: GraphView): GraphJSON => {
-  const { nodes } = graph;
-  return {
-    nodes: get(nodes).map(nodeToJson(get)),
-  };
-};
+import type { GraphJSON } from "./types";
 
 const uuid = () => Math.floor(Math.random() * 10 ** 12).toString();
 
@@ -24,9 +13,3 @@ export function replaceNodeIds(
 
   return { nodes };
 }
-
-export const jsonToGraph = (_get: Getter) => (json: GraphJSON) => {
-  const _json = replaceNodeIds(json); // replacing id should be at first
-  const nodes = _json.nodes.map(jsonToNode);
-  return createGraph(nodes);
-};

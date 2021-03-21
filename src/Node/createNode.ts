@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import type { Atom } from "jotai";
 
-import type { Node, NodeJSON, NodeComponent } from "./types";
+import type { NodeJSON, NodeComponent } from "./types";
 
 import { createInputSocket, createOutputSocket } from "../Socket";
 import type { InputSocketJSON, OutputSocketJSON } from "../Socket";
@@ -49,7 +49,12 @@ function getSocketsJsonByName(name: string, data?: {}) {
 
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type Props = PartialBy<NodeJSON, "id" | "isockets" | "osockets">;
-export function createNodeByName({ name, position, id, data }: Props): Node {
+export function createNodeByName({
+  name,
+  position,
+  id,
+  data,
+}: Props): NodeJSON {
   const option = nodeOptions.find((option) => option.name === name);
   if (option === undefined) throw new Error(`${name} not found`);
 
@@ -73,7 +78,7 @@ export function createNodeByJson({
   isockets,
   osockets,
   data,
-}: JSONProps): Node {
+}: JSONProps): NodeJSON {
   const option = nodeOptions.find((option) => option.name === name);
   if (option === undefined) throw new Error(`${name} not found`);
 
@@ -110,46 +115,42 @@ export function createNode({
   stream,
   toSave,
   id,
-}: createNodeProp): Node {
+}: createNodeProp): NodeJSON {
   console.log("createNode", name);
   const rect = createRect(position);
 
   const nodeId = id ?? Math.floor(Math.random() * 10 ** 12).toString();
 
-  const _isockets = atom(
-    isockets.map((s, i) => {
-      const pAtom = atom((get) => {
-        const position = get(rect);
-        return {
-          ...position,
-          y: position.y + get(rect).height / 2 + i * 25,
-        };
-      });
-      return createInputSocket(s, pAtom, nodeId);
-    })
-  );
-  const _osockets = atom(() =>
-    osockets.map((s, i) => {
-      const pAtom = atom((get) => {
-        const position = get(rect);
-        return {
-          ...position,
-          x: position.x + get(rect).width,
-          y: position.y + get(rect).height / 2 + i * 25,
-        };
-      });
-      return createOutputSocket(s, pAtom, nodeId);
-    })
-  );
+  const _isockets = isockets.map((s, i) => {
+    const pAtom = atom((get) => {
+      const position = get(rect);
+      return {
+        ...position,
+        y: position.y + get(rect).height / 2 + i * 25,
+      };
+    });
+    return createInputSocket(s, nodeId);
+  });
+
+  const _osockets = osockets.map((s, i) => {
+    const pAtom = atom((get) => {
+      const position = get(rect);
+      return {
+        ...position,
+        x: position.x + get(rect).width,
+        y: position.y + get(rect).height / 2 + i * 25,
+      };
+    });
+    return createOutputSocket(s, nodeId);
+  });
 
   return {
-    rect,
     isockets: _isockets,
     osockets: _osockets,
     name,
-    component,
+    //component,
     id: nodeId,
-    stream,
-    toSave,
+    //stream,
+    //toSave,
   };
 }

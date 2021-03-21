@@ -1,13 +1,13 @@
 import { atom } from "jotai";
 import { useAtomValue, useUpdateAtom } from "jotai/utils";
-import type { Node } from "../Node";
+import type { NodeJSON } from "../Node";
 import { copyToClipboard } from "../util";
 
-import { currentGraphAtom } from "../actions";
-import { getGraphViewByNodes, graphToJson, replaceNodeIds } from "../Graph";
+import { currentGraphJsonAtom } from "../actions";
+import { replaceNodeIds } from "../Graph";
 
 // selected nodes
-export const selectedNodesAtom = atom<Node[]>([]);
+export const selectedNodesAtom = atom<NodeJSON[]>([]);
 export function useSelectedNodes() {
   return useAtomValue(selectedNodesAtom);
 }
@@ -16,14 +16,16 @@ export function useSetSelected() {
 }
 
 export const selectedGraphAtom = atom((get) => {
-  const graph = get(currentGraphAtom);
-  return getGraphViewByNodes(selectedNodesAtom, graph);
+  const graph = get(currentGraphJsonAtom);
+  return {
+    nodes: get(selectedNodesAtom),
+  };
 });
 
 const selectedAtomJSON = atom(
   (get) => {
     const graph = get(selectedGraphAtom);
-    return graphToJson(get)(graph);
+    return graph;
   },
   (get) => {
     const json = get(selectedAtomJSON);

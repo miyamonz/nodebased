@@ -5,7 +5,6 @@ import { connectTargetAtom } from "./atoms";
 import { hoveredInputSocketAtom, hoveredOutputSocketAtom } from "../Socket";
 import type { InputSocket, OutputSocket } from "../Socket";
 import { useMouseStream } from "../SVGContext";
-import { appendEdgeAtom } from "../actions";
 
 export function useMouseToConnect() {
   const [hoveredOutput] = useAtom(hoveredOutputSocketAtom);
@@ -40,11 +39,7 @@ const connectAtom = atom(
     [connectTarget, hovered]: [OutputSocket<unknown>, InputSocket<unknown>]
   ) => {
     console.log("connect", connectTarget, hovered);
-    const c = {
-      from: connectTarget,
-      to: hovered,
-    };
-    set(appendEdgeAtom, c);
+    hovered.from = connectTarget;
     set(connectTargetAtom, null);
   }
 );

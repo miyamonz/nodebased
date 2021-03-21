@@ -8,8 +8,8 @@ import {
 } from "../Stream/queue";
 
 export const useEdgeEffect = (edge: Edge<unknown>) => {
-  const setConnect = useUpdateAtom(setConnectAtom);
-  const setDisconnect = useUpdateAtom(setDisconnectAtom);
+  const setConnect = useUpdateAtom(mountEdgeAtom);
+  const setDisconnect = useUpdateAtom(unmountEdgeAtom);
   useEffect(() => {
     setConnect(edge);
     return () => {
@@ -22,12 +22,12 @@ export function EdgeEffect({ edge }: { edge: Edge<unknown> }) {
   return null;
 }
 
-const setConnectAtom = atom(null, (get, set, edge: Edge<unknown>) => {
+export const mountEdgeAtom = atom(null, (get, set, edge: Edge<unknown>) => {
   console.log("connect", edge);
   set(appendConnectQueueAtom, edge);
 });
 
-const setDisconnectAtom = atom(null, (get, set, edge: Edge<unknown>) => {
+export const unmountEdgeAtom = atom(null, (get, set, edge: Edge<unknown>) => {
   console.log("disconnect", edge);
   set(appendDisconnectQueueAtom, edge);
 });

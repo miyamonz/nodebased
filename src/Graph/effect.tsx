@@ -1,16 +1,13 @@
-import { useAtomValue } from "jotai/utils";
-import type { Graph } from "./types";
+import type { GraphJSON } from "./types";
 
 import { NodeEffect } from "../Node/effect";
 
-export const useGraphEffect = (graph: Graph) => {
-  const nodes = useAtomValue(graph.nodes);
-
-  nodes.forEach((n) => <NodeEffect node={n} />);
+export const useGraphEffect = (graph: GraphJSON) => {
+  graph.nodes.forEach((n) => <NodeEffect node={n} />);
 };
 
-export function GraphEffect({ graph }: { graph: Graph }) {
-  const nodes = useAtomValue(graph.nodes);
+export function GraphEffect({ graph }: { graph: GraphJSON }) {
+  const { nodes } = graph;
 
   return (
     <>

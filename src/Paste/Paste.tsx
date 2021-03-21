@@ -5,8 +5,7 @@ import { useShortcutPaste } from "./shortcutHooks";
 import { getClipboard } from "../util";
 import { useMergeGraph } from "../actions";
 import { useSetSelected } from "../Select";
-
-import { jsonToGraph, GraphJSON } from "../Graph";
+import { GraphJSON } from "../Graph";
 
 const Paste = () => {
   const mergeGraph = useMergeGraph();
@@ -16,11 +15,10 @@ const Paste = () => {
     React.useCallback(async (get) => {
       const text = await getClipboard();
       try {
-        const json = JSON.parse(text) as GraphJSON;
-        const graph = jsonToGraph(get)(json);
+        const graph = JSON.parse(text) as GraphJSON;
         mergeGraph(graph);
 
-        setSelected(get(graph.nodes));
+        setSelected(graph.nodes);
       } catch (e: unknown) {
         console.error(e);
       }

@@ -24,4 +24,4 @@ export type Node = {
   stream: Stream;
   toSave: Atom<unknown> | undefined;
 };
-export type NodeComponent = React.FC<{ node: Node }>;
+export type NodeComponent = React.FC<{ node: NodeJSON }>;

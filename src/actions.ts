@@ -1,24 +1,15 @@
 import { atom } from "jotai";
 import { useUpdateAtom } from "jotai/utils";
-import type { SetStateAction } from "jotai/core/types";
 import { createNodeByName } from "./Node";
-import { currentGraphAtom } from "./Graph/atoms";
+import { currentGraphJsonAtom, currentNodesAtom } from "./Graph/atoms";
 import { removeNodeFromGraphAtom } from "./Graph";
-import type { Node } from "./Node";
-import type { Edge } from "./Edge";
-import type { Graph } from "./Graph";
+import type { NodeJSON } from "./Node";
+import type { GraphJSON } from "./Graph";
 
-export { currentGraphAtom };
-export const currentNodesAtom = atom<Node[], SetStateAction<Node[]>>(
-  (get) => get(get(currentGraphAtom).nodes),
-  (get, set, action: SetStateAction<Node[]>) => {
-    const graph = get(currentGraphAtom);
-    set(graph.nodes, action);
-  }
-);
+export { currentGraphJsonAtom, currentNodesAtom };
 
 // node
-const appendNode = atom(null, (_get, set, node: Node) => {
+const appendNode = atom(null, (_get, set, node: NodeJSON) => {
   set(currentNodesAtom, (prev) => [...prev, node]);
 });
 
@@ -35,21 +26,20 @@ export function useAppendNode() {
   return useUpdateAtom(appendNode);
 }
 
-const removeNode = atom(null, (get, set, args: Node | Node[]) => {
+const removeNode = atom(null, (_get, set, args: NodeJSON | NodeJSON[]) => {
   const nodes = Array.isArray(args) ? args : [args];
-  set(removeNodeFromGraphAtom, { targetGraphAtom: currentGraphAtom, nodes });
+  set(removeNodeFromGraphAtom, {
+    targetGraphAtom: currentGraphJsonAtom,
+    nodes,
+  });
 });
-
 export function useRemoveNode() {
   return useUpdateAtom(removeNode);
 }
 
-// edge
-export const appendEdgeAtom = atom(null, (get, set, _c: Edge<unknown>) => {});
-
 // graph
-const mergeGraphAtom = atom(null, (get, set, graph: Graph) => {
-  get(graph.nodes).map((n) => set(appendNode, n));
+const mergeGraphAtom = atom(null, (_get, set, graph: GraphJSON) => {
+  graph.nodes.map((n) => set(appendNode, n));
 });
 export function useMergeGraph() {
   return useUpdateAtom(mergeGraphAtom);

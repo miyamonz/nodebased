@@ -3,26 +3,22 @@ import type { OutputSocket, OutputSocketJSON } from "./types";
 import type { PositionAtom } from "../Position";
 import type { Node } from "../Node";
 
-export const createInputSocket = <IN>(
+export const createInputSocket = (
   json: InputSocketJSON,
-  position: PositionAtom,
   nodeId: Node["id"]
-): InputSocket<IN> => {
+): InputSocketJSON => {
   return {
     ...json,
-    position,
     nodeId,
   };
 };
 
-export const createOutputSocket = <OUT>(
+export const createOutputSocket = (
   json: OutputSocketJSON,
-  position: PositionAtom,
   nodeId: Node["id"]
-): OutputSocket<OUT> => {
+): OutputSocketJSON => {
   return {
     ...json,
-    position,
     nodeId,
   };
 };

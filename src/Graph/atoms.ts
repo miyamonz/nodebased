@@ -1,21 +1,22 @@
-import { atom } from "jotai";
+import { atom, PrimitiveAtom } from "jotai";
+import { focusAtom } from "jotai/optics";
+import { withImmer } from "jotai/immer";
 import { useAtomValue, useUpdateAtom } from "jotai/utils";
-import type { Atom, PrimitiveAtom } from "jotai";
-import { graphToJson, jsonToGraph } from "./json";
-import type { Graph, GraphJSON } from "./types";
+import type { GraphJSON } from "./types";
 
-import type { Node } from "../Node";
-import type { Edge } from "../Edge";
+import type { NodeJSON } from "../Node";
 
 type GraphStack = {
-  graph: PrimitiveAtom<GraphJSON>;
+  graph: typeof rootGraphJsonAtom;
   onPop: (json: GraphJSON) => void;
 };
 
-const rootGraphJsonAtom = atom<GraphJSON>({ nodes: [] });
+const rootGraphJsonAtom: PrimitiveAtom<GraphJSON> = atom<GraphJSON>({
+  nodes: [],
+});
 export const graphStackAtom = atom<GraphStack[]>([]);
 
-export const currentGraphJsonAtom: PrimitiveAtom<GraphJSON> = atom(
+export const currentGraphJsonAtom: typeof rootGraphJsonAtom = atom(
   (get) => {
     const stack = get(graphStackAtom);
     return stack.length > 0
@@ -29,11 +30,8 @@ export const currentGraphJsonAtom: PrimitiveAtom<GraphJSON> = atom(
     set(graphJsonAtom, newJson);
   }
 );
-export const currentGraphAtom = atom<Graph, Graph>(
-  (get) => jsonToGraph(get)(get(currentGraphJsonAtom)),
-  (get, set, newGraph) => {
-    set(currentGraphJsonAtom, graphToJson(get)(newGraph));
-  }
+export const currentNodesAtom = focusAtom(currentGraphJsonAtom, (optics) =>
+  optics.prop("nodes")
 );
 
 const dropStackAtom = atom(null, (get, set) => {
@@ -52,27 +50,19 @@ const pushGraphAtom = atom(null, (_get, set, graphStack: GraphStack) => {
   set(graphStackAtom, (prev) => [...prev, graphStack]);
 });
 
-const saveAtom = atom(null, (get, set) => {
-  // save graph to json
-  const graph = get(currentGraphAtom);
-  set(currentGraphJsonAtom, graphToJson(get)(graph));
-});
 export function usePushGraphJSON() {
-  const save = useUpdateAtom(saveAtom);
   const push = useUpdateAtom(pushGraphAtom);
   return (json: GraphJSON, onPop: GraphStack["onPop"]) => {
-    save();
     push({ graph: atom(json), onPop });
   };
 }
 
 export const popGraphAtom = atom(null, (get, set) => {
-  const graph = get(currentGraphAtom);
-  const json = graphToJson(get)(graph);
+  const graph = get(currentGraphJsonAtom);
   set(graphStackAtom, (prev) => {
     const popped = prev[prev.length - 1];
     if ("onPop" in popped) {
-      popped.onPop(json);
+      popped.onPop(graph);
     }
     prev.pop();
     return [...prev];
@@ -87,26 +77,31 @@ export function useSetRootGraph() {
 export const removeNodeFromGraphAtom = atom(
   null,
   (
-    get,
+    _get,
     set,
-    { targetGraphAtom, nodes }: { targetGraphAtom: Atom<Graph>; nodes: Node[] }
+    {
+      targetGraphAtom,
+      nodes,
+    }: { targetGraphAtom: typeof rootGraphJsonAtom; nodes: NodeJSON[] }
   ) => {
     // remove edge
-    const graph = get(targetGraphAtom);
-    const osockets = nodes.flatMap((n) => get(n.osockets));
-    const isockets = nodes.flatMap((n) => get(n.isockets));
-    const ids = nodes.map((n) => n.id);
-    const _shouldDisConnect = (c: Edge<unknown>) => {
-      const from =
-        osockets.map((s) => s.name).includes(c.from.name) &&
-        ids.includes(c.from.nodeId);
-      const to =
-        isockets.map((s) => s.name).includes(c.to.name) &&
-        ids.includes(c.to.nodeId);
-      return from || to;
-    };
+    const osockets = nodes.flatMap((n) => n.osockets);
+
+    set(withImmer(targetGraphAtom), (graph) => {
+      graph.nodes.forEach((node) => {
+        node.isockets.forEach((isocket) => {
+          const disconnect =
+            isocket.from !== undefined &&
+            node.name === isocket.from.nodeId &&
+            osockets.map((s) => s.name).includes(isocket.from.socketName);
+          if (disconnect) {
+            isocket.from = undefined;
+          }
+        });
+      });
+    });
 
     // remove node
-    set(graph.nodes, (prev) => prev.filter((na) => !nodes.includes(na)));
+    set(currentNodesAtom, (nodes) => nodes.filter((na) => !nodes.includes(na)));
   }
 );

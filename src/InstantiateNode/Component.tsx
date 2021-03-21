@@ -2,20 +2,17 @@ import React from "react";
 import { atom, useAtom } from "jotai";
 import type { Atom } from "jotai";
 import { useCreateInstanceNode } from "./funcs";
-import type { Node, NodeComponent } from "../Node";
+import type { NodeJSON, NodeComponent } from "../Node";
 //import { usePushGraphJSON } from "../Graph";
 import type { GraphJSON } from "../Graph";
-import { jsonToGraph } from "../Graph";
 import { RenderNode } from "../Node";
 
 export function createComponent(graphJsonAtom: Atom<GraphJSON>) {
-  const graphAtom = atom((get) => jsonToGraph(get)(get(graphJsonAtom)));
-
   const GraphNode: NodeComponent = ({ node }) => {
     //const pushGraphJSON = usePushGraphJSON();
     const [rect] = useAtom(node.rect);
 
-    const [graph] = useAtom(graphAtom);
+    const [graph] = useAtom(graphJsonAtom);
 
     const instancedRect = { ...rect, y: rect.y + rect.height };
     const createInstance = useCreateInstanceNode({

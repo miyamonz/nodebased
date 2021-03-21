@@ -9,6 +9,7 @@ export type Socket = {
 };
 export type InputSocket<T> = Socket & {
   type: "input";
+  from?: OutputSocket<T>;
 };
 export type InputSocketAtom<T> = Atom<InputSocket<T>>;
 
@@ -23,6 +24,10 @@ export type SocketJSON = {
 export type InputSocketJSON = {
   type: "input";
   name: string | number;
+  from?: {
+    nodeId: Node["id"];
+    socketName: OutputSocketJSON["name"];
+  };
 };
 export type OutputSocketJSON = {
   type: "output";
