@@ -57,6 +57,7 @@ const setDisconnectAtom = atom(
     }
     const toAtom = get(toNode.stream.inputAtoms)[edge.to.name as number];
 
-    set(toAtom, atom(get(get(toAtom))));
+    // TODO: 値を維持するか、socketの型に合わせてdefault値を入れるほうが良さそう
+    set(toAtom, atom(null));
   }
 );
