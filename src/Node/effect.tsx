@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { atom } from "jotai";
 import { useAtom } from "jotai";
 import { useUpdateAtom } from "jotai/utils";
@@ -17,7 +17,7 @@ export const useNodeEffect = (node: Node) => {
   }, []);
 };
 
-export function NodeEffect({ graph, node }: { graph: Graph; node: Node }) {
+function NodeEffect({ graph, node }: { graph: Graph; node: Node }) {
   useNodeEffect(node);
   const [edges] = useAtom(graph.edges);
   const [inputs] = useAtom(node.isockets);
@@ -33,6 +33,8 @@ export function NodeEffect({ graph, node }: { graph: Graph; node: Node }) {
     </>
   );
 }
+const NodeEffectMemo = React.memo(NodeEffect);
+export { NodeEffectMemo as NodeEffect };
 
 const mountNodeAtom = atom(null, async (_get, set, node: Node) => {});
 

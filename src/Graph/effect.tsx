@@ -1,3 +1,4 @@
+import React from "react";
 import { useAtomValue } from "jotai/utils";
 import type { Graph } from "./types";
 
@@ -7,7 +8,7 @@ export const useGraphEffect = (graph: Graph) => {
   <GraphEffect graph={graph} />;
 };
 
-export function GraphEffect({ graph }: { graph: Graph }) {
+function GraphEffect({ graph }: { graph: Graph }) {
   const nodes = useAtomValue(graph.nodes);
 
   return (
@@ -18,3 +19,6 @@ export function GraphEffect({ graph }: { graph: Graph }) {
     </>
   );
 }
+
+const GraphEffectMemo = React.memo(GraphEffect);
+export { GraphEffectMemo as GraphEffect };

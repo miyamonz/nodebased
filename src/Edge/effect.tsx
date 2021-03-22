@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { atom } from "jotai";
 import { useUpdateAtom } from "jotai/utils";
 import type { Graph } from "../Graph";
@@ -14,17 +14,13 @@ export const useEdgeEffect = (graph: Graph, edge: Edge<unknown>) => {
     };
   }, []);
 };
-export function EdgeEffect({
-  graph,
-  edge,
-}: {
-  graph: Graph;
-  edge: Edge<unknown>;
-}) {
+const EdgeEffect = ({ graph, edge }: { graph: Graph; edge: Edge<unknown> }) => {
   useEdgeEffect(graph, edge);
   console.log("edge effect");
   return null;
-}
+};
+const EdgeEffectMemo = React.memo(EdgeEffect);
+export { EdgeEffectMemo as EdgeEffect };
 
 const setConnectAtom = atom(
   null,
