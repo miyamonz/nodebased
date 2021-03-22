@@ -1,17 +1,16 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { atom } from "jotai";
-import type { Atom, WritableAtom } from "jotai";
-import { useAtomValue, useUpdateAtom } from "jotai/utils";
+import type { WritableAtom } from "jotai";
+import { useUpdateAtom } from "jotai/utils";
 import { NodeDefinition } from "./types";
 import type { Stream } from "../Stream";
 
-function getComponent(
-  componentAtom: Atom<React.ComponentType | null>,
+function getElement(
+  elem: ReactElement,
   pressAtom: WritableAtom<boolean, boolean>
 ) {
   const id = Math.floor(Math.random() * 10 ** 5).toString();
-  return (props: any) => {
-    const Component = useAtomValue(componentAtom);
+  const Component = (props: any) => {
     const set = useUpdateAtom(pressAtom);
 
     React.useEffect(() => {
@@ -26,41 +25,38 @@ function getComponent(
       return () => window.removeEventListener("mousedown", handle);
     }, []);
 
-    const isComponent = (c: unknown): c is React.ComponentType =>
-      Component !== null || typeof c !== "function";
-    if (!isComponent(Component)) return null;
-    return (
-      <Component
-        {...props}
-        data-select-id={id}
-        onMouseDown={(e: React.MouseEvent<Element>) => {
-          set(true);
-          props?.onMouseDown?.(e);
-        }}
-      />
-    );
+    return React.cloneElement(elem, {
+      ...props,
+      onMouseDown: (e: React.MouseEvent<Element>) => {
+        set(true);
+        props?.onMouseDown?.(e);
+      },
+      "data-select-id": id,
+    });
   };
+
+  return <Component />;
 }
 
 const option: NodeDefinition = {
   name: "select",
-  inputs: [{ type: "ComponentType" }],
-  outputs: [{ type: "ComponentType" }, { type: "boolean" }],
+  inputs: [{ type: "ReactElement" }],
+  outputs: [{ type: "ReactElement" }, { type: "boolean" }],
 
   init: () => {
-    const componentAtom = atom(atom<React.ComponentType | null>(null));
+    const elemAtom = atom(atom<React.ReactElement | null>(null));
     const pressAtom = atom(false);
 
     const outputAtoms = [
       atom((get) => {
-        const componentAtom_ = get(componentAtom);
-
-        return getComponent(componentAtom_, pressAtom);
+        const elem = get(get(elemAtom));
+        if (!React.isValidElement(elem)) return null;
+        return getElement(elem, pressAtom);
       }),
       pressAtom,
     ];
     const stream: Stream = {
-      inputAtoms: atom(() => [componentAtom as any]),
+      inputAtoms: atom(() => [elemAtom as any]),
       outputAtoms: atom(() => outputAtoms),
     };
     return { stream };

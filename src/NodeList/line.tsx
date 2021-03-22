@@ -11,7 +11,7 @@ const option: NodeDefinition = {
     { type: "number" },
     { type: "number" },
   ],
-  outputs: [{ type: "ComponentType" }],
+  outputs: [{ type: "ReactElement" }],
   init: () => {
     const x1 = createAtomRef(atom(0));
     const y1 = createAtomRef(atom(0));
@@ -22,16 +22,7 @@ const option: NodeDefinition = {
     const outputAtoms = [
       atom((get) => {
         const [x1, y1, x2, y2] = inputAtoms.map(get).map(get);
-        return (props: JSX.IntrinsicElements["line"]) => {
-          return (
-            <line
-              {...{ x1, y1, x2, y2 }}
-              fill="blue"
-              stroke="blue"
-              {...props}
-            />
-          );
-        };
+        return <line {...{ x1, y1, x2, y2 }} fill="blue" stroke="blue" />;
       }),
     ];
     const stream: Stream = {

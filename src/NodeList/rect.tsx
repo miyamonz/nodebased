@@ -11,7 +11,7 @@ const option: NodeDefinition = {
     { type: "number" },
     { type: "number" },
   ],
-  outputs: [{ type: "ComponentType" }],
+  outputs: [{ type: "ReactElement" }],
   init: () => {
     const x = createAtomRef(atom(0));
     const y = createAtomRef(atom(0));
@@ -22,9 +22,7 @@ const option: NodeDefinition = {
     const outputAtoms = [
       atom((get) => {
         const [x, y, width, height] = inputAtoms.map(get).map(get);
-        return (props: JSX.IntrinsicElements["rect"]) => {
-          return <rect {...{ x, y, width, height }} fill="blue" {...props} />;
-        };
+        return <rect {...{ x, y, width, height }} fill="blue" />;
       }),
     ];
     const stream: Stream = {

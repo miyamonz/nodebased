@@ -13,7 +13,7 @@ export type ValueType =
   | "boolean"
   | "Position"
   | "Json"
-  | "ComponentType"
+  | "ReactElement"
   | "any";
 
 type IOType = {

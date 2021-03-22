@@ -5,7 +5,7 @@ import type { Stream } from "../Stream";
 const option: NodeDefinition = {
   name: "circle",
   inputs: [{ type: "number" }, { type: "number" }, { type: "number" }],
-  outputs: [{ type: "ComponentType" }],
+  outputs: [{ type: "ReactElement" }],
 
   init: () => {
     const x = atom(atom(0));
@@ -15,18 +15,7 @@ const option: NodeDefinition = {
 
     const outAtom = atom((get) => {
       const [cx, cy, r] = inputAtoms.map(get).map(get);
-      return (props: JSX.IntrinsicElements["circle"]) => {
-        return (
-          <circle
-            cx={cx}
-            cy={cy}
-            r={r}
-            fill="transparent"
-            stroke="blue"
-            {...props}
-          />
-        );
-      };
+      return <circle {...{ cx, cy, r }} fill="transparent" stroke="blue" />;
     });
     const stream: Stream = {
       inputAtoms: atom(() => inputAtoms as any),

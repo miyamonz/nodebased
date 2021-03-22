@@ -1,29 +1,17 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { atom } from "jotai";
 import { useAtomValue } from "jotai/utils";
 import { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
 import type { Stream } from "../Stream";
 
-const isClassComponent = (c: unknown) =>
-  typeof c === "function" && c?.prototype?.isReactComponent;
-const isFunctionComponent = (c: unknown) => {
-  return (
-    typeof c === "function" &&
-    String(c).includes("return") &&
-    !!String(c).match(/react(\d+)?./i)
-  );
-};
-const isComponent = (c: unknown): c is React.ComponentType =>
-  isClassComponent(c) || isFunctionComponent(c);
-
 const range = (n: number) => [...Array(n).keys()];
 const option: NodeDefinition = {
   name: "render",
-  inputs: range(5).map(() => ({ type: "ComponentType" })),
+  inputs: range(5).map(() => ({ type: "ReactElement" })),
   init: () => {
     const inputAtoms = range(5).map(() => {
-      return createAtomRef(atom<React.ComponentType | null>(null));
+      return createAtomRef(atom<ReactElement | null>(null));
     });
 
     const componentsAtom = atom((get) => {
@@ -34,8 +22,8 @@ const option: NodeDefinition = {
       const components = useAtomValue(componentsAtom);
       return (
         <>
-          {components.filter(isComponent).map((Component, i) => (
-            <Component key={i} />
+          {components.filter(React.isValidElement).map((elem, i) => (
+            <g key={i}>{elem}</g>
           ))}
         </>
       );

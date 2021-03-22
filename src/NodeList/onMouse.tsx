@@ -1,6 +1,6 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { atom } from "jotai";
-import { useAtomValue, useUpdateAtom } from "jotai/utils";
+import { useUpdateAtom } from "jotai/utils";
 import type { WritableAtom } from "jotai";
 import { NodeDefinition } from "./types";
 import { transformAtom } from "../SVGContext";
@@ -8,11 +8,11 @@ import { Stream } from "../Stream";
 
 const option: NodeDefinition = {
   name: "onMouse",
-  inputs: [{ type: "ComponentType" }],
-  outputs: [{ type: "ComponentType" }, { type: "Position" }],
+  inputs: [{ type: "ReactElement" }],
+  outputs: [{ type: "ReactElement" }, { type: "Position" }],
   init: () => {
-    const componentAtom = atom(atom<React.ReactNode | null>(null));
-    const inputAtoms = [componentAtom];
+    const elemAtom = atom(atom<ReactElement | null>(null));
+    const inputAtoms = [elemAtom];
     type Event = React.MouseEvent<SVGElement> | null;
     const eventAtom: WritableAtom<Event, Event> = atom<Event>(null);
     const mouseAtom = atom((get) => {
@@ -24,32 +24,24 @@ const option: NodeDefinition = {
 
     const outputAtoms = [
       atom((get) => {
-        const componentAtom_ = get(componentAtom);
-        return (props: any) => {
-          const Component = useAtomValue(componentAtom_);
+        const elem = get(get(elemAtom));
+        if (!React.isValidElement(elem)) return null;
+        const Component = () => {
           const set = useUpdateAtom(eventAtom);
 
-          const isComponent = (c: unknown): c is React.ComponentType =>
-            Component !== null || typeof c !== "function";
-          if (!isComponent(Component)) return null;
-          return (
-            <Component
-              {...props}
-              onMouseDown={(e: React.MouseEvent<SVGElement>) => {
-                props?.onMouseDown?.(e);
-                set(e);
-              }}
-              onMouseMove={(e: React.MouseEvent<SVGElement>) => {
-                props?.onMouseMove?.(e);
-                set(e);
-              }}
-              onMouseUp={(e: React.MouseEvent<SVGElement>) => {
-                props?.onMouseUp?.(e);
-                set(e);
-              }}
-            />
-          );
+          return React.cloneElement(elem, {
+            onMouseDown: (e: React.MouseEvent<SVGElement>) => {
+              set(e);
+            },
+            onMouseMove: (e: React.MouseEvent<SVGElement>) => {
+              set(e);
+            },
+            onMouseUp: (e: React.MouseEvent<SVGElement>) => {
+              set(e);
+            },
+          });
         };
+        return <Component />;
       }),
       mouseAtom,
     ];
