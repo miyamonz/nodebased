@@ -60,6 +60,18 @@ const nodes: OptionFn[] = [
     fn: (a) => -a,
   },
   {
+    name: "and",
+    inputsType: ["boolean", "boolean"],
+    outputType: "boolean",
+    fn: (a, b) => a && b,
+  },
+  {
+    name: "or",
+    inputsType: ["boolean", "boolean"],
+    outputType: "boolean",
+    fn: (a, b) => a || b,
+  },
+  {
     name: "not",
     inputsType: ["boolean"],
     outputType: "boolean",
