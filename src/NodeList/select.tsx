@@ -9,7 +9,7 @@ function getComponent(
   componentAtom: Atom<React.ComponentType | null>,
   pressAtom: WritableAtom<boolean, boolean>
 ) {
-  const id = Math.floor(Math.random() * 10 ** 12);
+  const id = Math.floor(Math.random() * 10 ** 5).toString();
   return (props: any) => {
     const Component = useAtomValue(componentAtom);
     const set = useUpdateAtom(pressAtom);
@@ -18,7 +18,7 @@ function getComponent(
       const handle = (e: MouseEvent) => {
         const isInside =
           e.target instanceof Element &&
-          e.target.closest(`[data-select=${id}]`);
+          e.target.closest(`[data-select-id="${id}"]`);
         if (isInside) return;
         set(false);
       };
@@ -45,7 +45,7 @@ function getComponent(
 const option: NodeDefinition = {
   name: "select",
   inputs: [{ type: "ComponentType" }],
-  outputs: [{ type: "ComponentType" }],
+  outputs: [{ type: "ComponentType" }, { type: "boolean" }],
 
   init: () => {
     const componentAtom = atom(atom<React.ComponentType | null>(null));
