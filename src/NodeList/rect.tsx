@@ -1,17 +1,21 @@
 import { atom } from "jotai";
 import { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
-import { createMapAtomFromArray, Stream } from "../Stream"
+import { createMapAtomFromArray, Stream } from "../Stream";
+
+const inputs = [
+  { type: "number", name: "x" },
+  { type: "number", name: "y" },
+  { type: "number", name: "width" },
+  { type: "number", name: "height" },
+] as const;
+const outputs = [{ type: "ReactElement" }] as const;
 
 const option: NodeDefinition = {
   name: "rect",
-  inputs: [
-    { type: "number" },
-    { type: "number" },
-    { type: "number" },
-    { type: "number" },
-  ],
-  outputs: [{ type: "ReactElement" }],
+  inputs,
+  outputs,
+
   init: () => {
     const x = createAtomRef(atom(0));
     const y = createAtomRef(atom(0));
@@ -26,7 +30,10 @@ const option: NodeDefinition = {
       }),
     ];
     const stream: Stream = {
-      inputMap: createMapAtomFromArray(inputAtoms as any),
+      inputMap: createMapAtomFromArray(
+        inputAtoms as any,
+        inputs.map((s) => s.name)
+      ),
       outputMap: createMapAtomFromArray(outputAtoms),
     };
     return { stream };
