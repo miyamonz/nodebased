@@ -21,7 +21,7 @@ export const IOCircle: React.FC<IOCircleProps> = ({
     <circle
       cx={position.x}
       cy={position.y}
-      fill="white"
+      fill="transparent"
       stroke="blue"
       r={r}
       {...props}

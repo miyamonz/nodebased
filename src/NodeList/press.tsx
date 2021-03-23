@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { atom } from "jotai";
 import type { WritableAtom } from "jotai";
 import { useUpdateAtom } from "jotai/utils";
-import { NodeDefinition } from "./types";
+import { NodeDefinition, IOType } from "./types";
 import { createMapAtomFromArray, Stream } from "../Stream";
 
 function getElement(
@@ -30,10 +30,12 @@ function getElement(
   return <Component />;
 }
 
+const inputs: IOType[] = [{ type: "ReactElement" }];
+const outputs: IOType[] = [{ type: "ReactElement" }, { type: "boolean" }];
 const option: NodeDefinition = {
   name: "press",
-  inputs: [{ type: "ReactElement" }],
-  outputs: [{ type: "ReactElement" }, { type: "boolean" }],
+  inputs,
+  outputs,
 
   init: () => {
     const elemAtom = atom(atom<ReactElement | null>(null));
@@ -50,7 +52,10 @@ const option: NodeDefinition = {
     ];
     const stream: Stream = {
       inputMap: createMapAtomFromArray([elemAtom as any]),
-      outputMap: createMapAtomFromArray(outputAtoms),
+      outputMap: createMapAtomFromArray(
+        outputAtoms,
+        outputs.map((s) => s.name)
+      ),
     };
     return { stream };
   },

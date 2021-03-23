@@ -14,9 +14,17 @@ export const InputCircle = <T,>({ input }: { input: InputSocket<T> }) => {
   const myEdge = edges.find((e) => e.to === input);
 
   const isConnected = myEdge !== undefined;
+  const [position] = useAtom(input.position);
   return (
     <>
       {myEdge && <EdgeLine edge={myEdge} />}
+      <IOCircle
+        positionAtom={input.position}
+        fill={isHovered ? "red" : isConnected ? "lightblue" : "white"}
+      />
+      <text x={position.x - 4} y={position.y + 4}>
+        {typeof input.name !== "number" && input.name}
+      </text>
       <IOCircle
         positionAtom={input.position}
         onMouseEnter={() => {
@@ -25,7 +33,7 @@ export const InputCircle = <T,>({ input }: { input: InputSocket<T> }) => {
         onMouseLeave={() => {
           setHovered(null);
         }}
-        fill={isHovered ? "red" : isConnected ? "blue" : "white"}
+        fill="transparent"
       />
     </>
   );

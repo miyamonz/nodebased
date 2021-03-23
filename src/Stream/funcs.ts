@@ -11,7 +11,7 @@ import type {
 
 export function createMapAtomFromArray<T>(
   arr: T[],
-  key?: SocketName[]
+  key?: (SocketName | undefined)[]
 ): MapAtom<SocketName, T> {
   return atom(new Map(arr.map((anAtom, i) => [key?.[i] ?? i, anAtom])));
 }

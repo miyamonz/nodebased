@@ -16,7 +16,7 @@ export type ValueType =
   | "ReactElement"
   | "any";
 
-type IOType = {
+export type IOType = {
   type: ValueType;
   name?: string;
 };
