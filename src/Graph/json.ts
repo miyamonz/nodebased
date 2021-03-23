@@ -4,7 +4,7 @@ import { nodeToJson, jsonToNode } from "../Node";
 import { edgeToJson, jsonToEdge } from "../Edge";
 import type { Getter } from "jotai/core/types";
 import type { GraphView, GraphJSON } from "./types";
-import type { EdgeJSON } from "../Edge";
+import type { EdgeJSON, Edge } from "../Edge";
 
 export const graphToJson = (get: Getter) => (graph: GraphView): GraphJSON => {
   const { nodes, edges } = graph;
@@ -46,6 +46,14 @@ export function replaceNodeIds(
 export const jsonToGraph = (get: Getter) => (json: GraphJSON) => {
   const _json = replaceNodeIds(json); // replacing id should be at first
   const nodes = _json.nodes.map(jsonToNode);
-  const edges = _json.edges.map(jsonToEdge(get)(nodes));
+  const edges = _json.edges
+    .map((e) => {
+      try {
+        return jsonToEdge(get)(nodes)(e);
+      } catch (e: unknown) {
+        //TODO: we should notify or visualize something
+      }
+    })
+    .filter((a): a is Edge<unknown> => a !== undefined);
   return createGraph(nodes, edges);
 };
