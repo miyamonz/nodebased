@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
-import type { Stream } from "../Stream";
+import { createMapAtomFromArray, Stream } from "../Stream";
 
 const isPosition = (a: any): a is { x: number; y: number } => {
   return typeof a?.x === "number" && typeof a?.y === "number";
@@ -35,8 +35,8 @@ const option: NodeDefinition = {
       return get(tmpAtom);
     });
     const stream: Stream = {
-      inputAtoms: atom(() => [condAtom, inputAtom as any]),
-      outputAtoms: atom(() => [outAtom]),
+      inputMap: createMapAtomFromArray([condAtom, inputAtom as any]),
+      outputMap: createMapAtomFromArray([outAtom]),
     };
     return { stream };
   },

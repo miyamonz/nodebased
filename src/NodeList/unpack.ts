@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 import { NodeDefinition } from "./types";
-import type { Stream } from "../Stream";
+import { createMapAtomFromArray, Stream } from "../Stream";
 
 const option: NodeDefinition = {
   name: "unpack",
@@ -9,8 +9,8 @@ const option: NodeDefinition = {
   init: () => {
     const pos = atom(atom({ x: 0, y: 0 }));
     const stream: Stream = {
-      inputAtoms: atom(() => [pos as any]),
-      outputAtoms: atom(() => [
+      inputMap: createMapAtomFromArray([pos as any]),
+      outputMap: createMapAtomFromArray([
         atom((get) => get(get(pos))?.x ?? 0),
         atom((get) => get(get(pos))?.y ?? 0),
       ]),

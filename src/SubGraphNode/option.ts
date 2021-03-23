@@ -14,19 +14,29 @@ function createStream(graphAtom: Atom<Graph>) {
     get(get(graphAtom).nodes).filter((n) => n.name === "outlet")
   );
 
+
+
   // TODO ここらへんcurrentStream側で吸収したり、nullableなのをなんとかしたい
   const stream: Stream = {
-    inputAtoms: atom((get) => {
-      return get(inletNode).map((node) => {
-        const inputAtoms = node.stream.inputAtoms;
-        return get(inputAtoms)[0];
+    inputMap: atom((get) => {
+      const inputAtoms = get(inletNode).map((node) => {
+        const { inputMap } = node.stream;
+        const inputAtom = get(inputMap).get(0);
+        if (inputAtom === undefined)
+          throw new Error("inlet node should contain inputAtom at 0");
+        return inputAtom;
       });
+      return new Map(inputAtoms.map((anAtom, i) => [i, anAtom]));
     }),
-    outputAtoms: atom((get) => {
-      return get(outletNode).map((node) => {
-        const outputAtoms = node.stream.outputAtoms;
-        return get(outputAtoms)[0];
+    outputMap: atom((get) => {
+      const outputAtoms = get(outletNode).map((node) => {
+        const { outputMap } = node.stream;
+        const outputAtom = get(outputMap).get(0);
+        if (outputAtom === undefined)
+          throw new Error("outlet node should contain outputAtom at 0");
+        return outputAtom;
       });
+      return new Map(outputAtoms.map((anAtom, i) => [i, anAtom]));
     }),
   };
   return stream;

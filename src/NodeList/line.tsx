@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
-import { Stream } from "../Stream";
+import { createMapAtomFromArray, Stream } from "../Stream";
 
 const option: NodeDefinition = {
   name: "line",
@@ -26,8 +26,8 @@ const option: NodeDefinition = {
       }),
     ];
     const stream: Stream = {
-      inputAtoms: atom(() => inputAtoms as any),
-      outputAtoms: atom(() => outputAtoms),
+      inputMap: createMapAtomFromArray(inputAtoms as any),
+      outputMap: createMapAtomFromArray(outputAtoms),
     };
     return { stream };
   },

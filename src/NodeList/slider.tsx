@@ -7,7 +7,7 @@ import type { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
 import type { AtomRef } from "../AtomRef";
 import type { NodeComponent } from "../Node";
-import type { Stream } from "../Stream";
+import { createMapAtomFromArray, Stream } from "../Stream";
 
 function getComponent(
   inputRef: AtomRef<number>,
@@ -69,8 +69,8 @@ const option: NodeDefinition<number> = {
     const stream: Stream = {
       // @ts-ignore
       id: Math.random(),
-      inputAtoms: atom(() => [inputRef as any]),
-      outputAtoms: atom(() => [outputAtom]),
+      inputMap: createMapAtomFromArray([inputRef as any]),
+      outputMap: createMapAtomFromArray([outputAtom]),
     };
     const component = getComponent(inputRef, internalAtom, outputAtom);
     return { stream, component, toSave: internalAtom };

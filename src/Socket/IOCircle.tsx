@@ -5,7 +5,7 @@ import type { PositionAtom } from "../Position";
 import { socketRadiusStream } from "./streams";
 
 const radiusAtom = atom<number>(
-  (get) => get(get(socketRadiusStream.outputAtoms)[0]) as number
+  (get) => get(get(socketRadiusStream.outputMap).get(0) as any) as number
 );
 
 type IOCircleProps = {

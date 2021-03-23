@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { atom } from "jotai";
 import { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
-import type { Stream } from "../Stream";
+import { createMapAtomFromArray, Stream } from "../Stream";
 
 const range = (n: number) => [...Array(n).keys()];
 const option: NodeDefinition = {
@@ -26,8 +26,8 @@ const option: NodeDefinition = {
       );
     });
     const stream: Stream = {
-      inputAtoms: atom(() => inputAtoms as any),
-      outputAtoms: atom(() => [outAtom]),
+      inputMap: createMapAtomFromArray(inputAtoms as any),
+      outputMap: createMapAtomFromArray([outAtom]),
     };
     return { stream };
   },

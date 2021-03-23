@@ -63,9 +63,9 @@ const RenderText = ({
 
 function useStream(node: Node) {
   const { stream } = node;
-  const inputs = useAtomValue(stream?.inputAtoms ?? atom(0));
-  const outputs = useAtomValue(stream?.outputAtoms ?? atom(0));
-  return { inputs, outputs };
+  const inputMap = useAtomValue(stream?.inputMap);
+  const outputMap = useAtomValue(stream?.outputMap);
+  return { inputMap, outputMap };
 }
 
 const RenderNode: NodeComponent = ({ node }) => {
@@ -76,14 +76,14 @@ const RenderNode: NodeComponent = ({ node }) => {
   const isockets = useAtomValue(node.isockets);
   const osockets = useAtomValue(node.osockets);
 
-  const { outputs } = useStream(node);
+  const { outputMap } = useStream(node);
+
+  const outputAtom = outputMap.get(0);
 
   return (
     <>
       <ShowSelect node={node} />
-      {outputs.length > 0 && (
-        <RenderText outputAtom={outputs[0]} center={center} />
-      )}
+      {outputAtom && <RenderText outputAtom={outputAtom} center={center} />}
       <g transform={`translate(${rect.x} ${rect.y - 5} )`}>
         <text>{node.name}</text>
       </g>

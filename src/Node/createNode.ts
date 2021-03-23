@@ -14,7 +14,7 @@ import type { Position } from "../Position";
 
 const sizeAtom = atom(
   (get) =>
-    get(get(defaultNodeSizeStream.outputAtoms)[0]) as {
+    get(get(defaultNodeSizeStream.outputMap).get(0) as any) as {
       width: number;
       height: number;
     }

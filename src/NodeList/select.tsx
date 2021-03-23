@@ -3,7 +3,7 @@ import { atom } from "jotai";
 import type { WritableAtom } from "jotai";
 import { useUpdateAtom } from "jotai/utils";
 import { NodeDefinition } from "./types";
-import type { Stream } from "../Stream";
+import { createMapAtomFromArray, Stream } from "../Stream"
 
 function getElement(
   elem: ReactElement,
@@ -56,8 +56,8 @@ const option: NodeDefinition = {
       pressAtom,
     ];
     const stream: Stream = {
-      inputAtoms: atom(() => [elemAtom as any]),
-      outputAtoms: atom(() => outputAtoms),
+      inputMap: createMapAtomFromArray([elemAtom as any]),
+      outputMap: createMapAtomFromArray(outputAtoms),
     };
     return { stream };
   },

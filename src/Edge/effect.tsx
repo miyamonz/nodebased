@@ -33,10 +33,12 @@ const setConnectAtom = atom(
     if (!(fromNode && toNode)) {
       throw new Error("from Node and to node not found");
     }
-    const fromAtom = get(fromNode.stream.outputAtoms)[edge.from.name as number];
-    const toAtom = get(toNode.stream.inputAtoms)[edge.to.name as number];
+    const fromAtom = get(fromNode.stream.outputMap).get(edge.from.name);
+    const toAtom = get(toNode.stream.inputMap).get(edge.to.name);
 
-    set(toAtom, fromAtom);
+    if (fromAtom !== undefined && toAtom !== undefined) {
+      set(toAtom, fromAtom);
+    }
   }
 );
 
@@ -51,9 +53,11 @@ const setDisconnectAtom = atom(
     if (!toNode) {
       return;
     }
-    const toAtom = get(toNode.stream.inputAtoms)[edge.to.name as number];
+    const toAtom = get(toNode.stream.inputMap).get(edge.to.name);
 
-    // TODO: 値を維持するか、socketの型に合わせてdefault値を入れるほうが良さそう
-    set(toAtom, atom(null));
+    if (toAtom !== undefined) {
+      // TODO: 値を維持するか、socketの型に合わせてdefault値を入れるほうが良さそう
+      set(toAtom, atom(null));
+    }
   }
 );

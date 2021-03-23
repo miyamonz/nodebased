@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import { atom } from "jotai";
 import { useAtomCallback } from "jotai/utils";
@@ -5,7 +6,7 @@ import { createNode } from "../Node";
 import type { Node } from "../Node";
 import type { Graph } from "../Graph";
 import type { Position } from "../Position";
-import type { Stream } from "../Stream";
+import { createMapAtomFromArray, Stream } from "../Stream";
 
 import type { InputSocketJSON, OutputSocketJSON } from "../Socket";
 
@@ -23,10 +24,8 @@ export function useCreateInstanceNode({ position }: { position: Position }) {
         (n) => get(n.osockets)[0]
       );
 
-      const stream: Stream = {
-        inputAtoms: atom(() => inletNode.map(() => atom(atom(0)) as any)),
-        outputAtoms: atom(() => outletNode.map(() => atom(0))),
-      };
+      // TODO: subgraphと同じことする
+      const stream: Stream = {};
       return createNode({
         name: "instance",
         position,

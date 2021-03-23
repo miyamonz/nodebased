@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
-import type { Stream } from "../Stream";
+import { createMapAtomFromArray, Stream } from "../Stream";
 
 const option: NodeDefinition = {
   name: "outlet",
@@ -11,8 +11,8 @@ const option: NodeDefinition = {
     const refAtom = createAtomRef(atom(null));
     const outAtom = atom((get) => get(get(refAtom)));
     const stream: Stream = {
-      inputAtoms: atom(() => [refAtom as any]),
-      outputAtoms: atom(() => [outAtom]),
+      inputMap: createMapAtomFromArray([refAtom as any]),
+      outputMap: createMapAtomFromArray([outAtom]),
     };
     return { stream };
   },

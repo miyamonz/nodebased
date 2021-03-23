@@ -29,10 +29,7 @@ import { option as graph } from "../GraphNode";
 import { option as instantiate } from "../InstantiateNode";
 import { option as subGraph } from "../SubGraphNode";
 
-const optionFromStream = (
-  name: string,
-  stream: Stream
-): NodeDefinition => ({
+const optionFromStream = (name: string, stream: Stream): NodeDefinition => ({
   name,
   init: () => ({ stream }),
 });

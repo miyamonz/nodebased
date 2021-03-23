@@ -2,5 +2,6 @@ export {
   createStream,
   createOneOutputStream,
   createOneInputStream,
-} from "./types";
+  createMapAtomFromArray,
+} from "./funcs";
 export type { InputAtom, OutputAtom, Stream } from "./types";

@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { NodeDefinition, ValueType } from "./types";
 import type { NodeComponent } from "../Node";
-import { createStream } from "../Stream";
+import { createStream, Stream } from "../Stream";
 import { createAtomRef } from "../AtomRef";
 import type { Position } from "../Position";
 
@@ -11,7 +11,7 @@ export function createStreamFromFn(
   fn: (...args: unknown[]) => unknown,
   inputsType: ValueType[],
   outputType?: ValueType
-) {
+): Stream {
   const num = fn.length;
   const inputAtoms = range(num).map(() => createAtomRef(atom(0)));
   return createStream(inputAtoms, (inputs) =>

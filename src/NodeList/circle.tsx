@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 import { NodeDefinition } from "./types";
-import type { Stream } from "../Stream";
+import { createMapAtomFromArray, Stream } from "../Stream";
 
 const option: NodeDefinition = {
   name: "circle",
@@ -18,8 +18,8 @@ const option: NodeDefinition = {
       return <circle {...{ cx, cy, r }} fill="transparent" stroke="blue" />;
     });
     const stream: Stream = {
-      inputAtoms: atom(() => inputAtoms as any),
-      outputAtoms: atom(() => [outAtom]),
+      inputMap: createMapAtomFromArray(inputAtoms as any),
+      outputMap: createMapAtomFromArray([outAtom]),
     };
     return { stream };
   },
