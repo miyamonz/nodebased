@@ -9,7 +9,8 @@ const option: NodeDefinition = {
     const stream: Stream = createStream([], () => {
       const oscAtom = atom(0);
       oscAtom.onMount = (set) => {
-        const id = setInterval(() => set((prev) => prev + 1));
+        const start = +new Date();
+        const id = setInterval(() => set(+new Date() - start));
         return () => clearInterval(id);
       };
       return oscAtom;
