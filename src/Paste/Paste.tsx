@@ -1,7 +1,7 @@
 import React from "react";
 import { useAtomCallback } from "jotai/utils";
 
-import { useShortcutPaste } from "./shortcutHooks";
+import { useHotkeys } from "react-hotkeys-hook";
 import { getClipboard } from "../util";
 import { useMergeGraph } from "../actions";
 import { useSetSelected } from "../Select";
@@ -26,7 +26,9 @@ const Paste = () => {
       }
     }, [])
   );
-  useShortcutPaste(callback);
+  useHotkeys("ctrl+v, command+v", () => {
+    callback();
+  });
 
   return <></>;
 };

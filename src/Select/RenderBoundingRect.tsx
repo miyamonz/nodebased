@@ -8,7 +8,7 @@ import { useRemoveNode, useAppendNode } from "../actions";
 
 import { useCreateSubGraphNode } from "../SubGraphNode";
 
-import { useShortcutCopy } from "./shortcutHooks";
+import { useHotkeys } from "react-hotkeys-hook";
 
 const boundingRectAtom = atom((get) => {
   const selectedRectAtoms = get(selectedNodesAtom);
@@ -40,11 +40,10 @@ const RenderBoundingRectImpl = () => {
   const createSubGraphNode = useCreateSubGraphNode();
 
   const setSelected = useSetSelected();
-  useShortcutCopy(
-    React.useCallback(() => {
-      copyToClipboard();
-    }, [])
-  );
+  useHotkeys("ctrl+c, command+c", () => {
+    copyToClipboard();
+  });
+
   const buttons = [
     {
       name: "remove",
