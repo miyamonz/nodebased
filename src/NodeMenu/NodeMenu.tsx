@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useRef } from "react";
 import { atom, useAtom } from "jotai";
 import { useAppendNodeByName } from "../actions";
-import { useMousePosition } from "../SVGContext";
+import { useDoubleClick, useMousePosition } from "../SVGContext";
 import { nodeNames } from "../NodeList/nodes";
 
-import { useKeyDown } from "./useKeyDown";
+import { useHotkeys } from "react-hotkeys-hook";
+import useOnClickOutside from "./useOutsideClick";
 
 const width = 200;
 const optionHeight = 20;
@@ -45,10 +46,18 @@ function NodeMenu() {
   const posWhenOpen = React.useMemo(() => {
     return position;
   }, [open]);
-  useKeyDown(
-    "Space",
-    React.useCallback(() => setOpen((prev) => !prev), [])
-  );
+  const toggle = React.useCallback(() => setOpen((prev) => !prev), []);
+
+  useHotkeys("space", toggle);
+  useHotkeys("esc", () => {
+    if (open) setOpen(false);
+  });
+  useDoubleClick(300, () => {
+    if (!open) setOpen(true);
+  });
+
+  const ref = useRef<SVGGElement>(null);
+  useOnClickOutside(ref, () => toggle());
 
   const [text] = useAtom(textAtom);
 
@@ -61,7 +70,7 @@ function NodeMenu() {
     height,
   };
   return (
-    <>
+    <g ref={ref}>
       <rect {...rect} fill="white" stroke="black"></rect>
       {filtered.map((name, i) => {
         return (
@@ -76,7 +85,7 @@ function NodeMenu() {
       <foreignObject {...rect} y={rect.y - 30} height={30}>
         <SearchInput />
       </foreignObject>
-    </>
+    </g>
   );
 }
 
