@@ -43,6 +43,9 @@ const RenderBoundingRectImpl = () => {
   useHotkeys("ctrl+c, command+c", () => {
     copyToClipboard();
   });
+  useHotkeys("Backspace", () => {
+    removeSelected();
+  });
 
   const buttons = [
     {
