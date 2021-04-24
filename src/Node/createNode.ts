@@ -7,23 +7,10 @@ import { createInputSocket, createOutputSocket } from "../Socket";
 import type { InputSocketJSON, OutputSocketJSON } from "../Socket";
 import type { Stream } from "../Stream";
 
-import { createRectAtom } from "../Rect";
-import { defaultNodeSizeStream } from "./streams";
+import { createRect } from "./rect";
 import { nodeOptions } from "../NodeList";
 import type { Position } from "../Position";
-
-const sizeAtom = atom(
-  (get) =>
-    get(get(defaultNodeSizeStream.outputMap).get(0) as any) as {
-      width: number;
-      height: number;
-    }
-);
-function createRect(position: Position) {
-  const rectPos = atom(position);
-  const rect = createRectAtom(rectPos, sizeAtom);
-  return rect;
-}
+import type { Rect } from "../Rect";
 
 function getSocketsJsonByName(name: string, data?: {}) {
   const option = nodeOptions.find((option) => option.name === name);
@@ -77,7 +64,9 @@ export function createNodeByJson({
   const option = nodeOptions.find((option) => option.name === name);
   if (option === undefined) throw new Error(`${name} not found`);
 
-  const { component = () => null, stream, toSave } = option.init({ data });
+  const { component = () => null, stream, toSave, innerSize } = option.init({
+    data,
+  });
 
   return createNode({
     name,
@@ -88,6 +77,7 @@ export function createNodeByJson({
     component,
     stream,
     toSave,
+    innerSize,
   });
 }
 
@@ -99,6 +89,7 @@ type createNodeProp = {
   component: NodeComponent;
   stream: Stream;
   toSave: Atom<unknown> | undefined;
+  innerSize: Atom<Rect> | undefined;
   id?: string;
 };
 export function createNode({
@@ -109,10 +100,11 @@ export function createNode({
   component,
   stream,
   toSave,
+  innerSize,
   id,
 }: createNodeProp): Node {
   console.log("createNode", name);
-  const rect = createRect(position);
+  const rect = createRect(position, innerSize);
 
   const nodeId = id ?? Math.floor(Math.random() * 10 ** 12).toString();
 

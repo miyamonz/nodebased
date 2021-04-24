@@ -14,8 +14,6 @@ function createStream(graphAtom: Atom<Graph>) {
     get(get(graphAtom).nodes).filter((n) => n.name === "outlet")
   );
 
-
-
   // TODO ここらへんcurrentStream側で吸収したり、nullableなのをなんとかしたい
   const stream: Stream = {
     inputMap: atom((get) => {
@@ -54,6 +52,7 @@ const option = {
       .map((_, i) => ({ type: "output" as const, name: i })),
   init: ({ data = {} }) => {
     const json: GraphJSON = data as GraphJSON;
+    const viewNode = json.nodes.find((n) => n.name === "view");
     const jsonAtom = atom(json);
     const graphAtom = atom((get) => {
       const json = get(jsonAtom);

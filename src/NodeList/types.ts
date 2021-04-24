@@ -1,11 +1,13 @@
 import type { Atom } from "jotai";
 import type { NodeComponent } from "../Node";
 import type { Stream } from "../Stream";
+import type { Rect } from "../Rect";
 
 export type CreateNodeProps<T = unknown> = {
   stream: Stream;
   component?: NodeComponent;
   toSave?: Atom<unknown>;
+  innerSize?: Atom<Rect>;
 } & (unknown extends T ? {} : { toSave: Atom<T> });
 
 export type ValueType =
