@@ -10,10 +10,14 @@ const inputs = [
   { type: "number", name: "width" },
   { type: "number", name: "height" },
 ] as const;
+const outputs = [
+  { type: "ReactElement", name: "element" },
+  { type: "Size", name: "size" },
+] as const;
 const option: NodeDefinition = {
   name: "expose",
   inputs,
-  outputs: [{ type: "ReactElement" }, { type: "Size" }],
+  outputs,
   init: () => {
     const elmAtomRef = createAtomRef(atom<ReactElement | null>(null));
     const widthAtomRef = createAtomRef(atom(100));
@@ -42,7 +46,10 @@ const option: NodeDefinition = {
         inputAtoms as any,
         inputs.map((s) => s.name)
       ),
-      outputMap: createMapAtomFromArray([outAtom, innerSize]),
+      outputMap: createMapAtomFromArray(
+        [outAtom, innerSize],
+        outputs.map((s) => s.name)
+      ),
     };
     const Render: NodeComponent = ({ node }) => {
       const [element] = useAtom(elmAtom);

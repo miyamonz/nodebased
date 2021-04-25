@@ -10,7 +10,8 @@ import { GraphEffect } from "../Graph/effect";
 export function createComponent(
   jsonAtom: PrimitiveAtom<GraphJSON>,
   graphAtom: Atom<Graph>,
-  exposedAtom: Atom<React.ReactElement | null>
+  exposedAtom: Atom<React.ReactElement | null>,
+  innerSizeAtom: Atom<{ width: number; height: number } | null>
 ) {
   const SubGraphNode: NodeComponent = ({ node }) => {
     const pushGraphJSON = usePushGraphJSON();
@@ -22,24 +23,23 @@ export function createComponent(
     const [, setCurrentGraphJson] = useAtom(currentGraphJsonAtom);
 
     const [exposed] = useAtom(exposedAtom);
+    const [size] = useAtom(innerSizeAtom);
+
+    const editButton = {
+      x: rect.x,
+      y: rect.y,
+      width: rect.width,
+      height: 25,
+    };
     return (
       <>
         <GraphEffect graph={graph} />
-        <rect
-          x={rect.x}
-          y={rect.y + rect.height / 2}
-          width={rect.width}
-          height={rect.height / 2}
-          fill="lightgreen"
-        />
-        <text x={rect.x} y={rect.y + rect.height / 2 + 20}>
+        <rect {...editButton} fill="lightgreen" />
+        <text x={rect.x + 20} y={editButton.y + 20}>
           edit
         </text>
         <rect
-          x={rect.x}
-          y={rect.y + rect.height / 2}
-          width={rect.width}
-          height={rect.height / 2}
+          {...editButton}
           fill="transparent"
           onClick={() =>
             // TODO: don't want to depend current graph
@@ -57,7 +57,15 @@ export function createComponent(
             })
           }
         />
-        {exposed}
+        {exposed && size && (
+          <g
+            transform={`translate(${rect.x} ${
+              rect.y + rect.height - size.height
+            })`}
+          >
+            {exposed}
+          </g>
+        )}
       </>
     );
   };

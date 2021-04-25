@@ -59,22 +59,42 @@ const option = {
     });
     const stream = createStream(graphAtom);
 
-    const exposedAtom = atom((get) => {
+    const exposeNodeAtom = atom((get) => {
       const exposeNode = get(get(graphAtom).nodes).find(
         (n) => n.name === "expose"
       );
       if (!exposeNode) return null;
-      const outputAtom = get(exposeNode.stream.outputMap).get(0);
+      return exposeNode;
+    });
+    const exposedAtom = atom((get) => {
+      const exposeNode = get(exposeNodeAtom);
+      if (!exposeNode) return null;
+      const outputAtom = get(exposeNode.stream.outputMap).get("element");
       if (outputAtom === undefined)
-        throw new Error("expose node should contain outputAtom at 0");
-      console.log(get(outputAtom));
+        throw new Error("expose node should contain outputAtom at element");
       return get(outputAtom) as React.ReactElement;
+    });
+    const innerSizeAtom = atom((get) => {
+      const exposeNode = get(exposeNodeAtom);
+      if (!exposeNode) return { width: 0, height: 0 };
+      const outputAtom = get(exposeNode.stream.outputMap).get("size");
+      if (outputAtom === undefined)
+        throw new Error(
+          "expose node should contain innerSize at 'size' output"
+        );
+      return get(outputAtom) as { width: number; height: number };
     });
 
     return {
       stream,
-      component: createComponent(jsonAtom, graphAtom, exposedAtom),
+      component: createComponent(
+        jsonAtom,
+        graphAtom,
+        exposedAtom,
+        innerSizeAtom
+      ),
       toSave: jsonAtom,
+      innerSize: innerSizeAtom,
     };
   },
 };

@@ -71,7 +71,7 @@ function useStream(node: Node) {
 const RenderNode: NodeComponent = ({ node }) => {
   const rect = useAtomValue(node.rect);
 
-  const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+  const center = { x: rect.x + rect.width / 2, y: rect.y + 25 };
 
   const isockets = useAtomValue(node.isockets);
   const osockets = useAtomValue(node.osockets);
