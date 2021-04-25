@@ -1,3 +1,4 @@
+import React from "react";
 import { useAtom } from "jotai";
 import type { Atom, PrimitiveAtom } from "jotai";
 import type { NodeComponent } from "../Node";

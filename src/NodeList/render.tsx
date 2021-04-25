@@ -3,7 +3,7 @@ import { atom } from "jotai";
 import { useAtomValue } from "jotai/utils";
 import { NodeDefinition } from "./types";
 import { createAtomRef } from "../AtomRef";
-import { createMapAtomFromArray, Stream } from "../Stream"
+import { createMapAtomFromArray, Stream } from "../Stream";
 
 const range = (n: number) => [...Array(n).keys()];
 const option: NodeDefinition = {
@@ -14,15 +14,16 @@ const option: NodeDefinition = {
       return createAtomRef(atom<ReactElement | null>(null));
     });
 
-    const componentsAtom = atom((get) => {
-      return inputAtoms.map(get).map(get);
+    const elementsAtom = atom((get) => {
+      //@ts-ignore
+      return inputAtoms.map(get).map(get) as ReactElement[];
     });
 
     const Render = () => {
-      const components = useAtomValue(componentsAtom);
+      const elements = useAtomValue(elementsAtom);
       return (
         <>
-          {components.filter(React.isValidElement).map((elem, i) => (
+          {elements.filter(React.isValidElement).map((elem, i) => (
             <g key={i}>{elem}</g>
           ))}
         </>

@@ -24,7 +24,8 @@ const option: NodeDefinition = {
 
     const outputAtoms = [
       atom((get) => {
-        const [x1, y1, x2, y2] = inputAtoms.map(get).map(get);
+        //@ts-ignore
+        const [x1, y1, x2, y2] = inputAtoms.map(get).map(get) as number[];
         return <line {...{ x1, y1, x2, y2 }} fill="blue" stroke="blue" />;
       }),
     ];

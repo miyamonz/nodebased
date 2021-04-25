@@ -21,7 +21,8 @@ const option: NodeDefinition = {
     const inputAtoms = [x, y, r];
 
     const outAtom = atom((get) => {
-      const [cx, cy, r] = inputAtoms.map(get).map(get);
+      //@ts-ignore
+      const [cx, cy, r] = inputAtoms.map(get).map(get) as number[];
       return <circle {...{ cx, cy, r }} fill="transparent" stroke="blue" />;
     });
     const stream: Stream = {

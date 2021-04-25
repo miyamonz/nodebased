@@ -21,11 +21,12 @@ const option: NodeDefinition = {
     const y = createAtomRef(atom(0));
     const width = createAtomRef(atom(10));
     const height = createAtomRef(atom(10));
-    const inputAtoms = [x, y, width, height];
+    const inputAtoms = [x, y, width, height] as const;
 
     const outputAtoms = [
       atom((get) => {
-        const [x, y, width, height] = inputAtoms.map(get).map(get);
+        //@ts-ignore
+        const [x, y, width, height] = inputAtoms.map(get).map(get) as number;
         return <rect {...{ x, y, width, height }} fill="blue" />;
       }),
     ];

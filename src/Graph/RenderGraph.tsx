@@ -13,7 +13,7 @@ import { GraphEffect } from "./effect";
 
 function useCreateGraphFromJson(jsonAtom: WritableAtom<GraphJSON, GraphJSON>) {
   const [graph, setGraph] = useAtom(currentGraphAtom);
-  const callback = useAtomCallback<Graph>(
+  const callback = useAtomCallback(
     React.useCallback(
       (get, _set) => {
         const json = get(jsonAtom);

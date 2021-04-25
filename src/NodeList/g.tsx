@@ -15,7 +15,8 @@ const option: NodeDefinition = {
     });
 
     const outAtom = atom((get) => {
-      const elements = inputAtoms.map(get).map(get);
+      // @ts-ignore
+      const elements = inputAtoms.map(get).map(get) as ReactElement[];
 
       return (
         <g>

@@ -20,7 +20,8 @@ export function createStream<IN, OUT>(
   inputAtoms: InputAtom<IN>[],
   createOutput: (inputValuesAtom: Atom<IN[]>) => OutputAtom<OUT>
 ): Stream {
-  const input = atom((get) => inputAtoms.map(get).map(get));
+  //@ts-ignore
+  const input = atom((get) => inputAtoms.map(get).map(get) as IN[]);
   const outputAtom = createOutput(input);
 
   const inputMap: Stream["inputMap"] = createMapAtomFromArray(
