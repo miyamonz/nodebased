@@ -9,7 +9,8 @@ import { GraphEffect } from "../Graph/effect";
 
 export function createComponent(
   jsonAtom: PrimitiveAtom<GraphJSON>,
-  graphAtom: Atom<Graph>
+  graphAtom: Atom<Graph>,
+  exposedAtom: Atom<React.ReactElement | null>
 ) {
   const SubGraphNode: NodeComponent = ({ node }) => {
     const pushGraphJSON = usePushGraphJSON();
@@ -19,6 +20,8 @@ export function createComponent(
     const [graph] = useAtom(graphAtom);
 
     const [, setCurrentGraphJson] = useAtom(currentGraphJsonAtom);
+
+    const [exposed] = useAtom(exposedAtom);
     return (
       <>
         <GraphEffect graph={graph} />
@@ -54,6 +57,7 @@ export function createComponent(
             })
           }
         />
+        {exposed}
       </>
     );
   };

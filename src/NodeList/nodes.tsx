@@ -25,6 +25,7 @@ import select from "./select";
 import mouse from "./mouse";
 import inlet from "./inlet";
 import outlet from "./outlet";
+import expose from "./expose";
 import { option as graph } from "../GraphNode";
 import { option as subGraph } from "../SubGraphNode";
 
@@ -66,6 +67,7 @@ export const nodeOptions: Required<NodeDefinition>[] = [
   subGraph,
   inlet,
   outlet,
+  expose,
   optionFromStream("nodeSize", defaultNodeSizeStream),
   optionFromStream("socketRadius", socketRadiusStream),
 ].map((def) => ({

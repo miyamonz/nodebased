@@ -52,16 +52,28 @@ const option = {
       .map((_, i) => ({ type: "output" as const, name: i })),
   init: ({ data = {} }) => {
     const json: GraphJSON = data as GraphJSON;
-    const viewNode = json.nodes.find((n) => n.name === "view");
     const jsonAtom = atom(json);
     const graphAtom = atom((get) => {
       const json = get(jsonAtom);
       return jsonToGraph(get)(json);
     });
     const stream = createStream(graphAtom);
+
+    const exposedAtom = atom((get) => {
+      const exposeNode = get(get(graphAtom).nodes).find(
+        (n) => n.name === "expose"
+      );
+      if (!exposeNode) return null;
+      const outputAtom = get(exposeNode.stream.outputMap).get(0);
+      if (outputAtom === undefined)
+        throw new Error("expose node should contain outputAtom at 0");
+      console.log(get(outputAtom));
+      return get(outputAtom) as React.ReactElement;
+    });
+
     return {
       stream,
-      component: createComponent(jsonAtom, graphAtom),
+      component: createComponent(jsonAtom, graphAtom, exposedAtom),
       toSave: jsonAtom,
     };
   },

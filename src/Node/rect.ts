@@ -4,9 +4,9 @@ import { createRectAtom } from "../Rect";
 import { defaultNodeSizeStream } from "./streams";
 
 import type { Position } from "../Position";
-import type { Rect } from "../Rect";
+import type { RectAtom } from "../Rect";
 
-const sizeAtom = atom(
+const defaultSizeAtom = atom(
   (get) =>
     get(get(defaultNodeSizeStream.outputMap).get(0) as any) as {
       width: number;
@@ -16,15 +16,19 @@ const sizeAtom = atom(
 
 export function createRect(
   position: Position,
-  innerSize: Atom<Rect> | undefined
-) {
+  socketNum: number,
+  innerSize: Atom<{ width: number; height: number }> | undefined
+): RectAtom {
   const rectPos = atom(position);
-  const rect = createRectAtom(rectPos, sizeAtom);
-  if (!innerSize) return rect;
 
-  return atom((get) => {
-    const r = get(rect);
-    const i = get(innerSize);
-    return { ...r, width: r.width + i.width, height: r.height + i.height };
+  const sizeAtom = atom((get) => {
+    const s = get(defaultSizeAtom);
+    const i = innerSize ? get(innerSize) : { width: 0, height: 0 };
+    return {
+      width: Math.max(s.width, i.width),
+      height: Math.max(s.height, (socketNum + 1) * 25) + i.height,
+    };
   });
+  const rect = createRectAtom(rectPos, sizeAtom);
+  return rect;
 }

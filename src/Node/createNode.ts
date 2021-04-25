@@ -89,7 +89,7 @@ type createNodeProp = {
   component: NodeComponent;
   stream: Stream;
   toSave: Atom<unknown> | undefined;
-  innerSize: Atom<Rect> | undefined;
+  innerSize: Atom<{ width: number; height: number }> | undefined;
   id?: string;
 };
 export function createNode({
@@ -104,7 +104,9 @@ export function createNode({
   id,
 }: createNodeProp): Node {
   console.log("createNode", name);
-  const rect = createRect(position, innerSize);
+
+  const socketNum = Math.max(isockets.length, osockets.length);
+  const rect = createRect(position, socketNum, innerSize);
 
   const nodeId = id ?? Math.floor(Math.random() * 10 ** 12).toString();
 
@@ -114,7 +116,7 @@ export function createNode({
         const position = get(rect);
         return {
           ...position,
-          y: position.y + get(rect).height / 2 + i * 25,
+          y: position.y + 25 + i * 25,
         };
       });
       return createInputSocket(s, pAtom, nodeId);
@@ -127,7 +129,7 @@ export function createNode({
         return {
           ...position,
           x: position.x + get(rect).width,
-          y: position.y + get(rect).height / 2 + i * 25,
+          y: position.y + 25 + i * 25,
         };
       });
       return createOutputSocket(s, pAtom, nodeId);
