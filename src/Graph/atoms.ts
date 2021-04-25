@@ -71,10 +71,10 @@ export const popGraphAtom = atom(null, (get, set) => {
   const json = graphToJson(get)(graph);
   set(graphStackAtom, (prev) => {
     const popped = prev[prev.length - 1];
+    prev.pop();
     if ("onPop" in popped) {
       popped.onPop(json);
     }
-    prev.pop();
     return [...prev];
   });
 });
