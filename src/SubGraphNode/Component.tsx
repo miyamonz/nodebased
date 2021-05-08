@@ -59,15 +59,23 @@ export function createComponent(
         />
         {exposed && size && (
           <g
-            transform={`translate(${rect.x} ${
-              rect.y + rect.height - size.height
+            transform={`translate(${rect.x + (rect.width - size.width) / 2} ${
+              rect.y + rect.height - size.height - (rect.width - size.width) / 2
             })`}
           >
-            {exposed}
+            <Exposed {...{ exposed }} width={size.width} height={size.height} />
           </g>
         )}
       </>
     );
   };
+  function Exposed({ exposed, width, height }) {
+    return (
+      <>
+        <rect fill="transparent" stroke="black" {...{ width, height }} />
+        {exposed}
+      </>
+    );
+  }
   return SubGraphNode;
 }

@@ -54,10 +54,18 @@ const option: NodeDefinition = {
     const Render: NodeComponent = ({ node }) => {
       const [element] = useAtom(elmAtom);
       const [base] = useAtom(baseAtom);
+      const [width] = useAtom(widthAtom);
       const [height] = useAtom(heightAtom);
       const [rect] = useAtom(node.rect);
+
+      const offsetX = (rect.width - width) / 2;
+      const offsetY = 10;
       return (
-        <g transform={`translate(${rect.x} ${rect.y + rect.height - height})`}>
+        <g
+          transform={`translate(${rect.x + offsetX} ${
+            rect.y + rect.height - height - offsetY
+          })`}
+        >
           {base}
           {element}
         </g>

@@ -24,9 +24,14 @@ export function createRect(
   const sizeAtom = atom((get) => {
     const s = get(defaultSizeAtom);
     const i = innerSize ? get(innerSize) : { width: 0, height: 0 };
+    const offset = 20;
     return {
-      width: Math.max(s.width, i.width),
-      height: Math.max(s.height, (socketNum + 1) * 25) + i.height,
+      width:
+        Math.max(s.width, i.width) + (innerSize !== undefined ? offset : 0),
+      height:
+        Math.max(s.height, (socketNum + 1) * 25) +
+        i.height +
+        (innerSize !== undefined ? offset : 0),
     };
   });
   const rect = createRectAtom(rectPos, sizeAtom);
