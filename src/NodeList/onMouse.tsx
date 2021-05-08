@@ -18,7 +18,7 @@ const option: NodeDefinition = {
     const mouseAtom = atom((get) => {
       const { fn: transform } = get(transformAtom);
       const e = get(eventAtom);
-      if (e !== null) return transform(e);
+      if (e !== null) return transform(e, e.target as SVGGraphicsElement);
       return { x: 0, y: 0 };
     });
 

@@ -27,7 +27,9 @@ const option: NodeDefinition = {
       atom((get) => {
         //@ts-ignore
         const [x, y, width, height] = inputAtoms.map(get).map(get) as number;
-        return <rect {...{ x, y, width, height }} fill="blue" />;
+        return (
+          <rect {...{ x, y, width, height }} fill="transparent" stroke="blue" />
+        );
       }),
     ];
     const stream: Stream = {
