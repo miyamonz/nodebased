@@ -14,7 +14,7 @@ const screenToSvg = (svg: SVGSVGElement) => (
 
 export function useSVGMouse(node: SVGSVGElement) {
   const fn = React.useCallback(
-    (...args: [Event, SVGGraphicsElement]) => screenToSvg(node)(...args),
+    (...args: [Event, SVGGraphicsElement?]) => screenToSvg(node)(...args),
     [node]
   );
 

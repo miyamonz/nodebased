@@ -69,7 +69,15 @@ export function createComponent(
       </>
     );
   };
-  function Exposed({ exposed, width, height }) {
+  function Exposed({
+    exposed,
+    width,
+    height,
+  }: {
+    exposed: React.ReactElement;
+    width: number;
+    height: number;
+  }) {
     return (
       <>
         <rect fill="transparent" stroke="black" {...{ width, height }} />
