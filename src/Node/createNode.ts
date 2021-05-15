@@ -10,7 +10,6 @@ import type { Stream } from "../Stream";
 import { createRect } from "./rect";
 import { nodeOptions } from "../NodeList";
 import type { Position } from "../Position";
-import type { Rect } from "../Rect";
 
 function getSocketsJsonByName(name: string, data?: {}) {
   const option = nodeOptions.find((option) => option.name === name);
@@ -64,7 +63,12 @@ export function createNodeByJson({
   const option = nodeOptions.find((option) => option.name === name);
   if (option === undefined) throw new Error(`${name} not found`);
 
-  const { component = () => null, stream, toSave, innerSize } = option.init({
+  const {
+    component = () => null,
+    stream,
+    toSave,
+    innerSize,
+  } = option.init({
     data,
   });
 

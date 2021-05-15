@@ -6,23 +6,25 @@ import type { Getter } from "jotai/core/types";
 import type { GraphView, GraphJSON } from "./types";
 import type { EdgeJSON, Edge } from "../Edge";
 
-export const graphToJson = (get: Getter) => (graph: GraphView): GraphJSON => {
-  const { nodes, edges } = graph;
-  const cToJson = edgeToJson(get)(get(nodes));
-  return {
-    nodes: get(nodes).map(nodeToJson(get)),
-    edges: get(edges)
-      .map((c) => {
-        try {
-          return cToJson(c);
-        } catch (e: unknown) {
-          console.error(e, c);
-          return undefined;
-        }
-      })
-      .filter((a): a is EdgeJSON => a !== undefined),
+export const graphToJson =
+  (get: Getter) =>
+  (graph: GraphView): GraphJSON => {
+    const { nodes, edges } = graph;
+    const cToJson = edgeToJson(get)(get(nodes));
+    return {
+      nodes: get(nodes).map(nodeToJson(get)),
+      edges: get(edges)
+        .map((c) => {
+          try {
+            return cToJson(c);
+          } catch (e: unknown) {
+            console.error(e, c);
+            return undefined;
+          }
+        })
+        .filter((a): a is EdgeJSON => a !== undefined),
+    };
   };
-};
 
 const uuid = () => Math.floor(Math.random() * 10 ** 12).toString();
 
@@ -52,6 +54,7 @@ export const jsonToGraph = (get: Getter) => (json: GraphJSON) => {
         return jsonToEdge(get)(nodes)(e);
       } catch (e: unknown) {
         //TODO: we should notify or visualize something
+        throw e;
       }
     })
     .filter((a): a is Edge<unknown> => a !== undefined);
