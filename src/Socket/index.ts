@@ -1,4 +1,3 @@
-export { useConnected } from "./utils";
 export type { InputSocket, OutputSocket } from "./types";
 export type { InputSocketJSON, OutputSocketJSON } from "./types";
 export type { InputSocketAtom, OutputSocketAtom } from "./types";
